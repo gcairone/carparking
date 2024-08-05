@@ -1,0 +1,11 @@
+Makefile
+
+parameters/*
+
+bin/*
+
+build/*
+
+.vscode
+
+.qmake.stash
