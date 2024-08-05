@@ -3,16 +3,16 @@
 #include <QLineF>
 
 
-float len_car = 4;
-float width_car = 2;
+float len_car = 2;
+float width_car = 1;
 float len_env = 12;   // y-axis
-float width_env = 12; // x-axis
-float tol = 2;
+float width_env = 20; // x-axis
+float tol = 4;
 float free_park = 0;
 float lidar_maxDistance = 8;
 
-float reward_for_hit = -30;
-float reward_for_park = 300;
+float reward_for_hit = -300;
+float reward_for_park = 3000;
 float reward_for_nothing = -1;
 
 
@@ -112,9 +112,9 @@ QLineF simulateLidar(const QPointF& origin, double direction, const QPolygonF& p
     QPointF endPoint(origin.x() + lidar_maxDistance * cos(direction),
                      origin.y() + lidar_maxDistance * sin(direction));
 
-    for (int i = 0; i < polygon.size(); ++i) {
+    for (int i = 0; i<polygon.size(); ++i) {
 
-        int j = (i + 1) % polygon.size();
+        int j = (i + 1)%polygon.size();
         QLineF edge(polygon[i], polygon[j]);
 
         QPointF intersection;

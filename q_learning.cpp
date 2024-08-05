@@ -17,6 +17,11 @@ QLearningModel::QLearningModel(int stateCount, int actionCount, float learningRa
 }
 
 int QLearningModel::bestAction(int state) {
+    if(state >= stateCount) {
+        std::cerr << "non valid state " << state << std::endl;
+        throw 0;
+    }
+
     auto maxAction = std::max_element(qTable[state].begin(), qTable[state].end());
     return std::distance(qTable[state].begin(), maxAction);
 }
@@ -39,6 +44,19 @@ int QLearningModel::chooseAction(int state) {
 }
 
 void QLearningModel::train(int state, int action, float reward, int nextState) {
+    if(state >= stateCount) {
+        std::cerr << "non valid state " << state << std::endl;
+        throw 0;
+    }
+    if(nextState >= stateCount) {
+        std::cerr << "non valid state " << nextState << std::endl;
+        throw 0;
+    }
+    if(action >= actionCount) {
+        std::cerr << "non valid action " << action << std::endl;
+        throw 0;
+    }
+
     float maxNextQValue = *std::max_element(qTable[nextState].begin(), qTable[nextState].end());
     float QTarget = reward + discountFactor * maxNextQValue;
     qTable[state][action] += learningRate * (QTarget - qTable[state][action]);
