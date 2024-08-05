@@ -10,7 +10,7 @@
 #include <iostream>
 #include <cmath>
 #include "enviroment.h"
-#include "kohonen_net.h"
+//#include "kohonen_net.h"
 #include "q_learning.h"
 #include <QFileDialog>
 
@@ -45,8 +45,8 @@ private slots:
 
     //void on_num_iterations_valueChanged(int arg1);
 
-    void on_som_load_clicked();
-    void on_som_store_clicked();
+    //void on_som_load_clicked();
+    //void on_som_store_clicked();
     void on_qtable_load_sp_clicked();
     void on_qtable_store_sp_clicked();
     void on_qtable_load_st_clicked();
@@ -63,13 +63,13 @@ private:
 
 
     CarState car_st;
-    std::vector<float> car_st_vect;
+    //std::vector<float> car_st_vect;
 
 
     QPolygon env;
     QVector<QLineF> lidar;
 
-    SOM som;
+    //SOM som;
     QLearningModel speed_controller;
     QLearningModel steering_controller;
     int state_encoded;

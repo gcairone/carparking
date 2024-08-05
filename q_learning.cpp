@@ -34,10 +34,12 @@ int QLearningModel::chooseAction(int state) {
     std::uniform_real_distribution<float> distribution(0.0, 1.0);
     if (distribution(rng) < explorationRate) {
         // Explore
+        //std::cout << "Casuale" << std::endl;
         std::uniform_int_distribution<int> actionDistribution(0, qTable[state].size() - 1);
         return actionDistribution(rng);
     } else {
         // Exploit
+        //std::cout << "Migliore" << std::endl;
         auto maxAction = std::max_element(qTable[state].begin(), qTable[state].end());
         return std::distance(qTable[state].begin(), maxAction);
     }
@@ -102,7 +104,7 @@ bool QLearningModel::loadWeights(const std::string& filename) {
     float weight;
     while (file >> weight) {
         neuronWeights.push_back(weight);
-        if (neuronWeights.size() == actionCount) {
+        if (neuronWeights.size() == (unsigned int)(actionCount)) {
             qTable.push_back(neuronWeights);
             neuronWeights.clear();
         }

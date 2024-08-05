@@ -16,8 +16,8 @@ public:
     bool allowed(); //  state is allowed if the car is inside the area, not hitting walls
     CarState get_new_state(float speed, float steering, int timestep);
     static CarState generate_random_state();
-    QVector<QLineF> lidar_lines();
-    static std::vector<float> lidar_distances(const QVector<QLineF> &v);
+    //QVector<QLineF> lidar_lines();
+    //static std::vector<float> lidar_distances(const QVector<QLineF> &v);
     bool parked();
     float reward();
     std::vector<float> to_vector_normalized();
@@ -31,7 +31,7 @@ public:
 
 
 QPolygonF build_env();
-QLineF simulateLidar(const QPoint& origin, double direction, double maxDistance, const QPolygon& polygon);
+//QLineF simulateLidar(const QPoint& origin, double direction, double maxDistance, const QPolygon& polygon);
 
 
 

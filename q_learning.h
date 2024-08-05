@@ -20,7 +20,7 @@ private:
 
 public:
     float explorationRate;
-    QLearningModel(int stateCount, int actionCount, float learningRate = 0.1, float discountFactor = 0.9, float explorationRate_max = 0.1);
+    QLearningModel(int stateCount, int actionCount, float learningRate, float discountFactor, float explorationRate_max);
 
     int chooseAction(int state);
     int bestAction(int state);

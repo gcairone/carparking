@@ -3,16 +3,16 @@
 #include <QLineF>
 
 
-float len_car = 2;
-float width_car = 1;
-float len_env = 12;   // y-axis
-float width_env = 20; // x-axis
-float tol = 4;
-float free_park = 0;
-float lidar_maxDistance = 8;
+float len_car = 4;
+float width_car = 2;
+float len_env = 12;   // y-axis   // 20
+float width_env = 10; // x-axis
+float tol = 1.5;                    // 2
+float free_park = 0.5;
+//float lidar_maxDistance = 8;
 
-float reward_for_hit = -300;
-float reward_for_park = 3000;
+float reward_for_hit = -100;
+float reward_for_park = 1000;
 float reward_for_nothing = -1;
 
 
@@ -89,7 +89,7 @@ CarState CarState::generate_random_state() {
 QPolygonF build_env() {
     // The animation is in the top-left corner of the window
     float len_park = len_car + 2 * tol;
-    float width_park = width_car + 2 * tol;
+    float width_park = width_car + tol;
     QVector<QPointF> vertices = {
         QPointF(0, 0),  // Top-left corner
         QPointF(0, len_env),  // Bottom-left corner
@@ -106,7 +106,7 @@ QPolygonF build_env() {
     return env;
 
 }
-
+/*
 QLineF simulateLidar(const QPointF& origin, double direction, const QPolygonF& polygon) {
     QPointF endPoint(origin.x() + lidar_maxDistance * cos(direction),
                      origin.y() + lidar_maxDistance * sin(direction));
@@ -159,6 +159,7 @@ std::vector<float> CarState::lidar_distances(const QVector<QLineF> &v) {
     }
     return r;
 }
+*/
 
 
 bool CarState::parked() {
@@ -198,17 +199,17 @@ int CarState::discretize_state(int divide_x, int divide_y, int divide_theta) {
     float theta_section = 2*M_PI / divide_theta;
 
     int x_state = (int)(x / x_section);
+    if(x_state >= divide_x) x_state = divide_x - 1;
     int y_state = (int)(y / y_section);
+    if(y_state >= divide_y) y_state = divide_y - 1;
     float theta_mod = fmod(theta, 2.0 * M_PI);
     if (theta_mod < 0)
         theta_mod += 2.0 * M_PI;
     int theta_state = (int)(theta_mod / theta_section);
-    // stampare i singoli stati
-    //std::cout << "x_state " << x_state << std::endl;
-    //std::cout << "y_state " << y_state << std::endl;
-    //std::cout << "theta_state " << theta_state << std::endl;
+    if(theta_state >= divide_theta) theta_state = divide_theta -1;
+    int state_ret = theta_state + divide_theta * y_state + divide_theta * divide_y * x_state;
 
-    return theta_state + divide_theta * y_state + divide_theta * divide_y * x_state;
+    return state_ret;
 }
 
 
