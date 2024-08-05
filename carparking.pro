@@ -30,6 +30,9 @@ OBJECTS_DIR = build
 
 DESTDIR = bin
 
+TARGET = carparking
+
+
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
