@@ -2,9 +2,9 @@
 #include "ui_mainwindow.h"
 
 // frequency of choices and screen update
-#define MSEC 20 // latency in msec of timestep
+#define MSEC 10 // latency in msec of timestep
 #define ANIMATION_SPEED 1 // x1
-#define TIME_RATIO 30 // TIME_RATIO * MSEC is the frequency of the choice, used by the controller
+#define TIME_RATIO 1 // TIME_RATIO * MSEC is the frequency of the choice, used by the controller
 
 // video animation constansts
 #define PIXEL_RATIO 20 // how many pixel is a meter
@@ -24,9 +24,9 @@ bool SOM_weights_freezed = false;
 const float speed_unity = 2;
 const std::vector<float> speed_actions = {-4*speed_unity, -3*speed_unity, -2*speed_unity, -speed_unity, 0, speed_unity, 2*speed_unity, 3*speed_unity, 4*speed_unity};
 const std::vector<float> steering_actions = {-M_PI/4, -3*M_PI/16, -M_PI/8, -M_PI/16, 0, M_PI/16, M_PI/8, 3*M_PI/16, M_PI/4};
-int x_divide = 2;
-int y_divide = 2;
-int theta_divide = 4;
+int x_divide = 1;
+int y_divide = 1;
+int theta_divide = 1;
 int state_count = x_divide * y_divide * theta_divide;
 
 

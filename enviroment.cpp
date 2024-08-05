@@ -18,7 +18,6 @@ float reward_for_nothing = -1;
 
 
 QPolygonF CarState::to_polygon() {
-    // vertexes coord
     float sin_t = sin(this->theta);
     float cos_t = cos(this->theta);
 
