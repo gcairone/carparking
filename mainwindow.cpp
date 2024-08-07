@@ -19,7 +19,7 @@
 
 
 const bool Q_weights_freezed = false;
-const float learning_rate = 0.03;
+const float learning_rate = 0.01;
 const float discount_factor = 0.9;
 const float exploration_rate_max = 0.05; // per adesso costante
 
