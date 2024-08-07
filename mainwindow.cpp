@@ -19,13 +19,13 @@
 
 
 const bool Q_weights_freezed = false;
-const float learning_rate = 0.01;
+const float learning_rate = 0.3;
 const float discount_factor = 0.9;
 const float exploration_rate_max = 0.05; // per adesso costante
 
 
 //bool SOM_weights_freezed = false;
-const float speed_unity = 1.5;
+const float speed_unity = 1;
 const std::vector<float> speed_actions = {-4*speed_unity, -3*speed_unity, -2*speed_unity, -speed_unity, 0, speed_unity, 2*speed_unity, 3*speed_unity, 4*speed_unity};
 const std::vector<float> steering_actions = {-M_PI/4, -3*M_PI/16, -M_PI/8, -M_PI/16, 0, M_PI/16, M_PI/8, 3*M_PI/16, M_PI/4};
 const int x_divide = 10;
@@ -246,8 +246,8 @@ void MainWindow::on_trainButton_clicked()
     int num_iter = ui->num_iterations->value();
     for(int i=0; i<num_iter; ++i) {
         iteration_with_choice();
-        if(i%100000==0) {
-            std::cout << "Iteration " << i << " | hit: " << hit_counter << " success: " << success_counter << std::endl;
+        if(i%500000==0) {
+            std::cout << "Iteration " << i << " | hit: " << hit_counter << " success: " << success_counter << " | Success_ratio "<< 100 * success_counter / (float)(success_counter+hit_counter) << '%' <<std::endl;
             hit_counter=0;
             success_counter=0;
         }

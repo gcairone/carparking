@@ -9,3 +9,5 @@ build/*
 .vscode
 
 .qmake.stash
+
+README_private.txt

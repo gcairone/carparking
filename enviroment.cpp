@@ -6,13 +6,13 @@
 float len_car = 4;
 float width_car = 2;
 float len_env = 12;   // y-axis   // 20
-float width_env = 10; // x-axis
+float width_env = 8; // x-axis
 float tol = 1.5;                    // 2
 float free_park = 0.5;
 //float lidar_maxDistance = 8;
 
 float reward_for_hit = -100;
-float reward_for_park = 1000;
+float reward_for_park = 3000;
 float reward_for_nothing = -1;
 
 
@@ -20,7 +20,8 @@ float reward_for_nothing = -1;
 QPolygonF CarState::to_polygon() {
     float sin_t = sin(this->theta);
     float cos_t = cos(this->theta);
-
+    /*
+    con il punto (x, y) a metà del lato corto
     float xA = len_car * cos_t + 0.5 * width_car * sin_t + x;
     float yA = len_car * sin_t - 0.5 * width_car * cos_t + y;
 
@@ -32,6 +33,18 @@ QPolygonF CarState::to_polygon() {
 
     float xD = 0.5 * width_car * sin_t + x;
     float yD = - 0.5 * width_car * cos_t + y;
+    */
+    float xA = x + 0.5*len_car*cos_t + 0.5*width_car*sin_t;
+    float yA = y + 0.5*len_car*sin_t - 0.5*width_car*cos_t;
+
+    float xB = x + 0.5*len_car*cos_t - 0.5*width_car*sin_t;
+    float yB = y + 0.5*len_car*sin_t + 0.5*width_car*cos_t;
+
+    float xC = x - 0.5*len_car*cos_t - 0.5*width_car*sin_t;
+    float yC = y - 0.5*len_car*sin_t + 0.5*width_car*cos_t;
+
+    float xD = x - 0.5*len_car*cos_t + 0.5*width_car*sin_t;
+    float yD = y - 0.5*len_car*sin_t - 0.5*width_car*cos_t;
 
     // Trasforma i vertici in pixel
     QVector<QPointF> vertices = {
@@ -69,9 +82,19 @@ CarState::~CarState() {}
 
 
 CarState CarState::get_new_state(float speed, float steering, int timestep) {
-    float dt = timestep / 1000;
+    float dt = timestep / 1000.0;
 
-    return CarState(x + dt * cos(this->theta) * speed, y + dt * sin(this->theta) * speed, theta + dt * tan(steering) * speed / len_car);
+    float x_r = x - 0.5 * len_car * cos(this->theta); // x ruota dietro
+    float y_r = y - 0.5 * width_car * sin(this->theta); // y ruota dietro
+
+    float x_r_next = x_r + dt * cos(this->theta) * speed;
+    float y_r_next = y_r + dt * sin(this->theta) * speed;
+
+    float x_next = x_r_next + 0.5*len_car*cos(this->theta);
+    float y_next = y_r_next + 0.5*width_car*sin(this->theta);
+    float theta_next = theta + dt * tan(steering) * speed / len_car;
+
+    return CarState(x_next, y_next, theta_next);
 }
 
 
@@ -81,8 +104,8 @@ CarState CarState::generate_random_state() {
     float y = randomFloat(min_dist, len_env - min_dist);
     float th = randomFloat(0, 2*M_PI);
 
-    x -= cos(th)*len_car/2;
-    y -= sin(th)*len_car/2;
+    //x -= cos(th)*len_car/2; commentato per il center_rect
+    //y -= sin(th)*len_car/2;
     return CarState(x, y, th);
 }
 

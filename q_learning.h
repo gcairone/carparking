@@ -9,18 +9,30 @@
 
 class QLearningModel {
 private:
-    std::vector<std::vector<float>> qTable;
-    int stateCount;
-    int actionCount;
-    float learningRate;
-    float discountFactor;
-    float explorationRate_max;
+    std::vector<std::vector<float>> q_table;
+    int state_count;
+    int action_count;
+
+    float lr_max;
+    float lr_min;
+    float lr_half_life;
+
+    float discount_factor;
+
+    float exploration_rate_max;
+    float exploration_rate_min;
+    float er_half_life;
 
     std::mt19937 rng; // Mersenne Twister random number generator
 
 public:
-    float explorationRate;
-    QLearningModel(int stateCount, int actionCount, float learningRate, float discountFactor, float explorationRate_max);
+    float lr;
+    float exploration_rate;
+    QLearningModel(int state_count, 
+                    int action_count, 
+                    float lr_max, 
+                    float discount_factor,
+                    float exploration_rate_max);
 
     int chooseAction(int state);
     int bestAction(int state);
