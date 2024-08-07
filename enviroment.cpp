@@ -69,7 +69,7 @@ CarState::~CarState() {}
 
 
 CarState CarState::get_new_state(float speed, float steering, int timestep) {
-    float dt = timestep / 1000.0;
+    float dt = timestep / 1000;
 
     return CarState(x + dt * cos(this->theta) * speed, y + dt * sin(this->theta) * speed, theta + dt * tan(steering) * speed / len_car);
 }
