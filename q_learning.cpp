@@ -10,7 +10,7 @@ QLearningModel::QLearningModel(int state_count, int action_count, float lr_max, 
         lr_half_life(1e7),
         discount_factor(discount_factor), 
         exploration_rate_max(exploration_rate_max),
-        exploration_rate_min(exploration_rate_max),
+        exploration_rate_min(0),
         er_half_life(1e7)
 {
         std::random_device rd;

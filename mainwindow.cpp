@@ -243,17 +243,24 @@ void MainWindow::iteration_with_choice() {
 
 void MainWindow::on_trainButton_clicked()
 {
+    std::ofstream file("log/log0.txt");
+    if (!file.is_open()) {
+        std::cerr << "Failed to open file: log/log0.txt" << std::endl;
+    }
+
     int num_iter = ui->num_iterations->value();
     for(int i=0; i<num_iter; ++i) {
         iteration_with_choice();
         if(i%500000==0) {
-            std::cout << "Iteration " << i << " | hit: " << hit_counter << " success: " << success_counter << " | Success_ratio "<< 100 * success_counter / (float)(success_counter+hit_counter) << '%' << " | lr: "<< speed_controller.lr << " | er: " << speed_controller.exploration_rate << std::endl;
+            std::cout << "{\"iteration\": \"" << i << "\", \"hit\": \"" << hit_counter << "\", \"success\": \"" << success_counter << "\", \"success_ratio\": \""<< 100 * success_counter / (float)(success_counter+hit_counter) << '%' << "\", \"lr\": \""<< speed_controller.lr << "\", \"er\": \"" << speed_controller.exploration_rate << "\"}"<< std::endl;
+            file << "{\"iteration\": \"" << i << "\", \"hit\": \"" << hit_counter << "\", \"success\": \"" << success_counter << "\", \"success_ratio\": \""<< 100 * success_counter / (float)(success_counter+hit_counter) << '%' << "\", \"lr\": \""<< speed_controller.lr << "\", \"er\": \"" << speed_controller.exploration_rate << "\"}"<< std::endl;
             hit_counter=0;
             success_counter=0;
         }
     }
     update();
     std::cout << "Trained "<< num_iter <<std::endl;
+    file.close();
 }
 
 
