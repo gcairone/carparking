@@ -16,12 +16,14 @@ private:
     float lr_max;
     float lr_min;
     float lr_half_life;
+    float lr_ratio; 
 
     float discount_factor;
 
     float exploration_rate_max;
     float exploration_rate_min;
     float er_half_life;
+    float er_ratio;
 
     std::mt19937 rng; // Mersenne Twister random number generator
 

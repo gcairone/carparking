@@ -11,3 +11,9 @@ build/*
 .qmake.stash
 
 README_private.txt
+
+log/*
+
+moc_mainwindow.cpp
+
+moc_predefs.h

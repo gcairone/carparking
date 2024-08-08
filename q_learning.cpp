@@ -6,18 +6,20 @@ QLearningModel::QLearningModel(int state_count, int action_count, float lr_max, 
         state_count(state_count), 
         action_count(action_count), 
         lr_max(lr_max),
-        lr_min(lr_max/4.0),
-        lr_half_life(1000000),
+        lr_min(0.0),
+        lr_half_life(5e7),
         discount_factor(discount_factor), 
         exploration_rate_max(exploration_rate_max),
-        exploration_rate_min(exploration_rate_max/10.0),
-        er_half_life(1000000)
+        exploration_rate_min(0.0),
+        er_half_life(5e7)
 {
         std::random_device rd;
         rng.seed(rd());
 
         lr = lr_max;
         exploration_rate = exploration_rate_max;
+        lr_ratio = std::pow(0.5, 1.0/lr_half_life);
+        er_ratio = std::pow(0.5, 1.0/er_half_life);
 
         // Initialize Q-values randomly
         std::uniform_real_distribution<float> distribution(0.0, 1.0);
@@ -75,7 +77,8 @@ void QLearningModel::train(int state, int action, float reward, int nextState) {
     float QTarget = reward + discount_factor * maxNextQValue;
     q_table[state][action] += lr_max * (QTarget - q_table[state][action]);
 
-    //exploration_rate *= 0.99999;
+    exploration_rate = exploration_rate_min + er_ratio*(exploration_rate - exploration_rate_min);
+    lr = lr_min + lr_ratio*(lr - lr_min);
 }
 
 

@@ -247,7 +247,7 @@ void MainWindow::on_trainButton_clicked()
     for(int i=0; i<num_iter; ++i) {
         iteration_with_choice();
         if(i%500000==0) {
-            std::cout << "Iteration " << i << " | hit: " << hit_counter << " success: " << success_counter << " | Success_ratio "<< 100 * success_counter / (float)(success_counter+hit_counter) << '%' <<std::endl;
+            std::cout << "Iteration " << i << " | hit: " << hit_counter << " success: " << success_counter << " | Success_ratio "<< 100 * success_counter / (float)(success_counter+hit_counter) << '%' << " | lr: "<< speed_controller.lr << " | er: " << speed_controller.exploration_rate << std::endl;
             hit_counter=0;
             success_counter=0;
         }
