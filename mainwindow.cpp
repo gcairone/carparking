@@ -21,7 +21,7 @@
 const bool Q_weights_freezed = false;
 const float learning_rate = 0.02;
 const float discount_factor = 0.9;
-const float exploration_rate_max = 0.1; // per adesso costante
+const float exploration_rate_max = 0.1; 
 
 
 //bool SOM_weights_freezed = false;
@@ -30,7 +30,7 @@ const std::vector<float> speed_actions = {-4*speed_unity, -3*speed_unity, -2*spe
 const std::vector<float> steering_actions = {-M_PI/4, -3*M_PI/16, -M_PI/8, -M_PI/16, 0, M_PI/16, M_PI/8, 3*M_PI/16, M_PI/4};
 const int x_divide = 8;
 const int y_divide = 8;
-const int theta_divide = 8;
+const int theta_divide = 20;
 const int state_count = x_divide * y_divide * theta_divide;
 
 
