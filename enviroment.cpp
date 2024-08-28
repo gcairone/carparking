@@ -6,8 +6,8 @@
 float len_car = 4;
 float width_car = 2;
 float len_env = 15;   // y-axis   // 20
-float width_env = 13; // x-axis
-float tol = 2;                    // 2
+float width_env = 12; // x-axis
+float tol = 2.0;                    // 2
 float free_park = 0.3;
 //float lidar_maxDistance = 8;
 

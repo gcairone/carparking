@@ -2,7 +2,7 @@
 #include "ui_mainwindow.h"
 
 // frequency of choices and screen update
-#define MSEC 30 // latency in msec of timestep
+#define MSEC 100 // latency in msec of timestep
 #define ANIMATION_SPEED 1 // x1
 #define TIME_RATIO 1 // TIME_RATIO * MSEC is the frequency of the choice, used by the controller
 
@@ -19,14 +19,14 @@
 
 
 const bool Q_weights_freezed = false;
-const float learning_rate = 0.02;
+const float learning_rate = 0.005;
 const float discount_factor = 0.9;
 const float exploration_rate_max = 0.1; 
 
 
 //bool SOM_weights_freezed = false;
 const float speed_unity = 1;
-const std::vector<float> speed_actions = {-4*speed_unity, -3*speed_unity, -2*speed_unity, -speed_unity, 0, speed_unity, 2*speed_unity, 3*speed_unity, 4*speed_unity};
+const std::vector<float> speed_actions = {-4*speed_unity, -3*speed_unity, -2*speed_unity, -speed_unity, 0.1*speed_unity ,speed_unity, 2*speed_unity, 3*speed_unity, 4*speed_unity};
 const std::vector<float> steering_actions = {-M_PI/4, -3*M_PI/16, -M_PI/8, -M_PI/16, 0, M_PI/16, M_PI/8, 3*M_PI/16, M_PI/4};
 const int x_divide = 8;
 const int y_divide = 8;
