@@ -1,7 +1,7 @@
 #include "q_learning.h"
 #include <algorithm>
 
-QLearningModel::QLearningModel(int state_count, int action_count, float lr_max, float discount_factor, float exploration_rate_max): 
+QLearningModel::QLearningModel(int state_count, int action_count, float lr_max, float discount_factor, float exploration_rate_max, float er_half_life): 
         q_table(state_count, std::vector<float>(action_count, 0)), 
         state_count(state_count), 
         action_count(action_count), 
@@ -11,7 +11,7 @@ QLearningModel::QLearningModel(int state_count, int action_count, float lr_max, 
         discount_factor(discount_factor), 
         exploration_rate_max(exploration_rate_max),
         exploration_rate_min(0),
-        er_half_life(1e7)
+        er_half_life(er_half_life)
 {
         std::random_device rd;
         rng.seed(rd());

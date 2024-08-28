@@ -34,7 +34,8 @@ public:
                     int action_count, 
                     float lr_max, 
                     float discount_factor,
-                    float exploration_rate_max);
+                    float exploration_rate_max,
+                    float er_half_life);
 
     int chooseAction(int state);
     int bestAction(int state);

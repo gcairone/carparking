@@ -7,27 +7,48 @@
 #define TIME_RATIO 1 // TIME_RATIO * MSEC is the frequency of the choice, used by the controller
 
 // video animation constansts
-#define PIXEL_RATIO 20 // how many pixel is a meter
-#define MARGIN 20 // distance in pixel between window and enviroment representation
+#define PIXEL_RATIO 30 // how many pixel is a meter
+#define MARGIN 30 // distance in pixel between window and enviroment representation
 #define WINDOW_HEIGHT 600
 #define WINDOW_WIDTH 800
 
 // other constants
-//#define L_MAP 6
-//#define DIM_INPUT 3 // som input: (x, y, theta)
+// #define L_MAP 6
+// #define DIM_INPUT 3 // som input: (x, y, theta)
 
 
 
 const bool Q_weights_freezed = false;
-const float learning_rate = 0.003;
+const float learning_rate = 0.001;
 const float discount_factor = 0.9;
 const float exploration_rate_max = 0.1; 
+const float er_half_life = 1e7;
 
 
 //bool SOM_weights_freezed = false;
 const float speed_unity = 1;
-const std::vector<float> speed_actions = {-4*speed_unity, -3*speed_unity, -2*speed_unity, -speed_unity, 0.1*speed_unity ,speed_unity, 2*speed_unity, 3*speed_unity, 4*speed_unity};
-const std::vector<float> steering_actions = {-M_PI/4, -3*M_PI/16, -M_PI/8, -M_PI/16, 0, M_PI/16, M_PI/8, 3*M_PI/16, M_PI/4};
+const std::vector<float> speed_actions = {
+    -4*speed_unity, 
+    -3*speed_unity, 
+    -2*speed_unity, 
+    -speed_unity, 
+    0.1*speed_unity,
+    speed_unity, 
+    2*speed_unity, 
+    3*speed_unity, 
+    4*speed_unity
+};
+const std::vector<float> steering_actions = {
+    -M_PI/4, 
+    -3*M_PI/16, 
+    -M_PI/8, 
+    -M_PI/16, 
+    0, 
+    M_PI/16, 
+    M_PI/8, 
+    3*M_PI/16, 
+    M_PI/4
+};
 const int x_divide = 8;
 const int y_divide = 8;
 const int theta_divide = 20;
@@ -63,8 +84,8 @@ QVector<QLine> map_into_window(const QVector<QLineF> &v) {
 MainWindow::MainWindow(QWidget *parent): 
     QMainWindow(parent), 
     ui(new Ui::MainWindow), 
-    speed_controller(state_count, speed_actions.size(), learning_rate, discount_factor, exploration_rate_max), 
-    steering_controller(state_count, steering_actions.size(), learning_rate, discount_factor, exploration_rate_max),
+    speed_controller(state_count, speed_actions.size(), learning_rate, discount_factor, exploration_rate_max, er_half_life), 
+    steering_controller(state_count, steering_actions.size(), learning_rate, discount_factor, exploration_rate_max, er_half_life),
     iter(0), 
     hit_counter(0), 
     success_counter(0)
