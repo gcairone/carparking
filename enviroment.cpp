@@ -6,7 +6,7 @@
 float len_car = 4;
 float width_car = 2;
 float len_env = 15;   // y-axis   // 20
-float width_env = 12; // x-axis
+float width_env = 9; // x-axis
 float tol = 2.0;                    // 2
 float free_park = 0.3;
 //float lidar_maxDistance = 8;
@@ -99,10 +99,10 @@ CarState CarState::get_new_state(float speed, float steering, int timestep) {
 
 
 CarState CarState::generate_random_state() {
-    float min_dist = sqrt(len_car*len_car/4 + width_car*width_car/4);
-    float x = randomFloat(min_dist, width_env - min_dist - width_car - 2*tol);
-    float y = randomFloat(min_dist, len_env - min_dist);
-    float th = randomFloat(0, 2*M_PI);
+
+    float x = randomFloat(width_car*0.75, width_env - 1.75*width_car - tol);
+    float y = randomFloat(len_car*0.75, len_env - len_car*0.75);
+    float th = M_PI*0.5;
 
     //x -= cos(th)*len_car/2; commentato per il center_rect
     //y -= sin(th)*len_car/2;

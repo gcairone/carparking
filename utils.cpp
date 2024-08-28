@@ -2,6 +2,9 @@
 
 
 float randomFloat(float a, float b) {
+    if(a > b) {
+        std::cerr << "in interval linf > lsup" << std::endl;
+    }
     std::random_device rd;
     std::mt19937 gen(rd());
     std::uniform_real_distribution<float> distribution(a, b);

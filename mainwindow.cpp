@@ -19,7 +19,7 @@
 
 
 const bool Q_weights_freezed = false;
-const float learning_rate = 0.005;
+const float learning_rate = 0.001;
 const float discount_factor = 0.9;
 const float exploration_rate_max = 0.1; 
 
@@ -172,7 +172,7 @@ void MainWindow::iteration() {
     }
 
     else {
-       //std::cout << new_state_encoded << std::endl;
+       //std::cout << new_state_encoded << "allowed "<<std::endl;
        car_st = new_car_st;
        //car_st_vect = new_car_st_vect;
        state_encoded = new_state_encoded;
