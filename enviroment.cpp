@@ -5,11 +5,10 @@
 
 float len_car = 4;
 float width_car = 1.7;
-float len_env = 15;   // y-axis   // 20
-float width_env = 9; // x-axis
-float tol = 1.5;                    // 2
-float free_park = 0.3;
-//float lidar_maxDistance = 8;
+float len_env = 15;   // y-axis  
+float width_env = 8; // x-axis
+float tol = 1.5;                    
+float free_park = 0.6;
 
 float reward_for_hit = -100;
 float reward_for_park = 1000;

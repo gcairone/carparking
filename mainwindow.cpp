@@ -2,7 +2,7 @@
 #include "ui_mainwindow.h"
 
 // frequency of choices and screen update
-#define MSEC 100 // latency in msec of timestep
+#define MSEC 300 // latency in msec of timestep
 #define ANIMATION_SPEED 1 // x1
 #define TIME_RATIO 1 // TIME_RATIO * MSEC is the frequency of the choice, used by the controller
 
@@ -19,7 +19,7 @@
 
 
 const bool Q_weights_freezed = false;
-const float learning_rate = 0.001;
+const float learning_rate = 0.003;
 const float discount_factor = 0.9;
 const float exploration_rate_max = 0.1; 
 
