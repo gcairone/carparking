@@ -2,7 +2,7 @@
 #include "ui_mainwindow.h"
 
 // frequency of choices and screen update
-#define MSEC 300 // latency in msec of timestep
+#define MSEC 30 // latency in msec of timestep
 #define ANIMATION_SPEED 1 // x1
 #define TIME_RATIO 1 // TIME_RATIO * MSEC is the frequency of the choice, used by the controller
 
@@ -220,7 +220,7 @@ void MainWindow::iteration_with_choice() {
 
 
     if(!new_car_st.allowed()) {
-        //std::cout << "Choice " << new_state_encoded << " not allowed " << std::endl;
+        std::cout << "Choice " << new_state_encoded << " not allowed " << std::endl;
         hit_counter++;
         car_st = CarState::generate_random_state();
         //car_st_vect = car_st.to_vector_normalized();
@@ -229,7 +229,7 @@ void MainWindow::iteration_with_choice() {
 
     }
     else if(new_car_st.parked()) {
-        //std::cout << "Choice " << new_state_encoded << " parked " << std::endl;
+        std::cout << "Choice " << new_state_encoded << " parked " << std::endl;
         success_counter++;
         car_st = CarState::generate_random_state();
         //car_st_vect = car_st.to_vector_normalized();
@@ -239,7 +239,7 @@ void MainWindow::iteration_with_choice() {
     }
 
     else {
-        //std::cout << "Choice " << new_state_encoded << std::endl;
+        std::cout << "Choice " << new_state_encoded << std::endl;
         car_st = new_car_st;
         //car_st_vect = new_car_st_vect;
         state_encoded = new_state_encoded;

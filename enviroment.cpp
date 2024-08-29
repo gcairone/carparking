@@ -79,16 +79,15 @@ CarState::~CarState() {}
 
 CarState CarState::compute_new_state(float speed, float steering, int timestep) {
     float dt = timestep / 1000.0;
-
-    float x_r = x - 0.5 * len_car * cos(this->theta); // x ruota dietro
-    float y_r = y - 0.5 * width_car * sin(this->theta); // y ruota dietro
-
-    float x_r_next = x_r + dt * cos(this->theta) * speed;
-    float y_r_next = y_r + dt * sin(this->theta) * speed;
-
-    float x_next = x_r_next + 0.5*len_car*cos(this->theta);
-    float y_next = y_r_next + 0.5*width_car*sin(this->theta);
-    float theta_next = theta - dt * sin(steering) * speed / len_car;
+    // angle of rotation
+    float alpha = dt*speed*sin(steering)/len_car;
+    // center of rotation
+    float x_cr = x + 0.5*len_car*cos(theta) - len_car*sin(theta)/tan(steering);
+    float y_cr = y + 0.5*len_car*sin(theta) + len_car*cos(theta)/tan(steering);
+    // next state as rotation of (x, y, theta) respect to (x_cr, y_cr) of angle alpha
+    float x_next = (x-x_cr)*cos(alpha) - (y-y_cr)*sin(alpha) + x_cr;
+    float y_next = (x-x_cr)*sin(alpha) + (y-y_cr)*cos(alpha) + y_cr;
+    float theta_next = theta-alpha;
 
     return CarState(x_next, y_next, theta_next);
 }
@@ -96,14 +95,13 @@ CarState CarState::compute_new_state(float speed, float steering, int timestep) 
 
 CarState CarState::generate_random_state() {
 
-    float x = randomFloat(width_car*0.75, width_env - 1.75*width_car - tol);
-    float y = randomFloat(len_car*0.75, len_env - len_car*0.75);
-    float th = M_PI*0.5;
-    if(randomFloat(0.0, 1.0)>0.5) th = -M_PI*0.5;
+    float x_new = randomFloat(width_car*0.75, width_env - 1.75*width_car - tol);
+    float y_new = randomFloat(len_car*0.75, len_env - len_car*0.75);
+    float theta_new = M_PI*0.5;
+    if(randomFloat(0.0, 1.0)>0.5) theta_new = -M_PI*0.5;
+    //std::cout << "random state generated" << std::endl;
 
-    //x -= cos(th)*len_car/2; commentato per il center_rect
-    //y -= sin(th)*len_car/2;
-    return CarState(x, y, th);
+    return CarState(x_new, y_new, theta_new);
 }
 
 QPolygonF build_env() {
