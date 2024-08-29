@@ -77,9 +77,6 @@ CarState::~CarState() {}
 
 
 
-
-
-
 CarState CarState::compute_new_state(float speed, float steering, int timestep) {
     float dt = timestep / 1000.0;
 
@@ -91,7 +88,7 @@ CarState CarState::compute_new_state(float speed, float steering, int timestep) 
 
     float x_next = x_r_next + 0.5*len_car*cos(this->theta);
     float y_next = y_r_next + 0.5*width_car*sin(this->theta);
-    float theta_next = theta + dt * tan(steering) * speed / len_car;
+    float theta_next = theta - dt * sin(steering) * speed / len_car;
 
     return CarState(x_next, y_next, theta_next);
 }
@@ -102,6 +99,7 @@ CarState CarState::generate_random_state() {
     float x = randomFloat(width_car*0.75, width_env - 1.75*width_car - tol);
     float y = randomFloat(len_car*0.75, len_env - len_car*0.75);
     float th = M_PI*0.5;
+    if(randomFloat(0.0, 1.0)>0.5) th = -M_PI*0.5;
 
     //x -= cos(th)*len_car/2; commentato per il center_rect
     //y -= sin(th)*len_car/2;
