@@ -20,7 +20,7 @@ QPolygonF CarState::to_polygon() {
     float sin_t = sin(this->theta);
     float cos_t = cos(this->theta);
     /*
-    con il punto (x, y) a metà del lato corto
+     con il punto (x, y) a metà del lato corto
     float xA = len_car * cos_t + 0.5 * width_car * sin_t + x;
     float yA = len_car * sin_t - 0.5 * width_car * cos_t + y;
 
