@@ -80,7 +80,7 @@ CarState::~CarState() {}
 
 
 
-CarState CarState::get_new_state(float speed, float steering, int timestep) {
+CarState CarState::compute_new_state(float speed, float steering, int timestep) {
     float dt = timestep / 1000.0;
 
     float x_r = x - 0.5 * len_car * cos(this->theta); // x ruota dietro

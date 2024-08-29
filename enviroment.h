@@ -14,7 +14,7 @@ public:
     CarState(float x, float y, float theta): x(x), y(y), theta(theta) {};
     QPolygonF to_polygon();
     bool allowed(); //  state is allowed if the car is inside the area, not hitting walls
-    CarState get_new_state(float speed, float steering, int timestep);
+    CarState compute_new_state(float speed, float steering, int timestep);
     static CarState generate_random_state();
     //QVector<QLineF> lidar_lines();
     //static std::vector<float> lidar_distances(const QVector<QLineF> &v);

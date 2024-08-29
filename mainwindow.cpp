@@ -169,7 +169,7 @@ void MainWindow::iteration() {
     int speed_action = speed_controller.chooseAction(state_encoded);
     int steering_action = steering_controller.chooseAction(state_encoded);
 
-    auto new_car_st = car_st.get_new_state(speed_actions[speed_action], steering_actions[steering_action], ANIMATION_SPEED*MSEC);
+    auto new_car_st = car_st.compute_new_state(speed_actions[speed_action], steering_actions[steering_action], ANIMATION_SPEED*MSEC);
     //auto new_car_st_vect = new_car_st.to_vector_normalized();
 
     auto new_state_encoded = new_car_st.discretize_state(x_divide, y_divide, theta_divide);//auto new_state_encoded = som.findBMU(new_car_st_vect);
@@ -205,7 +205,7 @@ void MainWindow::iteration_with_choice() {
     int speed_action = speed_controller.chooseAction(state_encoded);
     int steering_action = steering_controller.chooseAction(state_encoded);
 
-    auto new_car_st = car_st.get_new_state(speed_actions[speed_action], steering_actions[steering_action], TIME_RATIO * MSEC * ANIMATION_SPEED);
+    auto new_car_st = car_st.compute_new_state(speed_actions[speed_action], steering_actions[steering_action], TIME_RATIO * MSEC * ANIMATION_SPEED);
     //auto new_car_st_vect = new_car_st.to_vector_normalized();
 
     auto new_state_encoded = new_car_st.discretize_state(x_divide, y_divide, theta_divide);//auto new_state_encoded = som.findBMU(new_car_st_vect);
