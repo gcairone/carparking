@@ -79,6 +79,9 @@ private:
     int iter;
     int hit_counter;
     int success_counter;
+
+    int last_speed_action;
+    int last_steering_action;
 };
 
 QPoint map_into_window(const QPointF &p);

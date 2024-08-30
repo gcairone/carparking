@@ -21,7 +21,7 @@
 const bool Q_weights_freezed = false;
 const float learning_rate = 0.003;
 const float discount_factor = 0.9;
-const float exploration_rate_max = 0.1; 
+const float exploration_rate_max = 0.2; 
 const float er_half_life = 1e7;
 
 
@@ -88,7 +88,9 @@ MainWindow::MainWindow(QWidget *parent):
     steering_controller(state_count, steering_actions.size(), learning_rate, discount_factor, exploration_rate_max, er_half_life),
     iter(0), 
     hit_counter(0), 
-    success_counter(0)
+    success_counter(0),
+    last_speed_action(0),
+    last_steering_action(0)
 {
     ui->setupUi(this);
     setWindowTitle("Animation Controller");
@@ -166,8 +168,8 @@ void MainWindow::paintEvent(QPaintEvent *event)
 
 
 void MainWindow::iteration() {
-    int speed_action = speed_controller.chooseAction(state_encoded);
-    int steering_action = steering_controller.chooseAction(state_encoded);
+    int speed_action = last_speed_action;
+    int steering_action = last_steering_action;
 
     auto new_car_st = car_st.compute_new_state(speed_actions[speed_action], steering_actions[steering_action], ANIMATION_SPEED*MSEC);
     //auto new_car_st_vect = new_car_st.to_vector_normalized();
@@ -204,7 +206,8 @@ void MainWindow::iteration_with_choice() {
 
     int speed_action = speed_controller.chooseAction(state_encoded);
     int steering_action = steering_controller.chooseAction(state_encoded);
-
+    last_speed_action = speed_action;
+    last_steering_action = steering_action;
     auto new_car_st = car_st.compute_new_state(speed_actions[speed_action], steering_actions[steering_action], TIME_RATIO * MSEC * ANIMATION_SPEED);
     //auto new_car_st_vect = new_car_st.to_vector_normalized();
 
