@@ -36,6 +36,9 @@ QPolygonF CarState::to_polygon() {
     float xA = x + 0.5*len_car*cos_t + 0.5*width_car*sin_t;
     float yA = y + 0.5*len_car*sin_t - 0.5*width_car*cos_t;
 
+    //std::cout << x << std::endl;
+    //std::cout << sin_t << std::endl;
+
     float xB = x + 0.5*len_car*cos_t - 0.5*width_car*sin_t;
     float yB = y + 0.5*len_car*sin_t + 0.5*width_car*cos_t;
 
@@ -44,6 +47,7 @@ QPolygonF CarState::to_polygon() {
 
     float xD = x - 0.5*len_car*cos_t + 0.5*width_car*sin_t;
     float yD = y - 0.5*len_car*sin_t - 0.5*width_car*cos_t;
+
 
     // Trasforma i vertici in pixel
     QVector<QPointF> vertices = {
@@ -62,13 +66,23 @@ QPolygonF CarState::to_polygon() {
 bool CarState::allowed() {
     // returns false if hit walls
     QPolygonF car_rect = this->to_polygon();
+    // debug
+    //std::cout << '('<<car_rect[0].x() << ", " <<car_rect[0].y() << "), ("<<car_rect[1].x() << ", " <<car_rect[1].y() << "), ("<<car_rect[2].x() << ", " <<car_rect[2].y() << "), ("<<car_rect[3].x() << ", " <<car_rect[3].y() << "), (\n";
+
+    // debug
     QPolygonF env_poly = build_env();
 
     for(auto point: car_rect) {
-        if(!env_poly.containsPoint(point, Qt::OddEvenFill)) return false;
+        if(!env_poly.containsPoint(point, Qt::OddEvenFill)) {
+            return false;
+        }
     }
-    if(car_rect.containsPoint(env_poly[3], Qt::OddEvenFill)) return false;
-    if(car_rect.containsPoint(env_poly[6], Qt::OddEvenFill)) return false;
+    if(car_rect.containsPoint(env_poly[3], Qt::OddEvenFill)) {
+        return false;
+    }
+    if(car_rect.containsPoint(env_poly[6], Qt::OddEvenFill)) {
+        return false;
+    }
 
     return true;
 }
@@ -79,6 +93,13 @@ CarState::~CarState() {}
 
 CarState CarState::compute_new_state(float speed, float steering, int timestep) {
     float dt = timestep / 1000.0;
+    if(steering==0.0) { // if there is no steering, rotation do not make sense
+        return CarState(
+            x + dt*speed*cos(theta), 
+            y + dt*speed*sin(theta),
+            theta
+        );
+    }
     // angle of rotation
     float alpha = dt*speed*sin(steering)/len_car;
     // center of rotation
@@ -88,6 +109,10 @@ CarState CarState::compute_new_state(float speed, float steering, int timestep) 
     float x_next = (x-x_cr)*cos(alpha) - (y-y_cr)*sin(alpha) + x_cr;
     float y_next = (x-x_cr)*sin(alpha) + (y-y_cr)*cos(alpha) + y_cr;
     float theta_next = theta-alpha;
+    
+    if(std::isnan(x_next)) {
+        std::cout << "TROVATO NAN" << " alpha: " << alpha << " x_cr: " <<x_cr<< " y_cr: " <<y_cr << std::endl;
+    }
 
     return CarState(x_next, y_next, theta_next);
 }

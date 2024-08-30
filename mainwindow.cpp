@@ -2,7 +2,7 @@
 #include "ui_mainwindow.h"
 
 // frequency of choices and screen update
-#define MSEC 30 // latency in msec of timestep
+#define MSEC 300 // latency in msec of timestep
 #define ANIMATION_SPEED 1 // x1
 #define TIME_RATIO 1 // TIME_RATIO * MSEC is the frequency of the choice, used by the controller
 
@@ -19,7 +19,7 @@
 
 
 const bool Q_weights_freezed = false;
-const float learning_rate = 0.001;
+const float learning_rate = 0.003;
 const float discount_factor = 0.9;
 const float exploration_rate_max = 0.1; 
 const float er_half_life = 1e7;
@@ -109,7 +109,7 @@ MainWindow::MainWindow(QWidget *parent):
     rectangle = map_into_window(car_st.to_polygon());
     env = map_into_window(build_env());
 
-    std::cout << "Distanza percorsa tra scelte " << 2.0 *speed_unity * TIME_RATIO * MSEC / 1000.0 << std::endl;
+    //std::cout << "Distanza percorsa tra scelte " << 2.0 *speed_unity * TIME_RATIO * MSEC / 1000.0 << std::endl;
 
 
 }
@@ -178,7 +178,7 @@ void MainWindow::iteration() {
     if(!new_car_st.allowed()) {
         //std::cout << new_state_encoded << " not allowed " << std::endl;
         hit_counter++;
-        std::cout << "HIT" << std::endl;
+        //std::cout << "HIT" << std::endl;
         car_st = CarState::generate_random_state();
         //car_st_vect = car_st.to_vector_normalized();
         state_encoded = car_st.discretize_state(x_divide, y_divide, theta_divide); //state_encoded = som.findBMU(car_st_vect);
@@ -186,7 +186,7 @@ void MainWindow::iteration() {
     else if(new_car_st.parked()) {
         //std::cout << new_state_encoded << " parked " << std::endl;
         success_counter++;
-        std::cout << "PARK" << std::endl;
+        //std::cout << "PARK" << std::endl;
         car_st = CarState::generate_random_state();
         //car_st_vect = car_st.to_vector_normalized();
         state_encoded = car_st.discretize_state(x_divide, y_divide, theta_divide);
@@ -220,7 +220,7 @@ void MainWindow::iteration_with_choice() {
 
 
     if(!new_car_st.allowed()) {
-        std::cout << "Choice " << new_state_encoded << " not allowed " << std::endl;
+        //std::cout << "Choice " << new_state_encoded << " not allowed " << std::endl;
         hit_counter++;
         car_st = CarState::generate_random_state();
         //car_st_vect = car_st.to_vector_normalized();
@@ -229,7 +229,7 @@ void MainWindow::iteration_with_choice() {
 
     }
     else if(new_car_st.parked()) {
-        std::cout << "Choice " << new_state_encoded << " parked " << std::endl;
+        //std::cout << "Choice " << new_state_encoded << " parked " << std::endl;
         success_counter++;
         car_st = CarState::generate_random_state();
         //car_st_vect = car_st.to_vector_normalized();
@@ -239,12 +239,12 @@ void MainWindow::iteration_with_choice() {
     }
 
     else {
-        std::cout << "Choice " << new_state_encoded << std::endl;
+        //std::cout << "Choice " << new_state_encoded << std::endl;
         car_st = new_car_st;
         //car_st_vect = new_car_st_vect;
         state_encoded = new_state_encoded;
         //std::cout << "state: " << state_encoded << " speed: " << speed_actions[speed_action] << " steering " << steering_actions[steering_action] << std::endl;
-
+        //std::cout << "x: " << car_st.x << " y: " << car_st.y << " theta: " << car_st.theta << std::endl;
     }
 }
 
