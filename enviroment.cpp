@@ -66,10 +66,7 @@ QPolygonF CarState::to_polygon() {
 bool CarState::allowed() {
     // returns false if hit walls
     QPolygonF car_rect = this->to_polygon();
-    // debug
-    //std::cout << '('<<car_rect[0].x() << ", " <<car_rect[0].y() << "), ("<<car_rect[1].x() << ", " <<car_rect[1].y() << "), ("<<car_rect[2].x() << ", " <<car_rect[2].y() << "), ("<<car_rect[3].x() << ", " <<car_rect[3].y() << "), (\n";
 
-    // debug
     QPolygonF env_poly = build_env();
 
     for(auto point: car_rect) {
