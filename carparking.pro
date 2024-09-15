@@ -10,7 +10,6 @@ CONFIG += c++11
 
 SOURCES += \
     enviroment.cpp \
-    kohonen_net.cpp \
     main.cpp \
     mainwindow.cpp \
     q_learning.cpp \
@@ -18,7 +17,6 @@ SOURCES += \
 
 HEADERS += \
     enviroment.h \
-    kohonen_net.h \
     mainwindow.h \
     q_learning.h \
     utils.h
