@@ -6,7 +6,7 @@
 #define ANIMATION_SPEED 1 // x1
 #define TIME_RATIO 10 // TIME_RATIO * MSEC is the frequency of the choice, used by the controller
 
-// video animation constansts
+// video animation constants
 #define PIXEL_RATIO 30 // how many pixel is a meter
 #define MARGIN 30 // distance in pixel between window and enviroment representation
 #define WINDOW_HEIGHT 600
@@ -19,7 +19,7 @@
 
 
 const bool Q_weights_freezed = false;
-const float learning_rate = 0.003;
+const float learning_rate = 0.001;
 const float discount_factor = 0.9;
 const float exploration_rate_max = 0.2; 
 const float er_half_life = 1e7;

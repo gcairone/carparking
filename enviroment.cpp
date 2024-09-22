@@ -1,7 +1,7 @@
 #include "enviroment.h"
 #include <cmath>
 #include <QLineF>
-
+#define APPROX_MOTION false // if true, it compute next state with approximate kinematics
 
 float len_car = 4;
 float width_car = 1.7;
@@ -90,28 +90,44 @@ CarState::~CarState() {}
 
 CarState CarState::compute_new_state(float speed, float steering, int timestep) {
     float dt = timestep / 1000.0;
-    if(steering==0.0) { // if there is no steering, rotation do not make sense
-        return CarState(
-            x + dt*speed*cos(theta), 
-            y + dt*speed*sin(theta),
-            theta
-        );
-    }
-    // angle of rotation
-    float alpha = dt*speed*tan(steering)/len_car;
-    // center of rotation
-    float x_cr = x - 0.5*len_car*cos(theta) - len_car*sin(theta)/tan(steering);
-    float y_cr = y - 0.5*len_car*sin(theta) + len_car*cos(theta)/tan(steering);
-    // next state as rotation of (x, y, theta) respect to (x_cr, y_cr) of angle alpha
-    float x_next = (x-x_cr)*cos(alpha) - (y-y_cr)*sin(alpha) + x_cr;
-    float y_next = (x-x_cr)*sin(alpha) + (y-y_cr)*cos(alpha) + y_cr;
-    float theta_next = theta-alpha;
-    
-    if(std::isnan(x_next)) {
-        std::cout << "TROVATO NAN" << " alpha: " << alpha << " x_cr: " <<x_cr<< " y_cr: " <<y_cr << std::endl;
-    }
 
-    return CarState(x_next, y_next, theta_next);
+    if(APPROX_MOTION) {
+        float x_r = x - 0.5 * len_car * cos(this->theta); // x ruota dietro
+        float y_r = y - 0.5 * width_car * sin(this->theta); // y ruota dietro
+
+        float x_r_next = x_r + dt * cos(this->theta) * speed;
+        float y_r_next = y_r + dt * sin(this->theta) * speed;
+
+        float x_next = x_r_next + 0.5*len_car*cos(this->theta);
+        float y_next = y_r_next + 0.5*width_car*sin(this->theta);
+        float theta_next = theta - dt * sin(steering) * speed / len_car;
+
+        return CarState(x_next, y_next, theta_next);
+    }
+    else {
+        if(steering==0.0) { // if there is no steering, rotation do not make sense
+            return CarState(
+                x + dt*speed*cos(theta), 
+                y + dt*speed*sin(theta),
+                theta
+            );
+        }
+        // angle of rotation
+        float alpha = dt*speed*tan(steering)/len_car;
+        // center of rotation
+        float x_cr = x - 0.5*len_car*cos(theta) - len_car*sin(theta)/tan(steering);
+        float y_cr = y - 0.5*len_car*sin(theta) + len_car*cos(theta)/tan(steering);
+        // next state as rotation of (x, y, theta) respect to (x_cr, y_cr) of angle alpha
+        float x_next = (x-x_cr)*cos(alpha) - (y-y_cr)*sin(alpha) + x_cr;
+        float y_next = (x-x_cr)*sin(alpha) + (y-y_cr)*cos(alpha) + y_cr;
+        float theta_next = theta-alpha;
+        
+        if(std::isnan(x_next)) {
+            std::cout << "TROVATO NAN" << " alpha: " << alpha << " x_cr: " <<x_cr<< " y_cr: " <<y_cr << std::endl;
+        }
+
+        return CarState(x_next, y_next, theta_next);
+    }
 }
 
 
