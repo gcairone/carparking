@@ -99,8 +99,8 @@ MainWindow::MainWindow(QWidget *parent):
 
     timer = new QTimer(this);
     connect(timer, &QTimer::timeout, this, [this]() {
-        if(iter % TIME_RATIO == 0) iteration_with_choice();
-        iteration(ANIMATION_SPEED*MSEC);
+        if(iter % TIME_RATIO == 0) model_iteration();
+        enviroment_iteration(ANIMATION_SPEED*MSEC);
         iter++;
         update();
     });
@@ -147,7 +147,7 @@ void MainWindow::on_stopButton_clicked()
 /*
 void MainWindow::iteration_animation()
 {
-    if(iter % TIME_RATIO == 0) iteration_with_choice();
+    if(iter % TIME_RATIO == 0) model_iteration();
     iteration();
     iter++;
     update();
@@ -172,7 +172,7 @@ void MainWindow::paintEvent(QPaintEvent *event)
 
 
 
-void MainWindow::iteration(int timestep) {
+void MainWindow::enviroment_iteration(int timestep) {
     int speed_action = last_speed_action;
     int steering_action = last_steering_action;
 
@@ -209,7 +209,7 @@ void MainWindow::iteration(int timestep) {
     }
 }
 
-void MainWindow::iteration_with_choice() {
+void MainWindow::model_iteration() {
 
     int speed_action = speed_controller.chooseAction(state_encoded);
     int steering_action = steering_controller.chooseAction(state_encoded);
@@ -282,8 +282,8 @@ void MainWindow::on_trainButton_clicked()
 
     int num_iter = ui->num_iterations->value();
     for(int i=0; i<num_iter; ++i) {
-        iteration_with_choice();
-        iteration(ANIMATION_SPEED*TIME_RATIO*MSEC);
+        model_iteration();
+        enviroment_iteration(ANIMATION_SPEED*TIME_RATIO*MSEC);
         if(i%500000==0) {
             std::cout << "{\"iteration\": \"" << i << "\", \"hit\": \"" << hit_counter << "\", \"success\": \"" << success_counter << "\", \"success_ratio\": \""<< 100 * success_counter / (float)(success_counter+hit_counter) << '%' << "\", \"lr\": \""<< speed_controller.lr << "\", \"er\": \"" << speed_controller.exploration_rate << "\"}"<< std::endl;
             file << "{\"iteration\": \"" << i << "\", \"hit\": \"" << hit_counter << "\", \"success\": \"" << success_counter << "\", \"success_ratio\": \""<< 100 * success_counter / (float)(success_counter+hit_counter) << '%' << "\", \"lr\": \""<< speed_controller.lr << "\", \"er\": \"" << speed_controller.exploration_rate << "\"}"<< std::endl;
