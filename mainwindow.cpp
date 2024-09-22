@@ -100,11 +100,11 @@ MainWindow::MainWindow(QWidget *parent):
     timer = new QTimer(this);
     connect(timer, &QTimer::timeout, this, [this]() {
         if(iter % TIME_RATIO == 0) iteration_with_choice();
-        iteration();
+        iteration(ANIMATION_SPEED*MSEC);
         iter++;
         update();
     });
-    timer->setInterval(MSEC); 
+    timer->setInterval(ANIMATION_SPEED*MSEC); 
 
     car_st = CarState::generate_random_state();
     //car_st = CarState(3, 3, M_PI*0.5);
@@ -172,11 +172,11 @@ void MainWindow::paintEvent(QPaintEvent *event)
 
 
 
-void MainWindow::iteration() {
+void MainWindow::iteration(int timestep) {
     int speed_action = last_speed_action;
     int steering_action = last_steering_action;
 
-    auto new_car_st = car_st.compute_new_state(speed_actions[speed_action], steering_actions[steering_action], ANIMATION_SPEED*MSEC);
+    auto new_car_st = car_st.compute_new_state(speed_actions[speed_action], steering_actions[steering_action], timestep);
     //auto new_car_st_vect = new_car_st.to_vector_normalized();
 
     auto new_state_encoded = new_car_st.discretize_state(x_divide, y_divide, theta_divide);//auto new_state_encoded = som.findBMU(new_car_st_vect);
@@ -185,18 +185,20 @@ void MainWindow::iteration() {
     if(!new_car_st.allowed()) {
         //std::cout << new_state_encoded << " not allowed " << std::endl;
         hit_counter++;
-        std::cout << "HIT" << std::endl;
+        //std::cout << "HIT" << std::endl;
         car_st = CarState::generate_random_state();
-        //car_st_vect = car_st.to_vector_normalized();
         state_encoded = car_st.discretize_state(x_divide, y_divide, theta_divide); //state_encoded = som.findBMU(car_st_vect);
+        last_speed_action = speed_controller.chooseAction(state_encoded);
+        last_steering_action = steering_controller.chooseAction(state_encoded);
     }
     else if(new_car_st.parked()) {
         //std::cout << new_state_encoded << " parked " << std::endl;
         success_counter++;
-        std::cout << "PARK" << std::endl;
+        //std::cout << "PARK" << std::endl;
         car_st = CarState::generate_random_state();
-        //car_st_vect = car_st.to_vector_normalized();
         state_encoded = car_st.discretize_state(x_divide, y_divide, theta_divide);
+        last_speed_action = speed_controller.chooseAction(state_encoded);
+        last_steering_action = steering_controller.chooseAction(state_encoded);
     }
 
     else {
@@ -226,7 +228,7 @@ void MainWindow::iteration_with_choice() {
         steering_controller.train(state_encoded, steering_action, reward, new_state_encoded);
     }
 
-
+    /*
     if(!new_car_st.allowed()) {
         //std::cout << "Choice " << new_state_encoded << " not allowed " << std::endl;
         hit_counter++;
@@ -254,6 +256,7 @@ void MainWindow::iteration_with_choice() {
         //std::cout << "state: " << state_encoded << " speed: " << speed_actions[speed_action] << " steering " << steering_actions[steering_action] << std::endl;
         //std::cout << "x: " << car_st.x << " y: " << car_st.y << " theta: " << car_st.theta << std::endl;
     }
+    */
 }
 
 
@@ -280,6 +283,7 @@ void MainWindow::on_trainButton_clicked()
     int num_iter = ui->num_iterations->value();
     for(int i=0; i<num_iter; ++i) {
         iteration_with_choice();
+        iteration(ANIMATION_SPEED*TIME_RATIO*MSEC);
         if(i%500000==0) {
             std::cout << "{\"iteration\": \"" << i << "\", \"hit\": \"" << hit_counter << "\", \"success\": \"" << success_counter << "\", \"success_ratio\": \""<< 100 * success_counter / (float)(success_counter+hit_counter) << '%' << "\", \"lr\": \""<< speed_controller.lr << "\", \"er\": \"" << speed_controller.exploration_rate << "\"}"<< std::endl;
             file << "{\"iteration\": \"" << i << "\", \"hit\": \"" << hit_counter << "\", \"success\": \"" << success_counter << "\", \"success_ratio\": \""<< 100 * success_counter / (float)(success_counter+hit_counter) << '%' << "\", \"lr\": \""<< speed_controller.lr << "\", \"er\": \"" << speed_controller.exploration_rate << "\"}"<< std::endl;

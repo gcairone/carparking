@@ -40,7 +40,7 @@ private slots:
 
     void on_trainButton_clicked();
 
-    void iteration();
+    void iteration(int timestep);
     void iteration_with_choice();
 
     //void on_num_iterations_valueChanged(int arg1);
