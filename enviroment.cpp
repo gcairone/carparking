@@ -98,10 +98,10 @@ CarState CarState::compute_new_state(float speed, float steering, int timestep) 
         );
     }
     // angle of rotation
-    float alpha = dt*speed*sin(steering)/len_car;
+    float alpha = dt*speed*tan(steering)/len_car;
     // center of rotation
-    float x_cr = x + 0.5*len_car*cos(theta) - len_car*sin(theta)/tan(steering);
-    float y_cr = y + 0.5*len_car*sin(theta) + len_car*cos(theta)/tan(steering);
+    float x_cr = x - 0.5*len_car*cos(theta) - len_car*sin(theta)/tan(steering);
+    float y_cr = y - 0.5*len_car*sin(theta) + len_car*cos(theta)/tan(steering);
     // next state as rotation of (x, y, theta) respect to (x_cr, y_cr) of angle alpha
     float x_next = (x-x_cr)*cos(alpha) - (y-y_cr)*sin(alpha) + x_cr;
     float y_next = (x-x_cr)*sin(alpha) + (y-y_cr)*cos(alpha) + y_cr;

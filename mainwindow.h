@@ -36,7 +36,7 @@ private slots:
     void on_stopButton_clicked();
 
     void on_pauseButton_clicked();
-    void iteration_animation();
+    //void iteration_animation();
 
     void on_trainButton_clicked();
 
