@@ -1,7 +1,7 @@
 #include "enviroment.h"
 #include <cmath>
 #include <QLineF>
-#define APPROX_MOTION false // if true, it compute next state with approximate kinematics
+#define APPROX_MOTION true // if true, it compute next state with approximate kinematics
 
 float len_car = 4;
 float width_car = 1.7;
