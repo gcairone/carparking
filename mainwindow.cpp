@@ -18,6 +18,7 @@
 
 
 
+
 const bool Q_weights_freezed = false;
 const float learning_rate = 0.001;
 const float discount_factor = 0.9;
