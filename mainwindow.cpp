@@ -2,7 +2,7 @@
 #include "ui_mainwindow.h"
 
 // frequency of choices and screen update
-//
+// 
 #define MSEC 30 // latency in msec of timestep
 #define ANIMATION_SPEED 1 // x1
 #define TIME_RATIO 10 // TIME_RATIO * MSEC is the frequency of the choice, used by the controller
