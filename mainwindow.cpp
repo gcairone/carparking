@@ -22,7 +22,7 @@
 
 
 const bool Q_weights_freezed = false;
-const float learning_rate = 0.001;
+const float learning_rate = 0.003;
 const float discount_factor = 0.9;
 const float exploration_rate_max = 0.1; 
 const float er_half_life = 1e7;
