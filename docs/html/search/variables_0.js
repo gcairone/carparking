@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['theta_30',['theta',['../classCarState.html#a4304843c25197fb6bebc423853267a09',1,'CarState']]]
+  ['exploration_5frate_48',['exploration_rate',['../classQLearningModel.html#a162563ab256ff75aafeeae02e133d1ea',1,'QLearningModel']]]
 ];

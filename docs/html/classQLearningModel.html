@@ -69,37 +69,279 @@ $(function() {
 <div class="title">QLearningModel Class Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>Class that implements a Q-Learning model for reinforcement learning.  
+ <a href="classQLearningModel.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="q__learning_8h_source.html">q_learning.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a02d9a3a0af6d2086b2b6a227b5aaafb6"><td class="memItemLeft" align="right" valign="top"><a id="a02d9a3a0af6d2086b2b6a227b5aaafb6"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>QLearningModel</b> (int state_count, int action_count, float lr_max, float discount_factor, float exploration_rate_max, float er_half_life)</td></tr>
+<tr class="memitem:a02d9a3a0af6d2086b2b6a227b5aaafb6"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classQLearningModel.html#a02d9a3a0af6d2086b2b6a227b5aaafb6">QLearningModel</a> (int state_count, int action_count, float lr_max, float discount_factor, float exploration_rate_max, float er_half_life)</td></tr>
+<tr class="memdesc:a02d9a3a0af6d2086b2b6a227b5aaafb6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor for the <a class="el" href="classQLearningModel.html" title="Class that implements a Q-Learning model for reinforcement learning.">QLearningModel</a> class.  <a href="classQLearningModel.html#a02d9a3a0af6d2086b2b6a227b5aaafb6">More...</a><br /></td></tr>
 <tr class="separator:a02d9a3a0af6d2086b2b6a227b5aaafb6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab104ec10ee1739e5a1594efb8b2345a5"><td class="memItemLeft" align="right" valign="top"><a id="ab104ec10ee1739e5a1594efb8b2345a5"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>chooseAction</b> (int state)</td></tr>
+<tr class="memitem:ab104ec10ee1739e5a1594efb8b2345a5"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classQLearningModel.html#ab104ec10ee1739e5a1594efb8b2345a5">chooseAction</a> (int state)</td></tr>
+<tr class="memdesc:ab104ec10ee1739e5a1594efb8b2345a5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Chooses an action using the epsilon-greedy strategy.  <a href="classQLearningModel.html#ab104ec10ee1739e5a1594efb8b2345a5">More...</a><br /></td></tr>
 <tr class="separator:ab104ec10ee1739e5a1594efb8b2345a5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0c330f7d1f5098efcfa79badfff68558"><td class="memItemLeft" align="right" valign="top"><a id="a0c330f7d1f5098efcfa79badfff68558"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>bestAction</b> (int state)</td></tr>
+<tr class="memitem:a0c330f7d1f5098efcfa79badfff68558"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classQLearningModel.html#a0c330f7d1f5098efcfa79badfff68558">bestAction</a> (int state)</td></tr>
+<tr class="memdesc:a0c330f7d1f5098efcfa79badfff68558"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the best action for a given state.  <a href="classQLearningModel.html#a0c330f7d1f5098efcfa79badfff68558">More...</a><br /></td></tr>
 <tr class="separator:a0c330f7d1f5098efcfa79badfff68558"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae6556810868328cbcebbab888a2d60f4"><td class="memItemLeft" align="right" valign="top"><a id="ae6556810868328cbcebbab888a2d60f4"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>train</b> (int state, int action, float reward, int nextState)</td></tr>
+<tr class="memitem:ae6556810868328cbcebbab888a2d60f4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classQLearningModel.html#ae6556810868328cbcebbab888a2d60f4">train</a> (int state, int action, float reward, int nextState)</td></tr>
+<tr class="memdesc:ae6556810868328cbcebbab888a2d60f4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Updates the Q-table based on the action taken.  <a href="classQLearningModel.html#ae6556810868328cbcebbab888a2d60f4">More...</a><br /></td></tr>
 <tr class="separator:ae6556810868328cbcebbab888a2d60f4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac7e8d9507996e5d9eba8ac79cc76380e"><td class="memItemLeft" align="right" valign="top"><a id="ac7e8d9507996e5d9eba8ac79cc76380e"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>storeWeights</b> (const std::string &amp;filename)</td></tr>
+<tr class="memitem:ac7e8d9507996e5d9eba8ac79cc76380e"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classQLearningModel.html#ac7e8d9507996e5d9eba8ac79cc76380e">storeWeights</a> (const std::string &amp;filename)</td></tr>
+<tr class="memdesc:ac7e8d9507996e5d9eba8ac79cc76380e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stores the Q-table to a file.  <a href="classQLearningModel.html#ac7e8d9507996e5d9eba8ac79cc76380e">More...</a><br /></td></tr>
 <tr class="separator:ac7e8d9507996e5d9eba8ac79cc76380e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3208662d60595f5a937d9b8257eaed6a"><td class="memItemLeft" align="right" valign="top"><a id="a3208662d60595f5a937d9b8257eaed6a"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>loadWeights</b> (const std::string &amp;filename)</td></tr>
+<tr class="memitem:a3208662d60595f5a937d9b8257eaed6a"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classQLearningModel.html#a3208662d60595f5a937d9b8257eaed6a">loadWeights</a> (const std::string &amp;filename)</td></tr>
+<tr class="memdesc:a3208662d60595f5a937d9b8257eaed6a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Loads the Q-table from a file.  <a href="classQLearningModel.html#a3208662d60595f5a937d9b8257eaed6a">More...</a><br /></td></tr>
 <tr class="separator:a3208662d60595f5a937d9b8257eaed6a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
 <tr class="memitem:aa94f381109f794ed010399a55b7fda2e"><td class="memItemLeft" align="right" valign="top"><a id="aa94f381109f794ed010399a55b7fda2e"></a>
-float&#160;</td><td class="memItemRight" valign="bottom"><b>lr</b></td></tr>
+float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classQLearningModel.html#aa94f381109f794ed010399a55b7fda2e">lr</a></td></tr>
+<tr class="memdesc:aa94f381109f794ed010399a55b7fda2e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Current learning rate (adjusted over time). <br /></td></tr>
 <tr class="separator:aa94f381109f794ed010399a55b7fda2e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a162563ab256ff75aafeeae02e133d1ea"><td class="memItemLeft" align="right" valign="top"><a id="a162563ab256ff75aafeeae02e133d1ea"></a>
-float&#160;</td><td class="memItemRight" valign="bottom"><b>exploration_rate</b></td></tr>
+float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classQLearningModel.html#a162563ab256ff75aafeeae02e133d1ea">exploration_rate</a></td></tr>
+<tr class="memdesc:a162563ab256ff75aafeeae02e133d1ea"><td class="mdescLeft">&#160;</td><td class="mdescRight">Current exploration rate (epsilon, adjusted over time). <br /></td></tr>
 <tr class="separator:a162563ab256ff75aafeeae02e133d1ea"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Class that implements a Q-Learning model for reinforcement learning. </p>
+<p>This class manages the Q-table for storing state-action values and provides methods to train the model, choose actions, and adjust learning and exploration rates over time. </p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a02d9a3a0af6d2086b2b6a227b5aaafb6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a02d9a3a0af6d2086b2b6a227b5aaafb6">&#9670;&nbsp;</a></span>QLearningModel()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QLearningModel::QLearningModel </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>state_count</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>action_count</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>lr_max</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>discount_factor</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>exploration_rate_max</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>er_half_life</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Constructor for the <a class="el" href="classQLearningModel.html" title="Class that implements a Q-Learning model for reinforcement learning.">QLearningModel</a> class. </p>
+<p>Initializes the Q-learning model with a given state and action space, and sets the initial learning and exploration rates.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">state_count</td><td>The number of states in the environment. </td></tr>
+    <tr><td class="paramname">action_count</td><td>The number of actions available per state. </td></tr>
+    <tr><td class="paramname">lr_max</td><td>The initial (maximum) learning rate. </td></tr>
+    <tr><td class="paramname">discount_factor</td><td>The discount factor for future rewards. </td></tr>
+    <tr><td class="paramname">exploration_rate_max</td><td>The initial (maximum) exploration rate. </td></tr>
+    <tr><td class="paramname">er_half_life</td><td>The half-life used to decrease the exploration rate. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a0c330f7d1f5098efcfa79badfff68558"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0c330f7d1f5098efcfa79badfff68558">&#9670;&nbsp;</a></span>bestAction()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int QLearningModel::bestAction </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>state</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the best action for a given state. </p>
+<p>Selects the action that has the highest Q-value for the specified state.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">state</td><td>The current state. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The index of the best action for the given state. </dd></dl>
+
+</div>
+</div>
+<a id="ab104ec10ee1739e5a1594efb8b2345a5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab104ec10ee1739e5a1594efb8b2345a5">&#9670;&nbsp;</a></span>chooseAction()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int QLearningModel::chooseAction </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>state</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Chooses an action using the epsilon-greedy strategy. </p>
+<p>With probability equal to the current exploration rate, it chooses a random action. Otherwise, it chooses the best action for the given state.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">state</td><td>The current state for which to choose an action. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The index of the action chosen (either random or best action). </dd></dl>
+
+</div>
+</div>
+<a id="a3208662d60595f5a937d9b8257eaed6a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3208662d60595f5a937d9b8257eaed6a">&#9670;&nbsp;</a></span>loadWeights()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool QLearningModel::loadWeights </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>filename</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Loads the Q-table from a file. </p>
+<p>Loads a previously saved Q-table from a file, restoring the model to its saved state.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">filename</td><td>The name of the file from which to load the Q-table. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>true if the Q-table was successfully loaded, false otherwise. </dd></dl>
+
+</div>
+</div>
+<a id="ac7e8d9507996e5d9eba8ac79cc76380e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac7e8d9507996e5d9eba8ac79cc76380e">&#9670;&nbsp;</a></span>storeWeights()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool QLearningModel::storeWeights </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>filename</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Stores the Q-table to a file. </p>
+<p>Saves the current Q-table to a specified file, allowing the model to be reloaded and reused later.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">filename</td><td>The name of the file where the Q-table will be stored. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>true if the Q-table was successfully saved, false otherwise. </dd></dl>
+
+</div>
+</div>
+<a id="ae6556810868328cbcebbab888a2d60f4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae6556810868328cbcebbab888a2d60f4">&#9670;&nbsp;</a></span>train()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void QLearningModel::train </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>state</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>action</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>reward</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>nextState</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Updates the Q-table based on the action taken. </p>
+<p>Performs the Q-learning update for the Q-value of the (state, action) pair based on the reward received and the next state.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">state</td><td>The current state. </td></tr>
+    <tr><td class="paramname">action</td><td>The action taken in the current state. </td></tr>
+    <tr><td class="paramname">reward</td><td>The reward received after taking the action. </td></tr>
+    <tr><td class="paramname">nextState</td><td>The next state after taking the action. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following files:<ul>
 <li>src/<a class="el" href="q__learning_8h_source.html">q_learning.h</a></li>
 <li>src/q_learning.cpp</li>

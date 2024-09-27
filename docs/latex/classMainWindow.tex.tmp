@@ -2,6 +2,15 @@
 \label{classMainWindow}\index{MainWindow@{MainWindow}}
 
 
+The \mbox{\hyperlink{classMainWindow}{Main\+Window}} class represents the main interface for the application.  
+
+
+
+
+{\ttfamily \#include $<$mainwindow.\+h$>$}
+
+
+
 Inheritance diagram for Main\+Window\+:
 % FIG 0
 
@@ -11,15 +20,70 @@ Collaboration diagram for Main\+Window\+:
 \doxysubsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\mbox{\Hypertarget{classMainWindow_a996c5a2b6f77944776856f08ec30858d}\label{classMainWindow_a996c5a2b6f77944776856f08ec30858d}} 
-{\bfseries Main\+Window} (QWidget $\ast$parent=nullptr)
-\end{DoxyCompactItemize}
+\mbox{\hyperlink{classMainWindow_a996c5a2b6f77944776856f08ec30858d}{Main\+Window}} (QWidget $\ast$parent=nullptr)
+\begin{DoxyCompactList}\small\item\em Constructs a \mbox{\hyperlink{classMainWindow}{Main\+Window}} object. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classMainWindow_ae98d00a93bc118200eeef9f9bba1dba7}{$\sim$\+Main\+Window}} ()
+\begin{DoxyCompactList}\small\item\em Destructor for the \mbox{\hyperlink{classMainWindow}{Main\+Window}} class. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsection*{Protected Member Functions}
 \begin{DoxyCompactItemize}
 \item 
+void \mbox{\hyperlink{classMainWindow_a015219518d1d99a94981820468a53b20}{paint\+Event}} (QPaint\+Event $\ast$event) override
+\begin{DoxyCompactList}\small\item\em Handles the paint event for custom drawing. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+The \mbox{\hyperlink{classMainWindow}{Main\+Window}} class represents the main interface for the application. 
+
+This class inherits from QMain\+Window and is responsible for handling user interactions, managing the environment, and visualizing the state of the Q-\/learning model and car simulation. It contains methods to control the simulation and manage the Q-\/learning process. 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classMainWindow_a996c5a2b6f77944776856f08ec30858d}\label{classMainWindow_a996c5a2b6f77944776856f08ec30858d}} 
+\index{MainWindow@{MainWindow}!MainWindow@{MainWindow}}
+\index{MainWindow@{MainWindow}!MainWindow@{MainWindow}}
+\doxysubsubsection{\texorpdfstring{MainWindow()}{MainWindow()}}
+{\footnotesize\ttfamily Main\+Window\+::\+Main\+Window (\begin{DoxyParamCaption}\item[{QWidget $\ast$}]{parent = {\ttfamily nullptr} }\end{DoxyParamCaption})}
+
+
+
+Constructs a \mbox{\hyperlink{classMainWindow}{Main\+Window}} object. 
+
+Initializes the main window and its components. Sets up timers and other necessary variables for simulation.
+
+
+\begin{DoxyParams}{Parameters}
+{\em parent} & Optional parent widget. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classMainWindow_ae98d00a93bc118200eeef9f9bba1dba7}\label{classMainWindow_ae98d00a93bc118200eeef9f9bba1dba7}} 
+\index{MainWindow@{MainWindow}!````~MainWindow@{$\sim$MainWindow}}
+\index{````~MainWindow@{$\sim$MainWindow}!MainWindow@{MainWindow}}
+\doxysubsubsection{\texorpdfstring{$\sim$MainWindow()}{~MainWindow()}}
+{\footnotesize\ttfamily Main\+Window\+::$\sim$\+Main\+Window (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Destructor for the \mbox{\hyperlink{classMainWindow}{Main\+Window}} class. 
+
+Cleans up resources used by the \mbox{\hyperlink{classMainWindow}{Main\+Window}} instance. 
+
+\doxysubsection{Member Function Documentation}
 \mbox{\Hypertarget{classMainWindow_a015219518d1d99a94981820468a53b20}\label{classMainWindow_a015219518d1d99a94981820468a53b20}} 
-void {\bfseries paint\+Event} (QPaint\+Event $\ast$event) override
-\end{DoxyCompactItemize}
+\index{MainWindow@{MainWindow}!paintEvent@{paintEvent}}
+\index{paintEvent@{paintEvent}!MainWindow@{MainWindow}}
+\doxysubsubsection{\texorpdfstring{paintEvent()}{paintEvent()}}
+{\footnotesize\ttfamily void Main\+Window\+::paint\+Event (\begin{DoxyParamCaption}\item[{QPaint\+Event $\ast$}]{event }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [protected]}}
+
+
+
+Handles the paint event for custom drawing. 
+
+This method is overridden to perform custom drawing on the main window.
+
+
+\begin{DoxyParams}{Parameters}
+{\em event} & The paint event that triggered this method. \\
+\hline
+\end{DoxyParams}
 
 
 The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}

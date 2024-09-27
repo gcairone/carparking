@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['generate_5frandom_5fstate_24',['generate_random_state',['../classCarState.html#a7540b63df198674cbc0da1ed69d60ffe',1,'CarState']]]
+  ['discretize_5fstate_34',['discretize_state',['../classCarState.html#a00b91222ce2e022797c22230cc1aa050',1,'CarState']]]
 ];

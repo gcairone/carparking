@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['qlearningmodel_18',['QLearningModel',['../classQLearningModel.html',1,'']]]
+  ['qlearningmodel_27',['QLearningModel',['../classQLearningModel.html',1,'']]]
 ];
