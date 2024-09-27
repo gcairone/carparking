@@ -1,0 +1,243 @@
+\hypertarget{classCarState}{}\doxysection{Car\+State Class Reference}
+\label{classCarState}\index{CarState@{CarState}}
+
+
+Class that contains the state of the car.  
+
+
+
+
+{\ttfamily \#include $<$enviroment.\+h$>$}
+
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classCarState_af69b7ada77b367d0f5934e6d10b454aa}{Car\+State}} ()
+\begin{DoxyCompactList}\small\item\em Default constructor for \mbox{\hyperlink{classCarState}{Car\+State}}. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classCarState_a77b8b0f180160069a54b681f32bced0b}{Car\+State}} (float \mbox{\hyperlink{classCarState_acea8a982513991c8ed0fe3c8abdf7ad5}{x}}, float \mbox{\hyperlink{classCarState_ab93d3ed69588f5a1f6c9e0003b69d02f}{y}}, float \mbox{\hyperlink{classCarState_a4304843c25197fb6bebc423853267a09}{theta}})
+\begin{DoxyCompactList}\small\item\em Constructor for \mbox{\hyperlink{classCarState}{Car\+State}} with specified values. \end{DoxyCompactList}\item 
+QPolygonF \mbox{\hyperlink{classCarState_a92eebfadddca1582ac80420b971c250c}{to\+\_\+polygon}} ()
+\begin{DoxyCompactList}\small\item\em Converts the car\textquotesingle{}s state to a polygon representation. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classCarState_a6f22bd931dfe7dcc577a3fed585921d9}{allowed}} ()
+\begin{DoxyCompactList}\small\item\em Checks if the current state of the car is valid. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classCarState}{Car\+State}} \mbox{\hyperlink{classCarState_a5b68adffff7845393a6c2eb62b3d5286}{compute\+\_\+new\+\_\+state}} (float speed, float steering, int timestep)
+\begin{DoxyCompactList}\small\item\em Computes the car\textquotesingle{}s new state based on speed and steering input. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classCarState_a3f5b836f6ac1f57b4570f9cd02700869}{parked}} ()
+\begin{DoxyCompactList}\small\item\em Checks if the car is parked correctly. \end{DoxyCompactList}\item 
+float \mbox{\hyperlink{classCarState_a00565a0a0fea7ec43d26b16a3b923f9a}{reward}} ()
+\begin{DoxyCompactList}\small\item\em Computes a reward based on the car\textquotesingle{}s state. \end{DoxyCompactList}\item 
+std\+::vector$<$ float $>$ \mbox{\hyperlink{classCarState_a13db53a51bc53a5b02ea3a18072fb1fb}{to\+\_\+vector\+\_\+normalized}} ()
+\begin{DoxyCompactList}\small\item\em Converts the car\textquotesingle{}s state to a normalized vector. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{classCarState_a00b91222ce2e022797c22230cc1aa050}{discretize\+\_\+state}} (int divide\+\_\+x, int divide\+\_\+y, int divide\+\_\+theta)
+\begin{DoxyCompactList}\small\item\em Discretizes the car\textquotesingle{}s state for grid-\/based processing. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classCarState_a95bb71462edfbc78fa3ebeb683b1fc43}{$\sim$\+Car\+State}} ()
+\begin{DoxyCompactList}\small\item\em Destructor for \mbox{\hyperlink{classCarState}{Car\+State}}. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static \mbox{\hyperlink{classCarState}{Car\+State}} \mbox{\hyperlink{classCarState_a7540b63df198674cbc0da1ed69d60ffe}{generate\+\_\+random\+\_\+state}} ()
+\begin{DoxyCompactList}\small\item\em Generates a random car state. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classCarState_acea8a982513991c8ed0fe3c8abdf7ad5}\label{classCarState_acea8a982513991c8ed0fe3c8abdf7ad5}} 
+float \mbox{\hyperlink{classCarState_acea8a982513991c8ed0fe3c8abdf7ad5}{x}}
+\begin{DoxyCompactList}\small\item\em The x-\/coordinate of the car. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classCarState_ab93d3ed69588f5a1f6c9e0003b69d02f}\label{classCarState_ab93d3ed69588f5a1f6c9e0003b69d02f}} 
+float \mbox{\hyperlink{classCarState_ab93d3ed69588f5a1f6c9e0003b69d02f}{y}}
+\begin{DoxyCompactList}\small\item\em The y-\/coordinate of the car. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classCarState_a4304843c25197fb6bebc423853267a09}\label{classCarState_a4304843c25197fb6bebc423853267a09}} 
+float \mbox{\hyperlink{classCarState_a4304843c25197fb6bebc423853267a09}{theta}}
+\begin{DoxyCompactList}\small\item\em The orientation of the car in radians (angle). \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Class that contains the state of the car. 
+
+The \mbox{\hyperlink{classCarState}{Car\+State}} class represents the state of a car in terms of its position (x, y), orientation (theta), and provides methods to calculate new states, check validity, and compute rewards based on the car\textquotesingle{}s configuration. 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classCarState_af69b7ada77b367d0f5934e6d10b454aa}\label{classCarState_af69b7ada77b367d0f5934e6d10b454aa}} 
+\index{CarState@{CarState}!CarState@{CarState}}
+\index{CarState@{CarState}!CarState@{CarState}}
+\doxysubsubsection{\texorpdfstring{CarState()}{CarState()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily Car\+State\+::\+Car\+State (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Default constructor for \mbox{\hyperlink{classCarState}{Car\+State}}. 
+
+Initializes the car\textquotesingle{}s state with default values (x = 0, y = 0, theta = 0). \mbox{\Hypertarget{classCarState_a77b8b0f180160069a54b681f32bced0b}\label{classCarState_a77b8b0f180160069a54b681f32bced0b}} 
+\index{CarState@{CarState}!CarState@{CarState}}
+\index{CarState@{CarState}!CarState@{CarState}}
+\doxysubsubsection{\texorpdfstring{CarState()}{CarState()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily Car\+State\+::\+Car\+State (\begin{DoxyParamCaption}\item[{float}]{x,  }\item[{float}]{y,  }\item[{float}]{theta }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Constructor for \mbox{\hyperlink{classCarState}{Car\+State}} with specified values. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em x} & The x-\/coordinate of the car. \\
+\hline
+{\em y} & The y-\/coordinate of the car. \\
+\hline
+{\em theta} & The orientation (angle) of the car in radians. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classCarState_a95bb71462edfbc78fa3ebeb683b1fc43}\label{classCarState_a95bb71462edfbc78fa3ebeb683b1fc43}} 
+\index{CarState@{CarState}!````~CarState@{$\sim$CarState}}
+\index{````~CarState@{$\sim$CarState}!CarState@{CarState}}
+\doxysubsubsection{\texorpdfstring{$\sim$CarState()}{~CarState()}}
+{\footnotesize\ttfamily Car\+State\+::$\sim$\+Car\+State (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Destructor for \mbox{\hyperlink{classCarState}{Car\+State}}. 
+
+Cleans up resources associated with the car state. 
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classCarState_a6f22bd931dfe7dcc577a3fed585921d9}\label{classCarState_a6f22bd931dfe7dcc577a3fed585921d9}} 
+\index{CarState@{CarState}!allowed@{allowed}}
+\index{allowed@{allowed}!CarState@{CarState}}
+\doxysubsubsection{\texorpdfstring{allowed()}{allowed()}}
+{\footnotesize\ttfamily bool Car\+State\+::allowed (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Checks if the current state of the car is valid. 
+
+The state is valid if the car is inside the designated area and does not collide with walls or other obstacles.
+
+\begin{DoxyReturn}{Returns}
+true if the state is allowed, false otherwise. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classCarState_a5b68adffff7845393a6c2eb62b3d5286}\label{classCarState_a5b68adffff7845393a6c2eb62b3d5286}} 
+\index{CarState@{CarState}!compute\_new\_state@{compute\_new\_state}}
+\index{compute\_new\_state@{compute\_new\_state}!CarState@{CarState}}
+\doxysubsubsection{\texorpdfstring{compute\_new\_state()}{compute\_new\_state()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classCarState}{Car\+State}} Car\+State\+::compute\+\_\+new\+\_\+state (\begin{DoxyParamCaption}\item[{float}]{speed,  }\item[{float}]{steering,  }\item[{int}]{timestep }\end{DoxyParamCaption})}
+
+
+
+Computes the car\textquotesingle{}s new state based on speed and steering input. 
+
+Calculates the new position and orientation of the car given the speed, steering angle, and time step.
+
+
+\begin{DoxyParams}{Parameters}
+{\em speed} & The speed of the car. \\
+\hline
+{\em steering} & The steering angle in radians. \\
+\hline
+{\em timestep} & The time step for the state change. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The new \mbox{\hyperlink{classCarState}{Car\+State}} after applying the inputs. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classCarState_a00b91222ce2e022797c22230cc1aa050}\label{classCarState_a00b91222ce2e022797c22230cc1aa050}} 
+\index{CarState@{CarState}!discretize\_state@{discretize\_state}}
+\index{discretize\_state@{discretize\_state}!CarState@{CarState}}
+\doxysubsubsection{\texorpdfstring{discretize\_state()}{discretize\_state()}}
+{\footnotesize\ttfamily int Car\+State\+::discretize\+\_\+state (\begin{DoxyParamCaption}\item[{int}]{divide\+\_\+x,  }\item[{int}]{divide\+\_\+y,  }\item[{int}]{divide\+\_\+theta }\end{DoxyParamCaption})}
+
+
+
+Discretizes the car\textquotesingle{}s state for grid-\/based processing. 
+
+Divides the state space (x, y, theta) into discrete intervals for quantization, which is often used in simulation or reinforcement learning.
+
+
+\begin{DoxyParams}{Parameters}
+{\em divide\+\_\+x} & The number of divisions for the x-\/coordinate. \\
+\hline
+{\em divide\+\_\+y} & The number of divisions for the y-\/coordinate. \\
+\hline
+{\em divide\+\_\+theta} & The number of divisions for the theta (angle). \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+An integer representing the discrete state. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classCarState_a7540b63df198674cbc0da1ed69d60ffe}\label{classCarState_a7540b63df198674cbc0da1ed69d60ffe}} 
+\index{CarState@{CarState}!generate\_random\_state@{generate\_random\_state}}
+\index{generate\_random\_state@{generate\_random\_state}!CarState@{CarState}}
+\doxysubsubsection{\texorpdfstring{generate\_random\_state()}{generate\_random\_state()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classCarState}{Car\+State}} Car\+State\+::generate\+\_\+random\+\_\+state (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Generates a random car state. 
+
+Creates a random state for the car, typically used for exploration or initializing a simulation.
+
+\begin{DoxyReturn}{Returns}
+A randomly generated \mbox{\hyperlink{classCarState}{Car\+State}}. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classCarState_a3f5b836f6ac1f57b4570f9cd02700869}\label{classCarState_a3f5b836f6ac1f57b4570f9cd02700869}} 
+\index{CarState@{CarState}!parked@{parked}}
+\index{parked@{parked}!CarState@{CarState}}
+\doxysubsubsection{\texorpdfstring{parked()}{parked()}}
+{\footnotesize\ttfamily bool Car\+State\+::parked (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Checks if the car is parked correctly. 
+
+Determines if the car is in a valid parked position based on predefined conditions.
+
+\begin{DoxyReturn}{Returns}
+true if the car is parked correctly, false otherwise. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classCarState_a00565a0a0fea7ec43d26b16a3b923f9a}\label{classCarState_a00565a0a0fea7ec43d26b16a3b923f9a}} 
+\index{CarState@{CarState}!reward@{reward}}
+\index{reward@{reward}!CarState@{CarState}}
+\doxysubsubsection{\texorpdfstring{reward()}{reward()}}
+{\footnotesize\ttfamily float Car\+State\+::reward (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Computes a reward based on the car\textquotesingle{}s state. 
+
+The reward function returns a score that can be used in reinforcement learning algorithms to assess the car\textquotesingle{}s performance based on its state.
+
+\begin{DoxyReturn}{Returns}
+A float representing the reward value. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classCarState_a92eebfadddca1582ac80420b971c250c}\label{classCarState_a92eebfadddca1582ac80420b971c250c}} 
+\index{CarState@{CarState}!to\_polygon@{to\_polygon}}
+\index{to\_polygon@{to\_polygon}!CarState@{CarState}}
+\doxysubsubsection{\texorpdfstring{to\_polygon()}{to\_polygon()}}
+{\footnotesize\ttfamily QPolygonF Car\+State\+::to\+\_\+polygon (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Converts the car\textquotesingle{}s state to a polygon representation. 
+
+\begin{DoxyReturn}{Returns}
+A QPolygonF representing the car\textquotesingle{}s shape in the current state. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classCarState_a13db53a51bc53a5b02ea3a18072fb1fb}\label{classCarState_a13db53a51bc53a5b02ea3a18072fb1fb}} 
+\index{CarState@{CarState}!to\_vector\_normalized@{to\_vector\_normalized}}
+\index{to\_vector\_normalized@{to\_vector\_normalized}!CarState@{CarState}}
+\doxysubsubsection{\texorpdfstring{to\_vector\_normalized()}{to\_vector\_normalized()}}
+{\footnotesize\ttfamily std\+::vector$<$ float $>$ Car\+State\+::to\+\_\+vector\+\_\+normalized (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Converts the car\textquotesingle{}s state to a normalized vector. 
+
+Returns a vector where each state component (x, y, theta) is normalized to a scale suitable for input into machine learning models or algorithms.
+
+\begin{DoxyReturn}{Returns}
+A vector of normalized state values. 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+src/enviroment.\+h\item 
+src/enviroment.\+cpp\end{DoxyCompactItemize}

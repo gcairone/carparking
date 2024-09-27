@@ -1,0 +1,38 @@
+\hypertarget{classQLearningModel}{}\doxysection{QLearning\+Model Class Reference}
+\label{classQLearningModel}\index{QLearningModel@{QLearningModel}}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classQLearningModel_a02d9a3a0af6d2086b2b6a227b5aaafb6}\label{classQLearningModel_a02d9a3a0af6d2086b2b6a227b5aaafb6}} 
+{\bfseries QLearning\+Model} (int state\+\_\+count, int action\+\_\+count, float lr\+\_\+max, float discount\+\_\+factor, float exploration\+\_\+rate\+\_\+max, float er\+\_\+half\+\_\+life)
+\item 
+\mbox{\Hypertarget{classQLearningModel_ab104ec10ee1739e5a1594efb8b2345a5}\label{classQLearningModel_ab104ec10ee1739e5a1594efb8b2345a5}} 
+int {\bfseries choose\+Action} (int state)
+\item 
+\mbox{\Hypertarget{classQLearningModel_a0c330f7d1f5098efcfa79badfff68558}\label{classQLearningModel_a0c330f7d1f5098efcfa79badfff68558}} 
+int {\bfseries best\+Action} (int state)
+\item 
+\mbox{\Hypertarget{classQLearningModel_ae6556810868328cbcebbab888a2d60f4}\label{classQLearningModel_ae6556810868328cbcebbab888a2d60f4}} 
+void {\bfseries train} (int state, int action, float reward, int next\+State)
+\item 
+\mbox{\Hypertarget{classQLearningModel_ac7e8d9507996e5d9eba8ac79cc76380e}\label{classQLearningModel_ac7e8d9507996e5d9eba8ac79cc76380e}} 
+bool {\bfseries store\+Weights} (const std\+::string \&filename)
+\item 
+\mbox{\Hypertarget{classQLearningModel_a3208662d60595f5a937d9b8257eaed6a}\label{classQLearningModel_a3208662d60595f5a937d9b8257eaed6a}} 
+bool {\bfseries load\+Weights} (const std\+::string \&filename)
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classQLearningModel_aa94f381109f794ed010399a55b7fda2e}\label{classQLearningModel_aa94f381109f794ed010399a55b7fda2e}} 
+float {\bfseries lr}
+\item 
+\mbox{\Hypertarget{classQLearningModel_a162563ab256ff75aafeeae02e133d1ea}\label{classQLearningModel_a162563ab256ff75aafeeae02e133d1ea}} 
+float {\bfseries exploration\+\_\+rate}
+\end{DoxyCompactItemize}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+src/q\+\_\+learning.\+h\item 
+src/q\+\_\+learning.\+cpp\end{DoxyCompactItemize}

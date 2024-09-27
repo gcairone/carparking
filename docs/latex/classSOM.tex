@@ -1,0 +1,41 @@
+\hypertarget{classSOM}{}\doxysection{SOM Class Reference}
+\label{classSOM}\index{SOM@{SOM}}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classSOM_a694e844768d6808329e737ee6319a608}\label{classSOM_a694e844768d6808329e737ee6319a608}} 
+{\bfseries SOM} (int dim\+\_\+1, int dim\+\_\+2, int dim\+\_\+3, int input\+\_\+dim, float learning\+\_\+rate\+\_\+max=0.\+1, float learning\+\_\+rate\+\_\+min=0.\+1, float r\+\_\+max=4, float r\+\_\+min=4)
+\item 
+\mbox{\Hypertarget{classSOM_aa95819c5cee5555062e00a7773b1b88a}\label{classSOM_aa95819c5cee5555062e00a7773b1b88a}} 
+void {\bfseries train} (const std\+::vector$<$ std\+::vector$<$ float $>$$>$ \&data, int epochs)
+\item 
+\mbox{\Hypertarget{classSOM_a3b517ef6ecb80fa0ec50a922e7921a0d}\label{classSOM_a3b517ef6ecb80fa0ec50a922e7921a0d}} 
+void {\bfseries train\+Online} (const std\+::vector$<$ float $>$ \&sample, int epoch)
+\item 
+\mbox{\Hypertarget{classSOM_ae910e780757be6fbcab5e4430561a621}\label{classSOM_ae910e780757be6fbcab5e4430561a621}} 
+std\+::vector$<$ std\+::vector$<$ float $>$ $>$ {\bfseries get\+Weights} () const
+\item 
+\mbox{\Hypertarget{classSOM_aa7385e483504b3fbb453bf29fbdd7da9}\label{classSOM_aa7385e483504b3fbb453bf29fbdd7da9}} 
+int {\bfseries find\+BMU} (const std\+::vector$<$ float $>$ \&input)
+\item 
+\mbox{\Hypertarget{classSOM_ad14b6c90e91a1f9c1746d263e7e53930}\label{classSOM_ad14b6c90e91a1f9c1746d263e7e53930}} 
+bool {\bfseries store\+Weights} (const std\+::string \&filename)
+\item 
+\mbox{\Hypertarget{classSOM_ae11e7687344f2da8e7ff8a80640f8da8}\label{classSOM_ae11e7687344f2da8e7ff8a80640f8da8}} 
+bool {\bfseries load\+Weights} (const std\+::string \&filename)
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classSOM_afc63109a165079a82adc4450837804c4}\label{classSOM_afc63109a165079a82adc4450837804c4}} 
+float {\bfseries learning\+\_\+rate}
+\item 
+\mbox{\Hypertarget{classSOM_a0e53784634b5773246d276d952a99249}\label{classSOM_a0e53784634b5773246d276d952a99249}} 
+float {\bfseries r}
+\end{DoxyCompactItemize}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+src/kohonen\+\_\+net.\+h\item 
+src/kohonen\+\_\+net.\+cpp\end{DoxyCompactItemize}
