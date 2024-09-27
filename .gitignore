@@ -12,6 +12,9 @@ build/*
 log/*
 !log/.gitkeep
 
+docs/*
+!docs/.gitkeep
+
 .vscode
 
 .qmake.stash
