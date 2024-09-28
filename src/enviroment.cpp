@@ -1,8 +1,8 @@
 #include "enviroment.h"
 #include <cmath>
 #include <QLineF>
-#define APPROX_MOTION true // if true, it compute next state with approximate kinematics
 
+bool approx_motion = true; // if true, it compute next state with approximate kinematics
 float len_car = 4;
 float width_car = 1.7;
 float len_env = 15;   // y-axis  
@@ -91,7 +91,7 @@ CarState::~CarState() {}
 CarState CarState::compute_new_state(float speed, float steering, int timestep) {
     float dt = timestep / 1000.0;
 
-    if(APPROX_MOTION) {
+    if(approx_motion) {
         float x_r = x - 0.5 * len_car * cos(this->theta); // x ruota dietro
         float y_r = y - 0.5 * width_car * sin(this->theta); // y ruota dietro
 
