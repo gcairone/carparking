@@ -1,18 +1,25 @@
 Makefile
 
 parameters/*
+!parameters/.gitkeep
 
 bin/*
+!bin/.gitkeep
 
 build/*
+!build/.gitkeep
+
+log/*
+!log/.gitkeep
+
+docs/*
+!docs/.gitkeep
 
 .vscode
 
 .qmake.stash
 
 README_private.txt
-
-log/*
 
 moc_mainwindow.cpp
 

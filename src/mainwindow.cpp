@@ -20,9 +20,8 @@
 
 
 
-
 const bool Q_weights_freezed = false;
-const float learning_rate = 0.001;
+const float learning_rate = 0.003;
 const float discount_factor = 0.9;
 const float exploration_rate_max = 0.1; 
 const float er_half_life = 1e7;
@@ -287,7 +286,7 @@ void MainWindow::on_trainButton_clicked()
     for(int i=0; i<num_iter; ++i) {
         model_iteration();
         enviroment_iteration(ANIMATION_SPEED*MSEC*TIME_RATIO);
-        if(i%500000==0) {
+        if(i%1000000==0) {
             std::cout << "{\"iteration\": \"" << i << "\", \"hit\": \"" << hit_counter << "\", \"success\": \"" << success_counter << "\", \"success_ratio\": \""<< 100 * success_counter / (float)(success_counter+hit_counter) << '%' << "\", \"lr\": \""<< speed_controller.lr << "\", \"er\": \"" << speed_controller.exploration_rate << "\"}"<< std::endl;
             file << "{\"iteration\": \"" << i << "\", \"hit\": \"" << hit_counter << "\", \"success\": \"" << success_counter << "\", \"success_ratio\": \""<< 100 * success_counter / (float)(success_counter+hit_counter) << '%' << "\", \"lr\": \""<< speed_controller.lr << "\", \"er\": \"" << speed_controller.exploration_rate << "\"}"<< std::endl;
             hit_counter=0;

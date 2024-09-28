@@ -1,0 +1,182 @@
+\hypertarget{classQLearningModel}{}\doxysection{QLearning\+Model Class Reference}
+\label{classQLearningModel}\index{QLearningModel@{QLearningModel}}
+
+
+Class that implements a Q-\/\+Learning model for reinforcement learning.  
+
+
+
+
+{\ttfamily \#include $<$q\+\_\+learning.\+h$>$}
+
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classQLearningModel_a02d9a3a0af6d2086b2b6a227b5aaafb6}{QLearning\+Model}} (int state\+\_\+count, int action\+\_\+count, float lr\+\_\+max, float discount\+\_\+factor, float exploration\+\_\+rate\+\_\+max, float er\+\_\+half\+\_\+life)
+\begin{DoxyCompactList}\small\item\em Constructor for the \mbox{\hyperlink{classQLearningModel}{QLearning\+Model}} class. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{classQLearningModel_ab104ec10ee1739e5a1594efb8b2345a5}{choose\+Action}} (int state)
+\begin{DoxyCompactList}\small\item\em Chooses an action using the epsilon-\/greedy strategy. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{classQLearningModel_a0c330f7d1f5098efcfa79badfff68558}{best\+Action}} (int state)
+\begin{DoxyCompactList}\small\item\em Returns the best action for a given state. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classQLearningModel_ae6556810868328cbcebbab888a2d60f4}{train}} (int state, int action, float reward, int next\+State)
+\begin{DoxyCompactList}\small\item\em Updates the Q-\/table based on the action taken. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classQLearningModel_ac7e8d9507996e5d9eba8ac79cc76380e}{store\+Weights}} (const std\+::string \&filename)
+\begin{DoxyCompactList}\small\item\em Stores the Q-\/table to a file. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classQLearningModel_a3208662d60595f5a937d9b8257eaed6a}{load\+Weights}} (const std\+::string \&filename)
+\begin{DoxyCompactList}\small\item\em Loads the Q-\/table from a file. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classQLearningModel_aa94f381109f794ed010399a55b7fda2e}\label{classQLearningModel_aa94f381109f794ed010399a55b7fda2e}} 
+float \mbox{\hyperlink{classQLearningModel_aa94f381109f794ed010399a55b7fda2e}{lr}}
+\begin{DoxyCompactList}\small\item\em Current learning rate (adjusted over time). \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classQLearningModel_a162563ab256ff75aafeeae02e133d1ea}\label{classQLearningModel_a162563ab256ff75aafeeae02e133d1ea}} 
+float \mbox{\hyperlink{classQLearningModel_a162563ab256ff75aafeeae02e133d1ea}{exploration\+\_\+rate}}
+\begin{DoxyCompactList}\small\item\em Current exploration rate (epsilon, adjusted over time). \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Class that implements a Q-\/\+Learning model for reinforcement learning. 
+
+This class manages the Q-\/table for storing state-\/action values and provides methods to train the model, choose actions, and adjust learning and exploration rates over time. 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classQLearningModel_a02d9a3a0af6d2086b2b6a227b5aaafb6}\label{classQLearningModel_a02d9a3a0af6d2086b2b6a227b5aaafb6}} 
+\index{QLearningModel@{QLearningModel}!QLearningModel@{QLearningModel}}
+\index{QLearningModel@{QLearningModel}!QLearningModel@{QLearningModel}}
+\doxysubsubsection{\texorpdfstring{QLearningModel()}{QLearningModel()}}
+{\footnotesize\ttfamily QLearning\+Model\+::\+QLearning\+Model (\begin{DoxyParamCaption}\item[{int}]{state\+\_\+count,  }\item[{int}]{action\+\_\+count,  }\item[{float}]{lr\+\_\+max,  }\item[{float}]{discount\+\_\+factor,  }\item[{float}]{exploration\+\_\+rate\+\_\+max,  }\item[{float}]{er\+\_\+half\+\_\+life }\end{DoxyParamCaption})}
+
+
+
+Constructor for the \mbox{\hyperlink{classQLearningModel}{QLearning\+Model}} class. 
+
+Initializes the Q-\/learning model with a given state and action space, and sets the initial learning and exploration rates.
+
+
+\begin{DoxyParams}{Parameters}
+{\em state\+\_\+count} & The number of states in the environment. \\
+\hline
+{\em action\+\_\+count} & The number of actions available per state. \\
+\hline
+{\em lr\+\_\+max} & The initial (maximum) learning rate. \\
+\hline
+{\em discount\+\_\+factor} & The discount factor for future rewards. \\
+\hline
+{\em exploration\+\_\+rate\+\_\+max} & The initial (maximum) exploration rate. \\
+\hline
+{\em er\+\_\+half\+\_\+life} & The half-\/life used to decrease the exploration rate. \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classQLearningModel_a0c330f7d1f5098efcfa79badfff68558}\label{classQLearningModel_a0c330f7d1f5098efcfa79badfff68558}} 
+\index{QLearningModel@{QLearningModel}!bestAction@{bestAction}}
+\index{bestAction@{bestAction}!QLearningModel@{QLearningModel}}
+\doxysubsubsection{\texorpdfstring{bestAction()}{bestAction()}}
+{\footnotesize\ttfamily int QLearning\+Model\+::best\+Action (\begin{DoxyParamCaption}\item[{int}]{state }\end{DoxyParamCaption})}
+
+
+
+Returns the best action for a given state. 
+
+Selects the action that has the highest Q-\/value for the specified state.
+
+
+\begin{DoxyParams}{Parameters}
+{\em state} & The current state. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The index of the best action for the given state. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classQLearningModel_ab104ec10ee1739e5a1594efb8b2345a5}\label{classQLearningModel_ab104ec10ee1739e5a1594efb8b2345a5}} 
+\index{QLearningModel@{QLearningModel}!chooseAction@{chooseAction}}
+\index{chooseAction@{chooseAction}!QLearningModel@{QLearningModel}}
+\doxysubsubsection{\texorpdfstring{chooseAction()}{chooseAction()}}
+{\footnotesize\ttfamily int QLearning\+Model\+::choose\+Action (\begin{DoxyParamCaption}\item[{int}]{state }\end{DoxyParamCaption})}
+
+
+
+Chooses an action using the epsilon-\/greedy strategy. 
+
+With probability equal to the current exploration rate, it chooses a random action. Otherwise, it chooses the best action for the given state.
+
+
+\begin{DoxyParams}{Parameters}
+{\em state} & The current state for which to choose an action. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The index of the action chosen (either random or best action). 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classQLearningModel_a3208662d60595f5a937d9b8257eaed6a}\label{classQLearningModel_a3208662d60595f5a937d9b8257eaed6a}} 
+\index{QLearningModel@{QLearningModel}!loadWeights@{loadWeights}}
+\index{loadWeights@{loadWeights}!QLearningModel@{QLearningModel}}
+\doxysubsubsection{\texorpdfstring{loadWeights()}{loadWeights()}}
+{\footnotesize\ttfamily bool QLearning\+Model\+::load\+Weights (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{filename }\end{DoxyParamCaption})}
+
+
+
+Loads the Q-\/table from a file. 
+
+Loads a previously saved Q-\/table from a file, restoring the model to its saved state.
+
+
+\begin{DoxyParams}{Parameters}
+{\em filename} & The name of the file from which to load the Q-\/table. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true if the Q-\/table was successfully loaded, false otherwise. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classQLearningModel_ac7e8d9507996e5d9eba8ac79cc76380e}\label{classQLearningModel_ac7e8d9507996e5d9eba8ac79cc76380e}} 
+\index{QLearningModel@{QLearningModel}!storeWeights@{storeWeights}}
+\index{storeWeights@{storeWeights}!QLearningModel@{QLearningModel}}
+\doxysubsubsection{\texorpdfstring{storeWeights()}{storeWeights()}}
+{\footnotesize\ttfamily bool QLearning\+Model\+::store\+Weights (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{filename }\end{DoxyParamCaption})}
+
+
+
+Stores the Q-\/table to a file. 
+
+Saves the current Q-\/table to a specified file, allowing the model to be reloaded and reused later.
+
+
+\begin{DoxyParams}{Parameters}
+{\em filename} & The name of the file where the Q-\/table will be stored. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true if the Q-\/table was successfully saved, false otherwise. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classQLearningModel_ae6556810868328cbcebbab888a2d60f4}\label{classQLearningModel_ae6556810868328cbcebbab888a2d60f4}} 
+\index{QLearningModel@{QLearningModel}!train@{train}}
+\index{train@{train}!QLearningModel@{QLearningModel}}
+\doxysubsubsection{\texorpdfstring{train()}{train()}}
+{\footnotesize\ttfamily void QLearning\+Model\+::train (\begin{DoxyParamCaption}\item[{int}]{state,  }\item[{int}]{action,  }\item[{float}]{reward,  }\item[{int}]{next\+State }\end{DoxyParamCaption})}
+
+
+
+Updates the Q-\/table based on the action taken. 
+
+Performs the Q-\/learning update for the Q-\/value of the (state, action) pair based on the reward received and the next state.
+
+
+\begin{DoxyParams}{Parameters}
+{\em state} & The current state. \\
+\hline
+{\em action} & The action taken in the current state. \\
+\hline
+{\em reward} & The reward received after taking the action. \\
+\hline
+{\em next\+State} & The next state after taking the action. \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+src/q\+\_\+learning.\+h\item 
+src/q\+\_\+learning.\+cpp\end{DoxyCompactItemize}

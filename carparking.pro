@@ -9,20 +9,20 @@ CONFIG += c++11
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-    enviroment.cpp \
-    main.cpp \
-    mainwindow.cpp \
-    q_learning.cpp \
-    utils.cpp
+    src/enviroment.cpp \
+    src/main.cpp \
+    src/mainwindow.cpp \
+    src/q_learning.cpp \
+    src/utils.cpp
 
 HEADERS += \
-    enviroment.h \
-    mainwindow.h \
-    q_learning.h \
-    utils.h
+    src/enviroment.h \
+    src/mainwindow.h \
+    src/q_learning.h \
+    src/utils.h
 
 FORMS += \
-    mainwindow.ui
+    src/mainwindow.ui
 
 OBJECTS_DIR = build
 

@@ -10,9 +10,9 @@ float width_env = 8; // x-axis
 float tol = 1.5;                    
 float free_park = 0.6;
 
-float reward_for_hit = -100;
+float reward_for_hit = -200;
 float reward_for_park = 1000;
-float reward_for_nothing = -1;
+float reward_for_nothing = -10;
 
 
 
