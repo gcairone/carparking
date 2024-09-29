@@ -109,17 +109,44 @@ MainWindow::MainWindow(QWidget *parent):
     timer->setInterval(ANIMATION_SPEED*MSEC); 
 
     car_st = CarState::generate_random_state();
-    //car_st = CarState(3, 3, M_PI*0.5);
-    //car_st_vect = car_st.to_vector_normalized();
-    //std::cout<< state_count << std::endl;
     state_encoded = car_st.discretize_state(x_divide, y_divide, theta_divide); //state_encoded = som.findBMU(car_st_vect);
 
     rectangle = map_into_window(car_st.to_polygon());
     env = map_into_window(build_env());
 
-    //std::cout << "Distanza percorsa tra scelte " << 2.0 *speed_unity * TIME_RATIO * MSEC / 1000.0 << std::endl;
 
 
+    // Inizia subito con il training
+    std::ofstream file("log/log0.txt");
+    if (!file.is_open()) {
+        std::cerr << "Failed to open file: log/log0.txt" << std::endl;
+    }
+    //speed_controller(state_count, speed_actions.size(), learning_rate, discount_factor, exploration_rate_max, er_half_life), 
+    //steering_controller(state_count, steering_actions.size(), learning_rate, discount_factor, exploration_rate_max, er_half_life),
+    
+    for(int ii=0; ii<3; ii++) {
+        speed_controller = QLearningModel(state_count, speed_actions.size(), learning_rate, discount_factor, exploration_rate_max, er_half_life);
+        steering_controller = QLearningModel(state_count, speed_actions.size(), learning_rate, discount_factor, exploration_rate_max, er_half_life);
+        car_st = CarState::generate_random_state();
+        state_encoded = car_st.discretize_state(x_divide, y_divide, theta_divide); //state_encoded = som.findBMU(car_st_vect);
+
+        rectangle = map_into_window(car_st.to_polygon());
+        env = map_into_window(build_env());
+
+        int num_iter = 3000000;
+        for(int i=0; i<num_iter; ++i) {
+            model_iteration();
+            enviroment_iteration(ANIMATION_SPEED*MSEC*TIME_RATIO);
+            if(i%1000000==0) {
+                std::cout << "{\"iteration\": \"" << i << "\", \"hit\": \"" << hit_counter << "\", \"success\": \"" << success_counter << "\", \"success_ratio\": \""<< 100 * success_counter / (float)(success_counter+hit_counter) << '%' << "\", \"lr\": \""<< speed_controller.lr << "\", \"er\": \"" << speed_controller.exploration_rate << "\"}"<< std::endl;
+                file << "{\"iteration\": \"" << i << "\", \"hit\": \"" << hit_counter << "\", \"success\": \"" << success_counter << "\", \"success_ratio\": \""<< 100 * success_counter / (float)(success_counter+hit_counter) << '%' << "\", \"lr\": \""<< speed_controller.lr << "\", \"er\": \"" << speed_controller.exploration_rate << "\"}"<< std::endl;
+                hit_counter=0;
+                success_counter=0;
+            }
+        }
+        update();
+    }
+    file.close();
 }
 
 MainWindow::~MainWindow()
