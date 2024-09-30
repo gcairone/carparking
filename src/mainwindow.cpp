@@ -22,7 +22,7 @@
 
 const bool Q_weights_freezed = false;
 const float learning_rate = 0.003;
-const float discount_factor = 0.9;
+const float discount_factor = 0.98;
 const float exploration_rate_max = 0.1; 
 const float er_half_life = 1e7;
 
@@ -133,7 +133,7 @@ MainWindow::MainWindow(QWidget *parent):
         rectangle = map_into_window(car_st.to_polygon());
         env = map_into_window(build_env());
 
-        int num_iter = 3000000;
+        int num_iter = 30000000;
         for(int i=0; i<num_iter; ++i) {
             model_iteration();
             enviroment_iteration(ANIMATION_SPEED*MSEC*TIME_RATIO);

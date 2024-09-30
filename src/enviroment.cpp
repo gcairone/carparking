@@ -2,15 +2,15 @@
 #include <cmath>
 #include <QLineF>
 
-bool approx_motion = true; // if true, it compute next state with approximate kinematics
+bool approx_motion = false; // if true, it compute next state with approximate kinematics
 float len_car = 4;
-float width_car = 1.7;
+float width_car = 1.4;
 float len_env = 15;   // y-axis  
 float width_env = 8; // x-axis
 float tol = 1.5;                    
 float free_park = 0.6;
 
-float reward_for_hit = -200;
+float reward_for_hit = -100;
 float reward_for_park = 1000;
 float reward_for_nothing = -10;
 
