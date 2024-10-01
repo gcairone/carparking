@@ -20,6 +20,9 @@ private:
     int state_count;  ///< The total number of states in the environment.
     int action_count; ///< The total number of actions available in each state.
 
+    std::mt19937 rng; ///< Mersenne Twister random number generator for stochastic actions.
+
+public:
     float lr_max;          ///< The maximum learning rate.
     float lr_min;          ///< The minimum learning rate.
     float lr_half_life;    ///< The half-life for reducing the learning rate.
@@ -32,9 +35,6 @@ private:
     float er_half_life;         ///< The half-life for reducing the exploration rate.
     float er_ratio;             ///< The ratio by which the exploration rate decreases over time.
 
-    std::mt19937 rng; ///< Mersenne Twister random number generator for stochastic actions.
-
-public:
     float lr;             ///< Current learning rate (adjusted over time).
     float exploration_rate; ///< Current exploration rate (epsilon, adjusted over time).
 
@@ -59,6 +59,12 @@ public:
                    float er_half_life);
 
     /**
+     * @brief Reset randomly Q-table.
+     * 
+     */
+    void reset();
+
+    /**
      * @brief Chooses an action using the epsilon-greedy strategy.
      * 
      * With probability equal to the current exploration rate, it chooses a random action.
@@ -68,18 +74,6 @@ public:
      * @return The index of the action chosen (either random or best action).
      */
     int chooseAction(int state, bool eval);
-
-    /**
-     * @brief Returns the best action for a given state.
-     * 
-     * Selects the action that has the highest Q-value for the specified state.
-     * If in evaluation mode, it does not choose randomly
-     * 
-     * @param state The current state.
-     * @param eval
-     * @return The index of the best action for the given state.
-     */
-    int bestAction(int state);
 
     /**
      * @brief Updates the Q-table based on the action taken.

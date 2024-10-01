@@ -122,6 +122,14 @@ private slots:
      */
     void on_qtable_store_st_clicked();
 
+    /**
+     * @brief Slot for reset Q-table for speed controller and steering controller
+     * 
+     * Reset randomly Q-table
+     */
+    void on_resetButton_clicked();
+
+
 protected:
     /**
      * @brief Handles the paint event for custom drawing.

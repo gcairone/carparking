@@ -131,6 +131,13 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_playButton_clicked()
 {   
+    speed_controller.lr = ui->learning_rate->value();
+    steering_controller.lr = ui->learning_rate->value();
+    speed_controller.exploration_rate = ui->epsilon->value();
+    steering_controller.exploration_rate = ui->epsilon->value();
+    speed_controller.exploration_rate_max = ui->epsilon->value();
+    steering_controller.exploration_rate_max = ui->epsilon->value();
+
     timer->start();
 }
 
@@ -223,7 +230,7 @@ void MainWindow::model_iteration() {
     //auto new_car_st_vect = new_car_st.to_vector_normalized();
 
     auto new_state_encoded = new_car_st.discretize_state(x_divide, y_divide, theta_divide);//auto new_state_encoded = som.findBMU(new_car_st_vect);
-    ui->epsilon->setValue(speed_controller.exploration_rate);
+    //ui->epsilon->setValue(speed_controller.exploration_rate);
 
     //if(!SOM_weights_freezed) som.trainOnline(car_st_vect, iter);
 
@@ -280,6 +287,13 @@ void MainWindow::model_iteration() {
 
 void MainWindow::on_trainButton_clicked()
 {
+    speed_controller.lr = ui->learning_rate->value();
+    steering_controller.lr = ui->learning_rate->value();
+    speed_controller.exploration_rate = ui->epsilon->value();
+    steering_controller.exploration_rate = ui->epsilon->value();
+    speed_controller.exploration_rate_max = ui->epsilon->value();
+    steering_controller.exploration_rate_max = ui->epsilon->value();
+
     std::ofstream file("log/log0.txt");
     if (!file.is_open()) {
         std::cerr << "Failed to open file: log/log0.txt" << std::endl;
@@ -297,7 +311,7 @@ void MainWindow::on_trainButton_clicked()
             update();
             // update hyperparameter values on interface
             //ui->epsilon->setValue(speed_controller.exploration_rate);
-            QCoreApplication::processEvents();
+            //QCoreApplication::processEvents();
         }
     }
     
@@ -306,7 +320,11 @@ void MainWindow::on_trainButton_clicked()
 }
 
 
-
+void MainWindow::on_resetButton_clicked() {
+    speed_controller.reset();
+    steering_controller.reset();
+    std::cout << "Q-Table reset" << std::endl;
+}
 /*
 void MainWindow::on_som_load_clicked()
 {

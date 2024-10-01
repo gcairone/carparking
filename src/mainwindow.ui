@@ -18,7 +18,7 @@
     <property name="geometry">
      <rect>
       <x>530</x>
-      <y>440</y>
+      <y>510</y>
       <width>80</width>
       <height>23</height>
      </rect>
@@ -31,7 +31,7 @@
     <property name="geometry">
      <rect>
       <x>620</x>
-      <y>440</y>
+      <y>510</y>
       <width>80</width>
       <height>23</height>
      </rect>
@@ -44,7 +44,7 @@
     <property name="geometry">
      <rect>
       <x>710</x>
-      <y>440</y>
+      <y>510</y>
       <width>80</width>
       <height>23</height>
      </rect>
@@ -57,20 +57,20 @@
     <property name="geometry">
      <rect>
       <x>620</x>
-      <y>250</y>
+      <y>290</y>
       <width>101</width>
       <height>23</height>
      </rect>
     </property>
     <property name="text">
-     <string>Train</string>
+     <string>Train/Test</string>
     </property>
    </widget>
    <widget class="QSpinBox" name="num_iterations">
     <property name="geometry">
      <rect>
       <x>620</x>
-      <y>220</y>
+      <y>260</y>
       <width>101</width>
       <height>24</height>
      </rect>
@@ -83,7 +83,7 @@
     <property name="geometry">
      <rect>
       <x>620</x>
-      <y>280</y>
+      <y>320</y>
       <width>101</width>
       <height>24</height>
      </rect>
@@ -102,7 +102,7 @@
     <property name="geometry">
      <rect>
       <x>620</x>
-      <y>370</y>
+      <y>410</y>
       <width>71</width>
       <height>41</height>
      </rect>
@@ -151,7 +151,7 @@
     <property name="geometry">
      <rect>
       <x>620</x>
-      <y>130</y>
+      <y>190</y>
       <width>151</width>
       <height>20</height>
      </rect>
@@ -164,7 +164,7 @@
     <property name="geometry">
      <rect>
       <x>620</x>
-      <y>160</y>
+      <y>130</y>
       <width>151</width>
       <height>23</height>
      </rect>
@@ -177,7 +177,7 @@
     <property name="geometry">
      <rect>
       <x>620</x>
-      <y>190</y>
+      <y>160</y>
       <width>151</width>
       <height>23</height>
      </rect>
@@ -190,7 +190,7 @@
     <property name="geometry">
      <rect>
       <x>620</x>
-      <y>410</y>
+      <y>480</y>
       <width>91</width>
       <height>16</height>
      </rect>
@@ -203,7 +203,7 @@
     <property name="geometry">
      <rect>
       <x>520</x>
-      <y>220</y>
+      <y>260</y>
       <width>91</width>
       <height>16</height>
      </rect>
@@ -229,7 +229,7 @@
     <property name="geometry">
      <rect>
       <x>500</x>
-      <y>280</y>
+      <y>320</y>
       <width>131</width>
       <height>16</height>
      </rect>
@@ -242,7 +242,7 @@
     <property name="geometry">
      <rect>
       <x>480</x>
-      <y>310</y>
+      <y>350</y>
       <width>131</width>
       <height>16</height>
      </rect>
@@ -255,7 +255,7 @@
     <property name="geometry">
      <rect>
       <x>620</x>
-      <y>310</y>
+      <y>350</y>
       <width>101</width>
       <height>24</height>
      </rect>
@@ -273,21 +273,21 @@
    <widget class="QLabel" name="label_6">
     <property name="geometry">
      <rect>
-      <x>540</x>
-      <y>340</y>
-      <width>71</width>
+      <x>500</x>
+      <y>380</y>
+      <width>131</width>
       <height>20</height>
      </rect>
     </property>
     <property name="text">
-     <string>Epsilon</string>
+     <string>Initial epsilon</string>
     </property>
    </widget>
    <widget class="QDoubleSpinBox" name="epsilon">
     <property name="geometry">
      <rect>
       <x>620</x>
-      <y>340</y>
+      <y>380</y>
       <width>101</width>
       <height>24</height>
      </rect>
@@ -300,6 +300,32 @@
     </property>
     <property name="maximum">
      <double>100000000.000000000000000</double>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="resetButton">
+    <property name="geometry">
+     <rect>
+      <x>620</x>
+      <y>220</y>
+      <width>151</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Reset QTable</string>
+    </property>
+   </widget>
+   <widget class="Line" name="line_2">
+    <property name="geometry">
+     <rect>
+      <x>590</x>
+      <y>440</y>
+      <width>151</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="orientation">
+     <enum>Qt::Orientation::Horizontal</enum>
     </property>
    </widget>
   </widget>

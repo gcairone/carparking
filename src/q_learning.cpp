@@ -13,30 +13,24 @@ QLearningModel::QLearningModel(int state_count, int action_count, float lr_max, 
         exploration_rate_min(0),
         er_half_life(er_half_life)
 {
-        std::random_device rd;
-        rng.seed(rd());
-
         lr = lr_max;
         exploration_rate = exploration_rate_max;
         lr_ratio = std::pow(0.5, 1.0/lr_half_life);
         er_ratio = std::pow(0.5, 1.0/er_half_life);
-
-        std::uniform_real_distribution<float> distribution(0.0, 1.0);
-        for (int i = 0; i < state_count; ++i) {
-            for (int j = 0; j < action_count; ++j) {
-                q_table[i][j] = distribution(rng);
-            }
-        }
+        reset();
 }
 
-int QLearningModel::bestAction(int state) {
-    if(state >= state_count) {
-        std::cerr << "non valid state " << state << std::endl;
-        throw 0;
+void QLearningModel::reset() {
+    std::random_device rd;
+    rng.seed(rd());
+
+    std::uniform_real_distribution<float> distribution(0.0, 1.0);
+    for (int i = 0; i < state_count; ++i) {
+        for (int j = 0; j < action_count; ++j) {
+            q_table[i][j] = distribution(rng);
+        }
     }
 
-    auto maxAction = std::max_element(q_table[state].begin(), q_table[state].end());
-    return std::distance(q_table[state].begin(), maxAction);
 }
 
 int QLearningModel::chooseAction(int state, bool eval) {
@@ -70,7 +64,7 @@ void QLearningModel::train(int state, int action, float reward, int nextState) {
 
     float maxNextQValue = *std::max_element(q_table[nextState].begin(), q_table[nextState].end());
     float QTarget = reward + discount_factor * maxNextQValue;
-    q_table[state][action] += lr_max * (QTarget - q_table[state][action]);
+    q_table[state][action] += lr * (QTarget - q_table[state][action]);
 
     exploration_rate = exploration_rate_min + er_ratio*(exploration_rate - exploration_rate_min);
     lr = lr_min + lr_ratio*(lr - lr_min);
