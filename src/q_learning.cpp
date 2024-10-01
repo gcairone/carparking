@@ -21,7 +21,6 @@ QLearningModel::QLearningModel(int state_count, int action_count, float lr_max, 
         lr_ratio = std::pow(0.5, 1.0/lr_half_life);
         er_ratio = std::pow(0.5, 1.0/er_half_life);
 
-        // Initialize Q-values randomly
         std::uniform_real_distribution<float> distribution(0.0, 1.0);
         for (int i = 0; i < state_count; ++i) {
             for (int j = 0; j < action_count; ++j) {
@@ -40,20 +39,16 @@ int QLearningModel::bestAction(int state) {
     return std::distance(q_table[state].begin(), maxAction);
 }
 
-int QLearningModel::chooseAction(int state) {
+int QLearningModel::chooseAction(int state, bool eval) {
     if(state >= state_count) {
         std::cerr << "non valid state " << state << std::endl;
         throw 0;
     }
     std::uniform_real_distribution<float> distribution(0.0, 1.0);
-    if (distribution(rng) < exploration_rate) {
-        // Explore
-        //std::cout << "Casuale" << std::endl;
+    if (distribution(rng) < exploration_rate && !eval) {
         std::uniform_int_distribution<int> actionDistribution(0, q_table[state].size() - 1);
         return actionDistribution(rng);
     } else {
-        // Exploit
-        //std::cout << "Migliore" << std::endl;
         auto maxAction = std::max_element(q_table[state].begin(), q_table[state].end());
         return std::distance(q_table[state].begin(), maxAction);
     }

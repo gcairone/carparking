@@ -21,9 +21,9 @@
 
 
 const bool Q_weights_freezed = false;
-const float learning_rate = 0.003;
-const float discount_factor = 0.9;
-const float exploration_rate_max = 0.1; 
+float learning_rate = 0.003;
+float discount_factor = 0.9;
+float exploration_rate_max = 0.1; 
 const float er_half_life = 1e7;
 
 
@@ -98,7 +98,9 @@ MainWindow::MainWindow(QWidget *parent):
     setWindowTitle("Animation Controller");
     resize(WINDOW_WIDTH, WINDOW_HEIGHT);
 
-
+    ui->learning_rate->setValue(learning_rate);
+    ui->discount_factor->setValue(discount_factor);
+    ui->epsilon->setValue(exploration_rate_max);
     timer = new QTimer(this);
     connect(timer, &QTimer::timeout, this, [this]() {
         if(iter % TIME_RATIO == 0) model_iteration();
@@ -128,7 +130,7 @@ MainWindow::~MainWindow()
 }
 
 void MainWindow::on_playButton_clicked()
-{
+{   
     timer->start();
 }
 
@@ -190,8 +192,8 @@ void MainWindow::enviroment_iteration(int timestep) {
         //std::cout << "HIT" << std::endl;
         car_st = CarState::generate_random_state();
         state_encoded = car_st.discretize_state(x_divide, y_divide, theta_divide); //state_encoded = som.findBMU(car_st_vect);
-        last_speed_action = speed_controller.chooseAction(state_encoded);
-        last_steering_action = steering_controller.chooseAction(state_encoded);
+        last_speed_action = speed_controller.chooseAction(state_encoded, ui->eval->isChecked());
+        last_steering_action = steering_controller.chooseAction(state_encoded, ui->eval->isChecked());
     }
     else if(new_car_st.parked()) {
         //std::cout << new_state_encoded << " parked " << std::endl;
@@ -199,8 +201,8 @@ void MainWindow::enviroment_iteration(int timestep) {
         //std::cout << "PARK" << std::endl;
         car_st = CarState::generate_random_state();
         state_encoded = car_st.discretize_state(x_divide, y_divide, theta_divide);
-        last_speed_action = speed_controller.chooseAction(state_encoded);
-        last_steering_action = steering_controller.chooseAction(state_encoded);
+        last_speed_action = speed_controller.chooseAction(state_encoded, ui->eval->isChecked());
+        last_steering_action = steering_controller.chooseAction(state_encoded, ui->eval->isChecked());
     }
 
     else {
@@ -213,18 +215,19 @@ void MainWindow::enviroment_iteration(int timestep) {
 
 void MainWindow::model_iteration() {
 
-    int speed_action = speed_controller.chooseAction(state_encoded);
-    int steering_action = steering_controller.chooseAction(state_encoded);
+    int speed_action = speed_controller.chooseAction(state_encoded, ui->eval->isChecked());
+    int steering_action = steering_controller.chooseAction(state_encoded, ui->eval->isChecked());
     last_speed_action = speed_action;
     last_steering_action = steering_action;
     auto new_car_st = car_st.compute_new_state(speed_actions[speed_action], steering_actions[steering_action], MSEC*TIME_RATIO * ANIMATION_SPEED);
     //auto new_car_st_vect = new_car_st.to_vector_normalized();
 
     auto new_state_encoded = new_car_st.discretize_state(x_divide, y_divide, theta_divide);//auto new_state_encoded = som.findBMU(new_car_st_vect);
+    ui->epsilon->setValue(speed_controller.exploration_rate);
 
     //if(!SOM_weights_freezed) som.trainOnline(car_st_vect, iter);
 
-    if(!Q_weights_freezed) {
+    if(!ui->eval->isChecked()) {
         float reward = new_car_st.reward();
         speed_controller.train(state_encoded, speed_action, reward, new_state_encoded);
         steering_controller.train(state_encoded, steering_action, reward, new_state_encoded);
@@ -291,9 +294,13 @@ void MainWindow::on_trainButton_clicked()
             file << "{\"iteration\": \"" << i << "\", \"hit\": \"" << hit_counter << "\", \"success\": \"" << success_counter << "\", \"success_ratio\": \""<< 100 * success_counter / (float)(success_counter+hit_counter) << '%' << "\", \"lr\": \""<< speed_controller.lr << "\", \"er\": \"" << speed_controller.exploration_rate << "\"}"<< std::endl;
             hit_counter=0;
             success_counter=0;
+            update();
+            // update hyperparameter values on interface
+            //ui->epsilon->setValue(speed_controller.exploration_rate);
+            QCoreApplication::processEvents();
         }
     }
-    update();
+    
     std::cout << "Trained "<< num_iter <<std::endl;
     file.close();
 }

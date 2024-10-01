@@ -19,25 +19,9 @@ float reward_for_nothing = -10;
 QPolygonF CarState::to_polygon() {
     float sin_t = sin(this->theta);
     float cos_t = cos(this->theta);
-    /*
-     con il punto (x, y) a metà del lato corto
-    float xA = len_car * cos_t + 0.5 * width_car * sin_t + x;
-    float yA = len_car * sin_t - 0.5 * width_car * cos_t + y;
 
-    float xB = len_car * cos_t - 0.5 * width_car * sin_t + x;
-    float yB = len_car * sin_t + 0.5 * width_car * cos_t + y;
-
-    float xC = - 0.5 * width_car * sin_t + x;
-    float yC = 0.5 * width_car * cos_t + y;
-
-    float xD = 0.5 * width_car * sin_t + x;
-    float yD = - 0.5 * width_car * cos_t + y;
-    */
     float xA = x + 0.5*len_car*cos_t + 0.5*width_car*sin_t;
     float yA = y + 0.5*len_car*sin_t - 0.5*width_car*cos_t;
-
-    //std::cout << x << std::endl;
-    //std::cout << sin_t << std::endl;
 
     float xB = x + 0.5*len_car*cos_t - 0.5*width_car*sin_t;
     float yB = y + 0.5*len_car*sin_t + 0.5*width_car*cos_t;
@@ -49,7 +33,6 @@ QPolygonF CarState::to_polygon() {
     float yD = y - 0.5*len_car*sin_t - 0.5*width_car*cos_t;
 
 
-    // Trasforma i vertici in pixel
     QVector<QPointF> vertices = {
         QPointF(xA, yA),  // Top-right corner
         QPointF(xB, yB),  // bottom-right corner
@@ -64,7 +47,6 @@ QPolygonF CarState::to_polygon() {
 
 
 bool CarState::allowed() {
-    // returns false if hit walls
     QPolygonF car_rect = this->to_polygon();
 
     QPolygonF env_poly = build_env();
@@ -137,23 +119,22 @@ CarState CarState::generate_random_state() {
     float y_new = randomFloat(len_car*0.75, len_env - len_car*0.75);
     float theta_new = M_PI*0.5;
     if(randomFloat(0.0, 1.0)>0.5) theta_new = -M_PI*0.5;
-    //std::cout << "random state generated" << std::endl;
 
     return CarState(x_new, y_new, theta_new);
 }
 
 QPolygonF build_env() {
-    // The animation is in the top-left corner of the window
+    // animation is in the top-left corner of the window
     float len_park = len_car + 2 * tol;
     float width_park = width_car + tol;
     QVector<QPointF> vertices = {
-        QPointF(0, 0),  // Top-left corner
-        QPointF(0, len_env),  // Bottom-left corner
+        QPointF(0, 0),  // top-left corner
+        QPointF(0, len_env),  //   Bottom-left corner
         QPointF(width_env-width_park, len_env),  // Bottom-right corner
-        QPointF(width_env-width_park, len_env-free_park*len_park), // PARK CORNER - bottom-right
-        QPointF(width_env, len_env-free_park*len_park), // PARK CORNER - bottom-left
-        QPointF(width_env, len_env-(free_park+1)*len_park), // PARK CORNER - top-left
-        QPointF(width_env-width_park, len_env-(free_park+1)*len_park),  // PARK CORNER - top-right
+        QPointF(width_env-width_park, len_env-free_park*len_park), // PARK CORNER  bottom-right
+        QPointF(width_env, len_env-free_park*len_park), // PARK CORNER  bottom-left
+        QPointF(width_env, len_env-(free_park+1)*len_park), // PARK CORNER  top-left
+        QPointF(width_env-width_park, len_env-(free_park+1)*len_park),  // PARK CORNER  top-right
         QPointF(width_env-width_park, 0),  // Top-right corner
     };
 
@@ -162,60 +143,6 @@ QPolygonF build_env() {
     return env;
 
 }
-/*
-QLineF simulateLidar(const QPointF& origin, double direction, const QPolygonF& polygon) {
-    QPointF endPoint(origin.x() + lidar_maxDistance * cos(direction),
-                     origin.y() + lidar_maxDistance * sin(direction));
-
-    for (int i = 0; i<polygon.size(); ++i) {
-
-        int j = (i + 1)%polygon.size();
-        QLineF edge(polygon[i], polygon[j]);
-
-        QPointF intersection;
-        if (edge.intersects(QLineF(origin, endPoint), &intersection) == QLineF::BoundedIntersection) {
-            endPoint = intersection;
-        }
-    }
-    return QLineF(origin, endPoint);
-}
-
-
-QVector<QLineF> CarState::lidar_lines() {
-
-    QVector<QPointF> origins = this->to_polygon();
-
-    QPolygonF env = build_env();
-
-    // Add medium points
-
-    origins << QPointF((origins[0].x() + origins[1].x()) / 2, (origins[0].y() + origins[1].y()) / 2);
-    origins << QPointF((origins[1].x() + origins[2].x()) / 2, (origins[1].y() + origins[2].y()) / 2);
-    origins << QPointF((origins[2].x() + origins[3].x()) / 2, (origins[2].y() + origins[3].y()) / 2);
-    origins << QPointF((origins[3].x() + origins[0].x()) / 2, (origins[3].y() + origins[0].y()) / 2);
-
-    //
-    return {
-        simulateLidar(origins[0], theta - M_PI/4, env), // top-right CORNER
-        simulateLidar(origins[4], theta, env), // right EDGE
-        simulateLidar(origins[1], theta + M_PI/4, env), // bottom-right CORNER
-        simulateLidar(origins[5], theta + M_PI/2, env), //  bottom EDGE
-        simulateLidar(origins[2], theta + 3*M_PI/4, env), // bottom-left CORNER
-        simulateLidar(origins[6], theta + M_PI, env), // left EDGE
-        simulateLidar(origins[3], theta + 5*M_PI/4, env), // top-left CORNER
-        simulateLidar(origins[7], theta + 3*M_PI/2, env), // top EDGE
-    };
-}
-
-std::vector<float> CarState::lidar_distances(const QVector<QLineF> &v) {
-    std::vector<float> r;
-    for(auto line: v) {
-        r.push_back(line.length());
-        //
-    }
-    return r;
-}
-*/
 
 
 bool CarState::parked() {

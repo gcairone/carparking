@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
-    <height>600</height>
+    <width>820</width>
+    <height>625</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -18,7 +18,7 @@
     <property name="geometry">
      <rect>
       <x>530</x>
-      <y>390</y>
+      <y>440</y>
       <width>80</width>
       <height>23</height>
      </rect>
@@ -31,7 +31,7 @@
     <property name="geometry">
      <rect>
       <x>620</x>
-      <y>390</y>
+      <y>440</y>
       <width>80</width>
       <height>23</height>
      </rect>
@@ -44,7 +44,7 @@
     <property name="geometry">
      <rect>
       <x>710</x>
-      <y>390</y>
+      <y>440</y>
       <width>80</width>
       <height>23</height>
      </rect>
@@ -57,7 +57,7 @@
     <property name="geometry">
      <rect>
       <x>620</x>
-      <y>310</y>
+      <y>250</y>
       <width>101</width>
       <height>23</height>
      </rect>
@@ -70,13 +70,45 @@
     <property name="geometry">
      <rect>
       <x>620</x>
-      <y>280</y>
+      <y>220</y>
       <width>101</width>
       <height>24</height>
      </rect>
     </property>
     <property name="maximum">
      <number>100000000</number>
+    </property>
+   </widget>
+   <widget class="QDoubleSpinBox" name="learning_rate">
+    <property name="geometry">
+     <rect>
+      <x>620</x>
+      <y>280</y>
+      <width>101</width>
+      <height>24</height>
+     </rect>
+    </property>
+    <property name="decimals">
+     <number>6</number>
+    </property>
+    <property name="minimum">
+     <double>0.000000000000000</double>
+    </property>
+    <property name="maximum">
+     <double>100000000.000000000000000</double>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="eval">
+    <property name="geometry">
+     <rect>
+      <x>620</x>
+      <y>370</y>
+      <width>71</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Eval</string>
     </property>
    </widget>
    <widget class="QLineEdit" name="file_name">
@@ -125,7 +157,7 @@
      </rect>
     </property>
     <property name="orientation">
-     <enum>Qt::Horizontal</enum>
+     <enum>Qt::Orientation::Horizontal</enum>
     </property>
    </widget>
    <widget class="QPushButton" name="qtable_store_st">
@@ -158,7 +190,7 @@
     <property name="geometry">
      <rect>
       <x>620</x>
-      <y>360</y>
+      <y>410</y>
       <width>91</width>
       <height>16</height>
      </rect>
@@ -170,8 +202,8 @@
    <widget class="QLabel" name="label_2">
     <property name="geometry">
      <rect>
-      <x>620</x>
-      <y>260</y>
+      <x>520</x>
+      <y>220</y>
       <width>91</width>
       <height>16</height>
      </rect>
@@ -193,14 +225,91 @@
      <string>File name</string>
     </property>
    </widget>
+   <widget class="QLabel" name="label_4">
+    <property name="geometry">
+     <rect>
+      <x>500</x>
+      <y>280</y>
+      <width>131</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Learning rate</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_5">
+    <property name="geometry">
+     <rect>
+      <x>480</x>
+      <y>310</y>
+      <width>131</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Discount factor</string>
+    </property>
+   </widget>
+   <widget class="QDoubleSpinBox" name="discount_factor">
+    <property name="geometry">
+     <rect>
+      <x>620</x>
+      <y>310</y>
+      <width>101</width>
+      <height>24</height>
+     </rect>
+    </property>
+    <property name="decimals">
+     <number>6</number>
+    </property>
+    <property name="minimum">
+     <double>0.000000000000000</double>
+    </property>
+    <property name="maximum">
+     <double>100000000.000000000000000</double>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_6">
+    <property name="geometry">
+     <rect>
+      <x>540</x>
+      <y>340</y>
+      <width>71</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Epsilon</string>
+    </property>
+   </widget>
+   <widget class="QDoubleSpinBox" name="epsilon">
+    <property name="geometry">
+     <rect>
+      <x>620</x>
+      <y>340</y>
+      <width>101</width>
+      <height>24</height>
+     </rect>
+    </property>
+    <property name="decimals">
+     <number>6</number>
+    </property>
+    <property name="minimum">
+     <double>0.000000000000000</double>
+    </property>
+    <property name="maximum">
+     <double>100000000.000000000000000</double>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>800</width>
-     <height>20</height>
+     <width>820</width>
+     <height>26</height>
     </rect>
    </property>
   </widget>

@@ -67,14 +67,16 @@ public:
      * @param state The current state for which to choose an action.
      * @return The index of the action chosen (either random or best action).
      */
-    int chooseAction(int state);
+    int chooseAction(int state, bool eval);
 
     /**
      * @brief Returns the best action for a given state.
      * 
      * Selects the action that has the highest Q-value for the specified state.
+     * If in evaluation mode, it does not choose randomly
      * 
      * @param state The current state.
+     * @param eval
      * @return The index of the best action for the given state.
      */
     int bestAction(int state);
