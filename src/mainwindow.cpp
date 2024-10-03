@@ -31,24 +31,16 @@ const float er_half_life = 1e7;
 const float speed_unity = 1;
 const std::vector<float> speed_actions = {
     -4*speed_unity, 
-    -3*speed_unity, 
     -2*speed_unity, 
-    -speed_unity, 
     0.1*speed_unity,
-    speed_unity, 
     2*speed_unity, 
-    3*speed_unity, 
     4*speed_unity
 };
 const std::vector<float> steering_actions = {
     -M_PI/4, 
-    -3*M_PI/16, 
     -M_PI/8, 
-    -M_PI/16, 
     0, 
-    M_PI/16, 
     M_PI/8, 
-    3*M_PI/16, 
     M_PI/4
 };
 const int x_divide = 8;
