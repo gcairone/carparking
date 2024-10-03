@@ -28,13 +28,12 @@ const float er_half_life = 1e7;
 
 
 //bool SOM_weights_freezed = false;
-const float speed_unity = 1;
+const float speed_unity = 2;
 const std::vector<float> speed_actions = {
-    -4*speed_unity, 
     -2*speed_unity, 
-    0.1*speed_unity,
-    2*speed_unity, 
-    4*speed_unity
+    -1*speed_unity, 
+    1*speed_unity, 
+    2*speed_unity
 };
 const std::vector<float> steering_actions = {
     -M_PI/4, 
