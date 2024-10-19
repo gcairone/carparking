@@ -46,6 +46,26 @@ QPolygonF CarState::to_polygon() {
 }
 
 
+bool CarState::allowed() {
+    QPolygonF car_rect = this->to_polygon();
+
+    QPolygonF env_poly = build_env();
+
+    for(auto point: car_rect) {
+        if(!env_poly.containsPoint(point, Qt::OddEvenFill)) {
+            return false;
+        }
+    }
+    if(car_rect.containsPoint(env_poly[3], Qt::OddEvenFill)) {
+        return false;
+    }
+    if(car_rect.containsPoint(env_poly[6], Qt::OddEvenFill)) {
+        return false;
+    }
+
+    return true;
+}
+
 CarState::~CarState() {}
 
 
@@ -103,9 +123,46 @@ CarState CarState::generate_random_state() {
     return CarState(x_new, y_new, theta_new);
 }
 
+QPolygonF build_env() {
+    // animation is in the top-left corner of the window
+    float len_park = len_car + 2 * tol;
+    float width_park = width_car + tol;
+    QVector<QPointF> vertices = {
+        QPointF(0, 0),  // top-left corner
+        QPointF(0, len_env),  //   Bottom-left corner
+        QPointF(width_env-width_park, len_env),  // Bottom-right corner
+        QPointF(width_env-width_park, len_env-free_park*len_park), // PARK CORNER  bottom-right
+        QPointF(width_env, len_env-free_park*len_park), // PARK CORNER  bottom-left
+        QPointF(width_env, len_env-(free_park+1)*len_park), // PARK CORNER  top-left
+        QPointF(width_env-width_park, len_env-(free_park+1)*len_park),  // PARK CORNER  top-right
+        QPointF(width_env-width_park, 0),  // Top-right corner
+    };
+
+    QPolygonF env(vertices);
+
+    return env;
+
+}
 
 
+bool CarState::parked() {
+    QVector<QPointF> car_rect = this->to_polygon();
 
+    QVector<QPointF> env = build_env();
+
+    QPolygonF parkspace({env[3], env[4], env[5], env[6]});
+
+    for(auto point: car_rect) {
+        if(!parkspace.containsPoint(point, Qt::OddEvenFill)) return false;
+    }
+    return true;
+}
+
+float CarState::reward() {
+    if(!allowed()) return reward_for_hit;
+    if(parked()) return reward_for_park;
+    return reward_for_nothing;
+}
 
 
 
@@ -139,119 +196,6 @@ int CarState::discretize_state(int divide_x, int divide_y, int divide_theta) {
 }
 
 
-Enviroment::Enviroment() {
-    car = CarState();
-    reward_for_hit = reward_for_hit;
-    reward_for_nothing = reward_for_nothing;
-    reward_for_park = reward_for_park;
-
-    // env build
-    // animation is in the top-left corner of the window
-    float len_park = len_car + 2 * tol;
-    float width_park = width_car + tol;
-    QVector<QPointF> vertices = {
-        QPointF(0, 0),  // top-left corner
-        QPointF(0, len_env),  //   Bottom-left corner
-        QPointF(width_env-width_park, len_env),  // Bottom-right corner
-        QPointF(width_env-width_park, len_env-free_park*len_park), // PARK CORNER  bottom-right
-        QPointF(width_env, len_env-free_park*len_park), // PARK CORNER  bottom-left
-        QPointF(width_env, len_env-(free_park+1)*len_park), // PARK CORNER  top-left
-        QPointF(width_env-width_park, len_env-(free_park+1)*len_park),  // PARK CORNER  top-right
-        QPointF(width_env-width_park, 0),  // Top-right corner
-    };
-    env_polygon = QPolygonF(vertices);
-}
-/*
-QPolygonF build_env() {
-    // animation is in the top-left corner of the window
-    float len_park = len_car + 2 * tol;
-    float width_park = width_car + tol;
-    QVector<QPointF> vertices = {
-        QPointF(0, 0),  // top-left corner
-        QPointF(0, len_env),  //   Bottom-left corner
-        QPointF(width_env-width_park, len_env),  // Bottom-right corner
-        QPointF(width_env-width_park, len_env-free_park*len_park), // PARK CORNER  bottom-right
-        QPointF(width_env, len_env-free_park*len_park), // PARK CORNER  bottom-left
-        QPointF(width_env, len_env-(free_park+1)*len_park), // PARK CORNER  top-left
-        QPointF(width_env-width_park, len_env-(free_park+1)*len_park),  // PARK CORNER  top-right
-        QPointF(width_env-width_park, 0),  // Top-right corner
-    };
-
-    QPolygonF env(vertices);
-
-    return env;
-
-}
-*/
-
-
-/*
-bool CarState::allowed() {
-    QPolygonF car_rect = this->to_polygon();
-
-    QPolygonF env_poly = build_env();
-
-    for(auto point: car_rect) {
-        if(!env_poly.containsPoint(point, Qt::OddEvenFill)) {
-            return false;
-        }
-    }
-    if(car_rect.containsPoint(env_poly[3], Qt::OddEvenFill)) {
-        return false;
-    }
-    if(car_rect.containsPoint(env_poly[6], Qt::OddEvenFill)) {
-        return false;
-    }
-
-    return true;
-}
-
-*/
 
 
 
-Enviroment Enviroment::compute_new_state(float speed, float steering, int timestep) {
-    Enviroment e = Enviroment();
-    e.car = car.compute_new_state(speed, steering, timestep);
-    return e;
-}
-
-bool Enviroment::car_allowed() {
-    QPolygonF car_rect = car.to_polygon();
-
-    //QPolygonF env_poly = build_env();
-
-    for(auto point: car_rect) {
-        if(!env_polygon.containsPoint(point, Qt::OddEvenFill)) {
-            return false;
-        }
-    }
-    if(car_rect.containsPoint(env_polygon[3], Qt::OddEvenFill)) {
-        return false;
-    }
-    if(car_rect.containsPoint(env_polygon[6], Qt::OddEvenFill)) {
-        return false;
-    }
-
-    return true;
-
-}
-
-bool Enviroment::car_parked() {
-    QVector<QPointF> car_rect = car.to_polygon();
-
-    //QVector<QPointF> env = build_env();
-
-    QPolygonF parkspace({env_polygon[3], env_polygon[4], env_polygon[5], env_polygon[6]});
-
-    for(auto point: car_rect) {
-        if(!parkspace.containsPoint(point, Qt::OddEvenFill)) return false;
-    }
-    return true;
-}
-
-float Enviroment::reward() {
-    if(!car_allowed()) return reward_for_hit;
-    if(car_parked()) return reward_for_park;
-    return reward_for_nothing;
-}
