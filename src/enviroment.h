@@ -136,7 +136,20 @@ public:
 */
 QPolygonF build_env();
 //QLineF simulateLidar(const QPoint& origin, double direction, double maxDistance, const QPolygon& polygon);
+class Enviroment {
+public:
+    CarState car;
+    float reward_for_hit;
+    float reward_for_park;
+    float reward_for_nothing;
+    QPolygonF env_polygon;
 
+    Enviroment();
+    Enviroment compute_new_state(float speed, float steering, int timestep);
+    bool car_allowed();
+    bool car_parked();
+    float reward();
+};
 
 
 
