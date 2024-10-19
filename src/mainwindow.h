@@ -143,11 +143,12 @@ protected:
 private:
     Ui::MainWindow *ui; ///< Pointer to the UI components of the main window.
 
-    QPolygon rectangle; ///< A polygon representing the drawable area of the car.
+    QPolygon car_draw; ///< A polygon representing the drawable area of the car.
 
-    CarState car_st; ///< The current state of the car.
+    //CarState car_st; ///< The current state of the car.
+    Enviroment env;
 
-    QPolygon env; ///< The polygon representing the environment.
+    QPolygon env_draw; ///< The polygon representing the environment.
 
     QVector<QLineF> lidar; ///< The lines representing lidar sensor readings.
 
