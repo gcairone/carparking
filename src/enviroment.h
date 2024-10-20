@@ -42,15 +42,6 @@ public:
      */
     QPolygonF to_polygon();
 
-    /**
-     * @brief Checks if the current state of the car is valid.
-     * 
-     * The state is valid if the car is inside the designated area and does not
-     * collide with walls or other obstacles.
-     * 
-     * @return true if the state is allowed, false otherwise.
-     */
-    bool allowed();
 
     /**
      * @brief Computes the car's new state based on speed and steering input.
@@ -75,25 +66,7 @@ public:
      */
     static CarState generate_random_state();
 
-    /**
-     * @brief Checks if the car is parked correctly.
-     * 
-     * Determines if the car is in a valid parked position based on predefined
-     * conditions.
-     * 
-     * @return true if the car is parked correctly, false otherwise.
-     */
-    bool parked();
 
-    /**
-     * @brief Computes a reward based on the car's state.
-     * 
-     * The reward function returns a score that can be used in reinforcement learning
-     * algorithms to assess the car's performance based on its state.
-     * 
-     * @return A float representing the reward value.
-     */
-    float reward();
 
     /**
      * @brief Converts the car's state to a normalized vector.
@@ -135,9 +108,20 @@ public:
 * @return A QPolygonF object that contains the entire enviroment 
 */
 QPolygonF build_env();
-//QLineF simulateLidar(const QPoint& origin, double direction, double maxDistance, const QPolygon& polygon);
 
-
+class Enviroment {
+public:
+    CarState car;
+    QPolygonF env_polygon;
+    //float reward_for_hit;
+    //float reward_for_nothing;
+    //float reward_for_park;
+    Enviroment();
+    bool car_parked();
+    bool car_allowed();
+    float reward();
+    Enviroment compute_new_state(float speed, float steering, int timestep);
+};
 
 
 

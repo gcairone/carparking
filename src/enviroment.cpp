@@ -46,25 +46,6 @@ QPolygonF CarState::to_polygon() {
 }
 
 
-bool CarState::allowed() {
-    QPolygonF car_rect = this->to_polygon();
-
-    QPolygonF env_poly = build_env();
-
-    for(auto point: car_rect) {
-        if(!env_poly.containsPoint(point, Qt::OddEvenFill)) {
-            return false;
-        }
-    }
-    if(car_rect.containsPoint(env_poly[3], Qt::OddEvenFill)) {
-        return false;
-    }
-    if(car_rect.containsPoint(env_poly[6], Qt::OddEvenFill)) {
-        return false;
-    }
-
-    return true;
-}
 
 CarState::~CarState() {}
 
@@ -145,25 +126,6 @@ QPolygonF build_env() {
 }
 
 
-bool CarState::parked() {
-    QVector<QPointF> car_rect = this->to_polygon();
-
-    QVector<QPointF> env = build_env();
-
-    QPolygonF parkspace({env[3], env[4], env[5], env[6]});
-
-    for(auto point: car_rect) {
-        if(!parkspace.containsPoint(point, Qt::OddEvenFill)) return false;
-    }
-    return true;
-}
-
-float CarState::reward() {
-    if(!allowed()) return reward_for_hit;
-    if(parked()) return reward_for_park;
-    return reward_for_nothing;
-}
-
 
 
 std::vector<float> CarState::to_vector_normalized() {
@@ -196,6 +158,66 @@ int CarState::discretize_state(int divide_x, int divide_y, int divide_theta) {
 }
 
 
+Enviroment::Enviroment() {
+    car = CarState();
+    float len_park = len_car + 2 * tol;
+    float width_park = width_car + tol;
+    QVector<QPointF> vertices = {
+        QPointF(0, 0),  // top-left corner
+        QPointF(0, len_env),  //   Bottom-left corner
+        QPointF(width_env-width_park, len_env),  // Bottom-right corner
+        QPointF(width_env-width_park, len_env-free_park*len_park), // PARK CORNER  bottom-right
+        QPointF(width_env, len_env-free_park*len_park), // PARK CORNER  bottom-left
+        QPointF(width_env, len_env-(free_park+1)*len_park), // PARK CORNER  top-left
+        QPointF(width_env-width_park, len_env-(free_park+1)*len_park),  // PARK CORNER  top-right
+        QPointF(width_env-width_park, 0),  // Top-right corner
+    };
+    env_polygon = QPolygonF(vertices);
+
+}
 
 
+bool Enviroment::car_allowed() {
+    QPolygonF car_rect = car.to_polygon();
 
+    for(auto point: car_rect) {
+        if(!env_polygon.containsPoint(point, Qt::OddEvenFill)) {
+            return false;
+        }
+    }
+    if(car_rect.containsPoint(env_polygon[3], Qt::OddEvenFill)) {
+        return false;
+    }
+    if(car_rect.containsPoint(env_polygon[6], Qt::OddEvenFill)) {
+        return false;
+    }
+
+    return true;
+}
+
+
+bool Enviroment::car_parked() {
+    QVector<QPointF> car_rect = car.to_polygon();
+
+    QPolygonF parkspace({env_polygon[3], env_polygon[4], env_polygon[5], env_polygon[6]});
+
+    for(auto point: car_rect) {
+        if(!parkspace.containsPoint(point, Qt::OddEvenFill)) return false;
+    }
+    return true;
+}
+
+
+float Enviroment::reward() {
+    float r;
+    if(!car_allowed()) r= reward_for_hit;
+    else if(car_parked()) r= reward_for_park;
+    else r= reward_for_nothing;
+    return r;
+}
+
+Enviroment Enviroment::compute_new_state(float speed, float steering, int timestep) {
+    Enviroment e = *this;
+    e.car = e.car.compute_new_state(speed, steering, timestep);
+    return e;
+}
