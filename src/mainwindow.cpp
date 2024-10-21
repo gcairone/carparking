@@ -13,6 +13,8 @@
 #define WINDOW_HEIGHT 600
 #define WINDOW_WIDTH 800
 
+// log constant
+#define LOG_FREQ 1000000 // how many iterations between each log
 
 
 
@@ -234,9 +236,9 @@ void MainWindow::on_trainButton_clicked()
     for(int i=0; i<num_iter; ++i) {
         model_iteration();
         enviroment_iteration(ANIMATION_SPEED*MSEC*TIME_RATIO);
-        if(i%1000000==0) {
-            std::cout << "{\"iteration\": \"" << i << "\", \"hit\": \"" << hit_counter << "\", \"success\": \"" << success_counter << "\", \"success_ratio\": \""<< 100 * success_counter / (float)(success_counter+hit_counter) << '%' << "\", \"lr\": \""<< speed_controller.lr << "\", \"er\": \"" << speed_controller.exploration_rate << "\"}"<< std::endl;
-            file << "{\"iteration\": \"" << i << "\", \"hit\": \"" << hit_counter << "\", \"success\": \"" << success_counter << "\", \"success_ratio\": \""<< 100 * success_counter / (float)(success_counter+hit_counter) << '%' << "\", \"lr\": \""<< speed_controller.lr << "\", \"er\": \"" << speed_controller.exploration_rate << "\"}"<< std::endl;
+        if((i+1)%LOG_FREQ==0) {
+            std::cout << "{\"iteration\": \"" << i+1 << "\", \"hit\": \"" << hit_counter << "\", \"success\": \"" << success_counter << "\", \"success_ratio\": \""<< 100 * success_counter / (float)(success_counter+hit_counter) << '%' << "\", \"lr\": \""<< speed_controller.lr << "\", \"er\": \"" << speed_controller.exploration_rate << "\"}"<< std::endl;
+            file << "{\"iteration\": \"" << i+1 << "\", \"hit\": \"" << hit_counter << "\", \"success\": \"" << success_counter << "\", \"success_ratio\": \""<< 100 * success_counter / (float)(success_counter+hit_counter) << '%' << "\", \"lr\": \""<< speed_controller.lr << "\", \"er\": \"" << speed_controller.exploration_rate << "\"}"<< std::endl;
             hit_counter=0;
             success_counter=0;
             update();
