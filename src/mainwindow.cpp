@@ -1,38 +1,8 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
-// frequency of choices and screen update
-
-//#define MSEC 30 // latency in msec of timestep
-//#define ANIMATION_SPEED 1 // x1
-//#define TIME_RATIO 10 // TIME_RATIO * MSEC is the frequency of the choice, used by the controller
-
-// video animation constants
-//#define PIXEL_RATIO 30 // how many pixel is a meter
-//#define MARGIN 30 // distance in pixel between window and enviroment representation
-
 // log constant
 #define LOG_FREQ 1000000 // how many iterations between each log
-
-
-const float speed_unity = 2;
-const std::vector<float> speed_actions = {
-    -2*speed_unity, 
-    -1*speed_unity, 
-    1*speed_unity, 
-    2*speed_unity
-};
-const std::vector<float> steering_actions = {
-    -M_PI/4, 
-    -M_PI/8, 
-    0, 
-    M_PI/8, 
-    M_PI/4
-};
-const int x_divide = 8;
-const int y_divide = 8;
-const int theta_divide = 20;
-//const int state_count = x_divide * y_divide * theta_divide;
 
 
 QPoint map_into_window(const QPointF &p, int m, int r) {
@@ -83,11 +53,15 @@ MainWindow::MainWindow(QWidget *parent):
 
     resize(std::stoi(conf["WINDOW_WIDTH"]), std::stoi(conf["WINDOW_HEIGHT"]));
 
-
-
     msec = std::stoi(conf["MSEC"]);
     animation_speed = std::stoi(conf["ANIMATION_SPEED"]);
     time_ratio = std::stoi(conf["TIME_RATIO"]);
+
+    speed_actions = progression(std::stoi(conf["N_SPEED_ACTIONS"]), std::stof(conf["SPEED_UNITY"]));
+    steering_actions = progression(std::stoi(conf["N_STEERING_ACTIONS"]), M_PI*std::stof(conf["STEERING_UNITY"]));
+
+
+
     ui->learning_rate->setValue(speed_controller.lr_max);
     ui->discount_factor->setValue(speed_controller.discount_factor);
     ui->epsilon->setValue(speed_controller.exploration_rate_max);

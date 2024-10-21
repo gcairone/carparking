@@ -168,8 +168,8 @@ private:
     int animation_speed;
     int time_ratio;
 
-    //std::vector<float> speed_actions;
-    //std::vector<float> steering_actions;
+    std::vector<float> speed_actions;
+    std::vector<float> steering_actions;
 };
 
 /**

@@ -62,7 +62,7 @@ std::map<std::string, std::string> readConfig(const std::string& filePath) {
 
 std::vector<float> progression(int n, float unity) {
     std::vector<float> ret(n);
-    float start = -n*unity/2;
+    float start = -(n/2)*unity;
     if(n%2==0) start += unity/2;
     for(int i=0; i<n; i++) ret[i] = start + i*unity;
     return ret;
