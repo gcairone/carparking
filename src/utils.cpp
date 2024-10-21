@@ -29,3 +29,29 @@ void printMatrix(const std::vector<std::vector<float>>& matrix) {
     std::cout << std::endl;
 }
 
+std::map<std::string, std::string> readConfig(const std::string& filePath) {
+    std::map<std::string, std::string> config;
+    std::ifstream file(filePath);
+    if (!file.is_open()) return config;
+
+    std::regex pattern(R"(^\s*([^\s#]+)\s*=\s*([^#]+?)\s*$)");
+    std::smatch match;
+    std::string line;
+
+    while (std::getline(file, line)) {
+        // Remove anything after '#' as it's considered a comment
+        size_t commentPos = line.find('#');
+        if (commentPos != std::string::npos) {
+            line = line.substr(0, commentPos); // Keep only part before the comment
+        }
+
+        // Trim any trailing whitespace that might have remained after removing comment
+        line = std::regex_replace(line, std::regex(R"(\s+$)"), "");
+
+        if (std::regex_match(line, match, pattern)) {
+            config[match[1]] = match[2];
+        }
+    }
+
+    return config;
+}
