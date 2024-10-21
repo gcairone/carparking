@@ -6,7 +6,7 @@
 #include <regex>
 #include <string>
 #include <map>
-
+#include <vector>
 
 // Function to generate a random float between a and b
 float randomFloat(float a, float b);
@@ -18,4 +18,5 @@ void printMatrix(const std::vector<std::vector<float>>& matrix);
 
 std::map<std::string, std::string> readConfig(const std::string& filePath);
 
+std::vector<float> progression(int n, float unity);
 #endif // UTILS_H

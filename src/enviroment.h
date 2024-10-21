@@ -84,12 +84,9 @@ public:
      * Divides the state space (x, y, theta) into discrete intervals for
      * quantization, which is often used in simulation or reinforcement learning.
      * 
-     * @param divide_x The number of divisions for the x-coordinate.
-     * @param divide_y The number of divisions for the y-coordinate.
-     * @param divide_theta The number of divisions for the theta (angle).
      * @return An integer representing the discrete state.
      */
-    int discretize_state(int divide_x, int divide_y, int divide_theta);
+    int discretize_state();
 
     /**
      * @brief Destructor for CarState.

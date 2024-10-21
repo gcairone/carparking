@@ -151,8 +151,6 @@ private:
 
     QVector<QLineF> lidar; ///< The lines representing lidar sensor readings.
 
-    QLearningModel speed_controller; ///< Q-learning model for speed control.
-    QLearningModel steering_controller; ///< Q-learning model for steering control.
     int state_encoded; ///< Encoded representation of the current state.
 
     QTimer *timer; ///< Timer for managing the simulation updates.
@@ -162,6 +160,16 @@ private:
 
     int last_speed_action; ///< Last speed action taken by the speed controller.
     int last_steering_action; ///< Last steering action taken by the steering controller.
+    QLearningModel speed_controller; ///< Q-learning model for speed control.
+    QLearningModel steering_controller; ///< Q-learning model for steering control.
+
+    std::map<std::string, std::string> conf;
+    int msec;
+    int animation_speed;
+    int time_ratio;
+
+    //std::vector<float> speed_actions;
+    //std::vector<float> steering_actions;
 };
 
 /**

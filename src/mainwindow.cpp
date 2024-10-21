@@ -3,30 +3,18 @@
 
 // frequency of choices and screen update
 
-#define MSEC 30 // latency in msec of timestep
-#define ANIMATION_SPEED 1 // x1
-#define TIME_RATIO 10 // TIME_RATIO * MSEC is the frequency of the choice, used by the controller
+//#define MSEC 30 // latency in msec of timestep
+//#define ANIMATION_SPEED 1 // x1
+//#define TIME_RATIO 10 // TIME_RATIO * MSEC is the frequency of the choice, used by the controller
 
 // video animation constants
-#define PIXEL_RATIO 30 // how many pixel is a meter
-#define MARGIN 30 // distance in pixel between window and enviroment representation
-#define WINDOW_HEIGHT 600
-#define WINDOW_WIDTH 800
+//#define PIXEL_RATIO 30 // how many pixel is a meter
+//#define MARGIN 30 // distance in pixel between window and enviroment representation
 
 // log constant
 #define LOG_FREQ 1000000 // how many iterations between each log
 
 
-
-
-const bool Q_weights_freezed = false;
-float learning_rate = 0.003;
-float discount_factor = 0.9;
-float exploration_rate_max = 0.1; 
-const float er_half_life = 1e7;
-
-
-//bool SOM_weights_freezed = false;
 const float speed_unity = 2;
 const std::vector<float> speed_actions = {
     -2*speed_unity, 
@@ -44,68 +32,85 @@ const std::vector<float> steering_actions = {
 const int x_divide = 8;
 const int y_divide = 8;
 const int theta_divide = 20;
-const int state_count = x_divide * y_divide * theta_divide;
+//const int state_count = x_divide * y_divide * theta_divide;
 
 
-QPoint map_into_window(const QPointF &p) {
-    return QPoint((int)(MARGIN + PIXEL_RATIO*p.x()), (int)(MARGIN + PIXEL_RATIO*p.y()));
+QPoint map_into_window(const QPointF &p, int m, int r) {
+    return QPoint((int)(m + r*p.x()), (int)(m + r*p.y()));
 }
 
-QPolygon map_into_window(const QPolygonF &p) {
+QPolygon map_into_window(const QPolygonF &p, int m, int r) {
     QPolygon polygon;
 
     for(auto point: p) {
-        polygon << map_into_window(point);
+        polygon << map_into_window(point, m, r);
     }
 
     return polygon;
 }
 
-QLine map_into_window(const QLineF &l) {
-    return QLine(map_into_window(l.p1()), map_into_window(l.p2()));
+QLine map_into_window(const QLineF &l, int m, int r) {
+    return QLine(map_into_window(l.p1(), m, r), map_into_window(l.p2(), m, r));
 }
 
-QVector<QLine> map_into_window(const QVector<QLineF> &v) {
-    QVector<QLine> r;
+QVector<QLine> map_into_window(const QVector<QLineF> &v, int m, int r) {
+    QVector<QLine> vi;
     for(auto line: v) {
-        r.push_back(map_into_window(line));
+        vi.push_back(map_into_window(line, m, r));
     }
-    return r;
+    return vi;
 }
 
 MainWindow::MainWindow(QWidget *parent): 
     QMainWindow(parent), 
     ui(new Ui::MainWindow), 
-    speed_controller(state_count, speed_actions.size(), learning_rate, discount_factor, exploration_rate_max, er_half_life), 
-    steering_controller(state_count, steering_actions.size(), learning_rate, discount_factor, exploration_rate_max, er_half_life),
+    //speed_controller(state_count, speed_actions.size(), learning_rate, discount_factor, exploration_rate_max, er_half_life), 
+    //steering_controller(state_count, steering_actions.size(), learning_rate, discount_factor, exploration_rate_max, er_half_life),
     iter(0), 
     hit_counter(0), 
     success_counter(0),
     last_speed_action(0),
     last_steering_action(0)
 {
+    std::setlocale(LC_NUMERIC, "C");
+    conf = readConfig("configuration/default.conf");
+    conf["N_ACTIONS"] = conf["N_SPEED_ACTIONS"];
+    speed_controller = QLearningModel(conf);
+    conf["N_ACTIONS"] = conf["N_STEERING_ACTIONS"];
+    steering_controller = QLearningModel(conf);
     ui->setupUi(this);
     setWindowTitle("Animation Controller");
-    resize(WINDOW_WIDTH, WINDOW_HEIGHT);
 
-    ui->learning_rate->setValue(learning_rate);
-    ui->discount_factor->setValue(discount_factor);
-    ui->epsilon->setValue(exploration_rate_max);
+    resize(std::stoi(conf["WINDOW_WIDTH"]), std::stoi(conf["WINDOW_HEIGHT"]));
+
+
+
+    msec = std::stoi(conf["MSEC"]);
+    animation_speed = std::stoi(conf["ANIMATION_SPEED"]);
+    time_ratio = std::stoi(conf["TIME_RATIO"]);
+    ui->learning_rate->setValue(speed_controller.lr_max);
+    ui->discount_factor->setValue(speed_controller.discount_factor);
+    ui->epsilon->setValue(speed_controller.exploration_rate_max);
     timer = new QTimer(this);
     connect(timer, &QTimer::timeout, this, [this]() {
-        if(iter % TIME_RATIO == 0) model_iteration();
-        enviroment_iteration(ANIMATION_SPEED*MSEC);
+        if(iter % time_ratio == 0) model_iteration();
+        enviroment_iteration(animation_speed*msec);
         iter++;
         update();
     });
-    timer->setInterval(ANIMATION_SPEED*MSEC); 
+
+    timer->setInterval(animation_speed*msec); 
 
     env = Enviroment();
     env.car = CarState::generate_random_state();;
-    state_encoded = env.car.discretize_state(x_divide, y_divide, theta_divide); //state_encoded = som.findBMU(car_st_vect);
+    state_encoded = env.car.discretize_state(); //state_encoded = som.findBMU(car_st_vect);
 
-    car_picture = map_into_window(env.car.to_polygon());
-    env_picture = map_into_window(env.env_polygon);
+
+
+    int m = std::stoi(conf["MARGIN"]);
+    int r = std::stoi(conf["PIXEL_RATIO"]);
+    car_picture = map_into_window(env.car.to_polygon(), m, r);
+    env_picture = map_into_window(env.env_polygon, m, r);
 
 
 
@@ -126,6 +131,7 @@ void MainWindow::on_playButton_clicked()
     steering_controller.exploration_rate_max = ui->epsilon->value();
 
     timer->start();
+
 }
 
 void MainWindow::on_pauseButton_clicked()
@@ -135,8 +141,10 @@ void MainWindow::on_pauseButton_clicked()
 
 void MainWindow::on_stopButton_clicked()
 {
-    env.car = CarState::generate_random_state();;
-    car_picture = map_into_window(env.car.to_polygon());
+    env.car = CarState::generate_random_state();
+    int m = std::stoi(conf["MARGIN"]);
+    int r = std::stoi(conf["PIXEL_RATIO"]);
+    car_picture = map_into_window(env.car.to_polygon(), m, r);
     update();
     timer->stop();
 
@@ -150,11 +158,14 @@ void MainWindow::paintEvent(QPaintEvent *event)
     painter.setBrush(Qt::black);
     painter.drawPolygon(env_picture);
     painter.setBrush(Qt::blue); // Set car_picture color
-    car_picture = map_into_window(env.car.to_polygon());
+    int m = std::stoi(conf["MARGIN"]);
+    int r = std::stoi(conf["PIXEL_RATIO"]);
+
+    car_picture = map_into_window(env.car.to_polygon(), m, r);
     painter.drawPolygon(car_picture);
 
     painter.setBrush(Qt::red); // Set car_picture color
-    painter.drawEllipse(map_into_window(QPointF(env.car.x, env.car.y)), 2, 2);
+    painter.drawEllipse(map_into_window(QPointF(env.car.x, env.car.y), m, r), 2, 2);
 
 
 }
@@ -168,20 +179,20 @@ void MainWindow::enviroment_iteration(int timestep) {
     auto new_env_st = env.compute_new_state(speed_actions[speed_action], steering_actions[steering_action], timestep);
 
 
-    auto new_state_encoded = new_env_st.car.discretize_state(x_divide, y_divide, theta_divide);
+    auto new_state_encoded = new_env_st.car.discretize_state();
 
 
     if(!new_env_st.car_allowed()) {
         hit_counter++;
         env.car = CarState::generate_random_state();;
-        state_encoded = env.car.discretize_state(x_divide, y_divide, theta_divide); 
+        state_encoded = env.car.discretize_state(); 
         last_speed_action = speed_controller.chooseAction(state_encoded, ui->eval->isChecked());
         last_steering_action = steering_controller.chooseAction(state_encoded, ui->eval->isChecked());
     }
     else if(new_env_st.car_parked()) {
         success_counter++;
         env.car = CarState::generate_random_state();;
-        state_encoded = env.car.discretize_state(x_divide, y_divide, theta_divide);
+        state_encoded = env.car.discretize_state();
         last_speed_action = speed_controller.chooseAction(state_encoded, ui->eval->isChecked());
         last_steering_action = steering_controller.chooseAction(state_encoded, ui->eval->isChecked());
     }
@@ -196,13 +207,15 @@ void MainWindow::model_iteration() {
 
     int speed_action = speed_controller.chooseAction(state_encoded, ui->eval->isChecked());
     int steering_action = steering_controller.chooseAction(state_encoded, ui->eval->isChecked());
+
     last_speed_action = speed_action;
     last_steering_action = steering_action;
-    //CarState new_car_st = env.car.compute_new_state(speed_actions[speed_action], steering_actions[steering_action], MSEC*TIME_RATIO * ANIMATION_SPEED);
-    Enviroment new_env_st = env.compute_new_state(speed_actions[speed_action], steering_actions[steering_action], MSEC*TIME_RATIO * ANIMATION_SPEED);
+
+    //CarState new_car_st = env.car.compute_new_state(speed_actions[speed_action], steering_actions[steering_action], msec*time_ratio * animation_speed);
+    Enviroment new_env_st = env.compute_new_state(speed_actions[speed_action], steering_actions[steering_action], msec*time_ratio * animation_speed);
 
 
-    auto new_state_encoded = new_env_st.car.discretize_state(x_divide, y_divide, theta_divide);//auto new_state_encoded = som.findBMU(new_car_st_vect);
+    auto new_state_encoded = new_env_st.car.discretize_state();//auto new_state_encoded = som.findBMU(new_car_st_vect);
 
     if(!ui->eval->isChecked()) {
 
@@ -210,6 +223,7 @@ void MainWindow::model_iteration() {
         speed_controller.train(state_encoded, speed_action, reward, new_state_encoded);
         steering_controller.train(state_encoded, steering_action, reward, new_state_encoded);
     }
+
 
 }
 
@@ -235,7 +249,7 @@ void MainWindow::on_trainButton_clicked()
     int num_iter = ui->num_iterations->value();
     for(int i=0; i<num_iter; ++i) {
         model_iteration();
-        enviroment_iteration(ANIMATION_SPEED*MSEC*TIME_RATIO);
+        enviroment_iteration(animation_speed*msec*time_ratio);
         if((i+1)%LOG_FREQ==0) {
             std::cout << "{\"iteration\": \"" << i+1 << "\", \"hit\": \"" << hit_counter << "\", \"success\": \"" << success_counter << "\", \"success_ratio\": \""<< 100 * success_counter / (float)(success_counter+hit_counter) << '%' << "\", \"lr\": \""<< speed_controller.lr << "\", \"er\": \"" << speed_controller.exploration_rate << "\"}"<< std::endl;
             file << "{\"iteration\": \"" << i+1 << "\", \"hit\": \"" << hit_counter << "\", \"success\": \"" << success_counter << "\", \"success_ratio\": \""<< 100 * success_counter / (float)(success_counter+hit_counter) << '%' << "\", \"lr\": \""<< speed_controller.lr << "\", \"er\": \"" << speed_controller.exploration_rate << "\"}"<< std::endl;
@@ -247,6 +261,7 @@ void MainWindow::on_trainButton_clicked()
     
     std::cout << "Trained "<< num_iter <<std::endl;
     file.close();
+
 }
 
 

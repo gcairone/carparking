@@ -30,9 +30,13 @@ void printMatrix(const std::vector<std::vector<float>>& matrix) {
 }
 
 std::map<std::string, std::string> readConfig(const std::string& filePath) {
+
     std::map<std::string, std::string> config;
     std::ifstream file(filePath);
-    if (!file.is_open()) return config;
+    if (!file.is_open()) {
+        std::cout << "Somthing wrong in .conf opening" << std::endl;
+        return config;
+    }
 
     std::regex pattern(R"(^\s*([^\s#]+)\s*=\s*([^#]+?)\s*$)");
     std::smatch match;
@@ -54,4 +58,12 @@ std::map<std::string, std::string> readConfig(const std::string& filePath) {
     }
 
     return config;
+}
+
+std::vector<float> progression(int n, float unity) {
+    std::vector<float> ret(n);
+    float start = -n*unity/2;
+    if(n%2==0) start += unity/2;
+    for(int i=0; i<n; i++) ret[i] = start + i*unity;
+    return ret;
 }

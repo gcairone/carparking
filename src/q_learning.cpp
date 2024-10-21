@@ -1,5 +1,8 @@
 #include "q_learning.h"
 #include <algorithm>
+QLearningModel::QLearningModel() {
+
+}
 
 QLearningModel::QLearningModel(int state_count, int action_count, float lr_max, float discount_factor, float exploration_rate_max, float er_half_life): 
         q_table(state_count, std::vector<float>(action_count, 0)), 
@@ -18,6 +21,35 @@ QLearningModel::QLearningModel(int state_count, int action_count, float lr_max, 
         lr_ratio = std::pow(0.5, 1.0/lr_half_life);
         er_ratio = std::pow(0.5, 1.0/er_half_life);
         reset();
+}
+
+QLearningModel::QLearningModel(std::map<std::string, std::string> config) {
+    state_count = std::stoi(config["X_DIVIDE"]) * std::stoi(config["Y_DIVIDE"]) * std::stoi(config["THETA_DIVIDE"]);
+
+    action_count = std::stoi(config["N_ACTIONS"]);
+
+    lr_max = std::stof(config["LEARNING_RATE"]);
+    lr_min = lr_max;
+    lr_half_life = 1000; // no life
+    discount_factor = std::stof(config["DISCOUNT_FACTOR"]);
+    exploration_rate_max = std::stof(config["ER_MAX"]);
+    exploration_rate_min = 0;
+    er_half_life = std::stof(config["ER_HALF_LIFE"]);
+
+    lr = lr_max;
+    exploration_rate = exploration_rate_max;
+    lr_ratio = std::pow(0.5, 1.0/lr_half_life);
+    er_ratio = std::pow(0.5, 1.0/er_half_life);
+
+    q_table.resize(state_count); 
+
+    for (int i = 0; i < state_count; ++i) {
+        q_table[i].resize(action_count, 0.0f);
+    }
+
+
+    reset();
+
 }
 
 void QLearningModel::reset() {

@@ -13,6 +13,9 @@ float free_park = 0.6;
 float reward_for_hit = -200;
 float reward_for_park = 1000;
 float reward_for_nothing = -10;
+const int x_divide = 8;
+const int y_divide = 8;
+const int theta_divide = 20;
 
 
 
@@ -137,22 +140,22 @@ std::vector<float> CarState::to_vector_normalized() {
 }
 
 
-int CarState::discretize_state(int divide_x, int divide_y, int divide_theta) {
+int CarState::discretize_state() {
 
-    float x_section = (float)(width_env) / divide_x;
-    float y_section = (float)(len_env) / divide_y;
-    float theta_section = 2*M_PI / divide_theta;
+    float x_section = (float)(width_env) / x_divide;
+    float y_section = (float)(len_env) / y_divide;
+    float theta_section = 2*M_PI / theta_divide;
 
     int x_state = (int)(x / x_section);
-    if(x_state >= divide_x) x_state = divide_x - 1;
+    if(x_state >= x_divide) x_state = x_divide - 1;
     int y_state = (int)(y / y_section);
-    if(y_state >= divide_y) y_state = divide_y - 1;
+    if(y_state >= y_divide) y_state = y_divide - 1;
     float theta_mod = fmod(theta, 2.0 * M_PI);
     if (theta_mod < 0)
         theta_mod += 2.0 * M_PI;
     int theta_state = (int)(theta_mod / theta_section);
-    if(theta_state >= divide_theta) theta_state = divide_theta -1;
-    int state_ret = theta_state + divide_theta * y_state + divide_theta * divide_y * x_state;
+    if(theta_state >= theta_divide) theta_state = theta_divide -1;
+    int state_ret = theta_state + theta_divide * y_state + theta_divide * y_divide * x_state;
 
     return state_ret;
 }

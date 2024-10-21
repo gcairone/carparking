@@ -7,6 +7,7 @@
 #include <fstream>
 #include <string>
 #include <sstream>
+#include <map>
 
 /**
  * @brief Class that implements a Q-Learning model for reinforcement learning.
@@ -38,6 +39,7 @@ public:
     float lr;             ///< Current learning rate (adjusted over time).
     float exploration_rate; ///< Current exploration rate (epsilon, adjusted over time).
 
+    QLearningModel();
     /**
      * @brief Constructor for the QLearningModel class.
      * 
@@ -57,6 +59,20 @@ public:
                    float discount_factor,
                    float exploration_rate_max,
                    float er_half_life);
+    /**
+     * @brief Constructor for the QLearningModel class.
+     * 
+     * Initializes the Q-learning model from std::map configuration structure
+     * 
+     * @param state_count The number of states in the environment.
+     * @param action_count The number of actions available per state.
+     * @param lr_max The initial (maximum) learning rate.
+     * @param discount_factor The discount factor for future rewards.
+     * @param exploration_rate_max The initial (maximum) exploration rate.
+     * @param er_half_life The half-life used to decrease the exploration rate.
+     */
+    QLearningModel(std::map<std::string, std::string> config);
+
 
     /**
      * @brief Reset randomly Q-table.
