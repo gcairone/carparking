@@ -91,6 +91,30 @@ MainWindow::MainWindow(QWidget *parent):
 
 
 
+
+    //--------------------------------------------------
+    ofstream file(conf["LOG_PATH"], ios::app);
+    if (!file.is_open()) {
+        cerr << "Failed to open file" << endl;
+    }
+
+    int num_iter = 10000000;
+    for(int i=0; i<num_iter; ++i) {
+        model_iteration();
+        enviroment_iteration(animation_speed*msec*time_ratio);
+        if((i+1)%LOG_FREQ==0) {
+            cout << "{\"i\": \"" << i+1 << "\", \"hit\": \"" << hit_counter << "\", \"success\": \"" << success_counter << "\", \"rate\": \""<< 100 * success_counter / (float)(success_counter+hit_counter) <<  "\", \"er\": \"" << speed_controller.exploration_rate << "\", \"tdr_sp\": \"" << avg_tdr_sp << "\", \"tdr_st\": \"" << avg_tdr_st <<"\"}"<< endl;
+            file << "{\"i\": \"" << i+1 << "\", \"hit\": \"" << hit_counter << "\", \"success\": \"" << success_counter << "\", \"rate\": \""<< 100 * success_counter / (float)(success_counter+hit_counter) <<  "\", \"er\": \"" << speed_controller.exploration_rate << "\", \"tdr_sp\": \"" << avg_tdr_sp << "\", \"tdr_st\": \"" << avg_tdr_st <<"\"}"<< endl;
+            hit_counter=0;
+            success_counter=0;
+            avg_tdr_sp = 0;
+            avg_tdr_st = 0;
+            update();
+        }
+    }
+    file.close();
+    throw 0;
+
 }
 
 MainWindow::~MainWindow()
@@ -235,8 +259,8 @@ void MainWindow::on_trainButton_clicked()
         model_iteration();
         enviroment_iteration(animation_speed*msec*time_ratio);
         if((i+1)%LOG_FREQ==0) {
-            cout << "{\"iteration\": \"" << i+1 << "\", \"hit\": \"" << hit_counter << "\", \"success\": \"" << success_counter << "\", \"success_ratio\": \""<< 100 * success_counter / (float)(success_counter+hit_counter) << '%' << "\", \"lr\": \""<< speed_controller.lr << "\", \"er\": \"" << speed_controller.exploration_rate << "\", \"avg_tdr_sp\": \"" << avg_tdr_sp << "\", \"avg_tdr_st\": \"" << avg_tdr_st <<"\"}"<< endl;
-            file << "{\"iteration\": \"" << i+1 << "\", \"hit\": \"" << hit_counter << "\", \"success\": \"" << success_counter << "\", \"success_ratio\": \""<< 100 * success_counter / (float)(success_counter+hit_counter) << '%' << "\", \"lr\": \""<< speed_controller.lr << "\", \"er\": \"" << speed_controller.exploration_rate << "\", \"avg_tdr_sp\": \"" << avg_tdr_sp << "\", \"avg_tdr_st\": \"" << avg_tdr_st <<"\"}"<< endl;
+            cout << "{\"i\": \"" << i+1 << "\", \"hit\": \"" << hit_counter << "\", \"success\": \"" << success_counter << "\", \"rate\": \""<< 100 * success_counter / (float)(success_counter+hit_counter) <<  "\", \"er\": \"" << speed_controller.exploration_rate << "\", \"tdr_sp\": \"" << avg_tdr_sp << "\", \"tdr_st\": \"" << avg_tdr_st <<"\"}"<< endl;
+            file << "{\"i\": \"" << i+1 << "\", \"hit\": \"" << hit_counter << "\", \"success\": \"" << success_counter << "\", \"rate\": \""<< 100 * success_counter / (float)(success_counter+hit_counter) <<  "\", \"er\": \"" << speed_controller.exploration_rate << "\", \"tdr_sp\": \"" << avg_tdr_sp << "\", \"tdr_st\": \"" << avg_tdr_st <<"\"}"<< endl;
             hit_counter=0;
             success_counter=0;
             avg_tdr_sp = 0;
