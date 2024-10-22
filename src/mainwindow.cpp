@@ -198,8 +198,9 @@ void MainWindow::model_iteration() {
     if(!ui->eval->isChecked()) {
 
         float reward = new_env_st.reward();
-        speed_controller.train(state_encoded, speed_action, reward, new_state_encoded);
-        steering_controller.train(state_encoded, steering_action, reward, new_state_encoded);
+        float tdr_sp = speed_controller.train(state_encoded, speed_action, reward, new_state_encoded);
+        float tdr_st = steering_controller.train(state_encoded, steering_action, reward, new_state_encoded);
+
     }
 
 

@@ -79,7 +79,7 @@ int QLearningModel::chooseAction(int state, bool eval) {
     }
 }
 
-void QLearningModel::train(int state, int action, float reward, int nextState) {
+float QLearningModel::train(int state, int action, float reward, int nextState) {
     if(state >= state_count) {
         cerr << "non valid state " << state << endl;
         throw 0;
@@ -94,11 +94,13 @@ void QLearningModel::train(int state, int action, float reward, int nextState) {
     }
 
     float maxNextQValue = *max_element(q_table[nextState].begin(), q_table[nextState].end());
-    float QTarget = reward + discount_factor * maxNextQValue;
-    q_table[state][action] += lr * (QTarget - q_table[state][action]);
+    float tdr = reward + discount_factor * maxNextQValue - q_table[state][action];
+    q_table[state][action] += lr * tdr;
 
     exploration_rate = exploration_rate_min + er_ratio*(exploration_rate - exploration_rate_min);
     lr = lr_min + lr_ratio*(lr - lr_min);
+
+    return tdr;
 }
 
 

@@ -103,7 +103,7 @@ public:
      * @param reward The reward received after taking the action.
      * @param nextState The next state after taking the action.
      */
-    void train(int state, int action, float reward, int nextState);
+    float train(int state, int action, float reward, int nextState);
 
     /**
      * @brief Stores the Q-table to a file.
