@@ -1,22 +1,6 @@
 #include "enviroment.h"
 #include <cmath>
 #include <QLineF>
-#define APPROX_MOTION true // if true, it compute next state with approximate kinematics
-
-//float len_car = 4;
-//float width_car = 1.7;
-float len_env = 15;   // y-axis  
-float width_env = 8; // x-axis
-float tol = 1.5;                    
-float free_park = 0.6;
-
-float reward_for_hit = -200;
-float reward_for_park = 1000;
-float reward_for_nothing = -10;
-const int x_divide = 8;
-const int y_divide = 8;
-const int theta_divide = 20;
-
 
 CarState::CarState(std::map<std::string, std::string> conf) {
     len = std::stof(conf["LEN_CAR"]);
@@ -59,10 +43,10 @@ CarState::~CarState() {}
 
 
 
-CarState CarState::compute_new_state(float speed, float steering, int timestep) {
+CarState CarState::compute_new_state(float speed, float steering, int timestep, bool approx_motion) {
     float dt = timestep / 1000.0;
 
-    if(APPROX_MOTION) {
+    if(approx_motion) {
         float x_r = x - 0.5 * len * cos(this->theta); // x ruota dietro
         float y_r = y - 0.5 * width * sin(this->theta); // y ruota dietro
 
@@ -103,41 +87,8 @@ CarState CarState::compute_new_state(float speed, float steering, int timestep) 
     }
 }
 
-/*
-CarState CarState::generate_random_state() {
-
-    float x_new = randomFloat(width*0.75, width_env - 1.75*width - tol);
-    float y_new = randomFloat(len*0.75, len_env - len*0.75);
-    float theta_new = M_PI*0.5;
-    if(randomFloat(0.0, 1.0)>0.5) theta_new = -M_PI*0.5;
-
-    return CarState(x_new, y_new, theta_new);
-}
 
 
-
-*/
-
-
-int CarState::discretize_state() {
-
-    float x_section = (float)(width_env) / x_divide;
-    float y_section = (float)(len_env) / y_divide;
-    float theta_section = 2*M_PI / theta_divide;
-
-    int x_state = (int)(x / x_section);
-    if(x_state >= x_divide) x_state = x_divide - 1;
-    int y_state = (int)(y / y_section);
-    if(y_state >= y_divide) y_state = y_divide - 1;
-    float theta_mod = fmod(theta, 2.0 * M_PI);
-    if (theta_mod < 0)
-        theta_mod += 2.0 * M_PI;
-    int theta_state = (int)(theta_mod / theta_section);
-    if(theta_state >= theta_divide) theta_state = theta_divide -1;
-    int state_ret = theta_state + theta_divide * y_state + theta_divide * y_divide * x_state;
-
-    return state_ret;
-}
 
 
 Enviroment::Enviroment() {
@@ -160,6 +111,24 @@ Enviroment::Enviroment() {
 
 Enviroment::Enviroment(std::map<std::string, std::string> conf) {
     car = CarState(conf);
+
+    len_env = std::stof(conf["LEN_ENV"]);
+    width_env = std::stof(conf["WIDTH_ENV"]);
+    tol = std::stof(conf["TOL"]);
+    free_park = std::stof(conf["FREE_PARK"]);
+
+    reward_for_hit = std::stof(conf["REWARD_FOR_HIT"]);
+    reward_for_park = std::stof(conf["REWARD_FOR_PARK"]);
+    reward_for_nothing = std::stof(conf["REWARD_FOR_NOTHING"]);
+
+    x_divide = std::stoi(conf["X_DIVIDE"]);
+    y_divide = std::stoi(conf["Y_DIVIDE"]);
+    theta_divide = std::stoi(conf["THETA_DIVIDE"]);
+
+
+    approx_motion = (conf["APPROX_MOTION"] == "1");
+
+
     float len_park = car.len + 2 * tol;
     float width_park = car.width + tol;
     QVector<QPointF> vertices = {
@@ -176,6 +145,25 @@ Enviroment::Enviroment(std::map<std::string, std::string> conf) {
 
 }
 
+int Enviroment::discretize_state() {
+    float x_section = (float)(width_env) / x_divide;
+    float y_section = (float)(len_env) / y_divide;
+    float theta_section = 2*M_PI / theta_divide;
+
+    int x_state = (int)(car.x / x_section);
+    if(x_state >= x_divide) x_state = x_divide - 1;
+    int y_state = (int)(car.y / y_section);
+    if(y_state >= y_divide) y_state = y_divide - 1;
+    float theta_mod = fmod(car.theta, 2.0 * M_PI);
+    if (theta_mod < 0)
+        theta_mod += 2.0 * M_PI;
+    int theta_state = (int)(theta_mod / theta_section);
+    if(theta_state >= theta_divide) theta_state = theta_divide -1;
+    int state_ret = theta_state + theta_divide * y_state + theta_divide * y_divide * x_state;
+
+    return state_ret;
+
+}
 
 
 bool Enviroment::car_allowed() {
@@ -219,7 +207,7 @@ float Enviroment::reward() {
 
 Enviroment Enviroment::compute_new_state(float speed, float steering, int timestep) {
     Enviroment e = *this;
-    e.car = e.car.compute_new_state(speed, steering, timestep);
+    e.car = e.car.compute_new_state(speed, steering, timestep, approx_motion);
     return e;
 }
 

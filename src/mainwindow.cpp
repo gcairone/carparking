@@ -78,7 +78,7 @@ MainWindow::MainWindow(QWidget *parent):
     env = Enviroment(conf);
     env.set_random_carstate();
     //env.car = CarState::generate_random_state();;
-    state_encoded = env.car.discretize_state(); //state_encoded = som.findBMU(car_st_vect);
+    state_encoded = env.discretize_state(); //state_encoded = som.findBMU(car_st_vect);
 
 
 
@@ -155,14 +155,14 @@ void MainWindow::enviroment_iteration(int timestep) {
     Enviroment new_env_st = env.compute_new_state(speed_actions[speed_action], steering_actions[steering_action], timestep);
 
 
-    int new_state_encoded = new_env_st.car.discretize_state();
+    int new_state_encoded = new_env_st.discretize_state();
 
 
     if(!new_env_st.car_allowed()) {
         hit_counter++;
         //env.car = CarState::generate_random_state();
         env.set_random_carstate();
-        state_encoded = env.car.discretize_state(); 
+        state_encoded = env.discretize_state(); 
         last_speed_action = speed_controller.chooseAction(state_encoded, ui->eval->isChecked());
         last_steering_action = steering_controller.chooseAction(state_encoded, ui->eval->isChecked());
     }
@@ -170,7 +170,7 @@ void MainWindow::enviroment_iteration(int timestep) {
         success_counter++;
         //env.car = CarState::generate_random_state();
         env.set_random_carstate();
-        state_encoded = env.car.discretize_state();
+        state_encoded = env.discretize_state();
         last_speed_action = speed_controller.chooseAction(state_encoded, ui->eval->isChecked());
         last_steering_action = steering_controller.chooseAction(state_encoded, ui->eval->isChecked());
     }
@@ -193,7 +193,7 @@ void MainWindow::model_iteration() {
     Enviroment new_env_st = env.compute_new_state(speed_actions[speed_action], steering_actions[steering_action], msec*time_ratio * animation_speed);
 
 
-    int new_state_encoded = new_env_st.car.discretize_state();//auto new_state_encoded = som.findBMU(new_car_st_vect);
+    int new_state_encoded = new_env_st.discretize_state();//auto new_state_encoded = som.findBMU(new_car_st_vect);
 
     if(!ui->eval->isChecked()) {
 

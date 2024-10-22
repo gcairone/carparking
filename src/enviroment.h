@@ -67,7 +67,7 @@ public:
      * @param timestep The time step for the state change.
      * @return The new CarState after applying the inputs.
      */
-    CarState compute_new_state(float speed, float steering, int timestep);
+    CarState compute_new_state(float speed, float steering, int timestep, bool approx_motion);
 
     /**
      * @brief Generates a random car state.
@@ -90,7 +90,7 @@ public:
      * 
      * @return An integer representing the discrete state.
      */
-    int discretize_state();
+    //int discretize_state();
 
     /**
      * @brief Destructor for CarState.
@@ -107,15 +107,28 @@ class Enviroment {
 public:
     CarState car;
     QPolygonF env_polygon;
-    //float reward_for_hit;
-    //float reward_for_nothing;
-    //float reward_for_park;
+
+    float len_env;   // y-axis  
+    float width_env; // x-axis
+    float tol;                    
+    float free_park;
+
+    float reward_for_hit;
+    float reward_for_park;
+    float reward_for_nothing;
+    int x_divide;
+    int y_divide;
+    int theta_divide;
+    bool approx_motion;
+
+
     Enviroment();
     Enviroment(std::map<std::string, std::string> conf);
     bool car_parked();
     bool car_allowed();
     float reward();
     void set_random_carstate();
+    int discretize_state();
     Enviroment compute_new_state(float speed, float steering, int timestep);
 };
 
