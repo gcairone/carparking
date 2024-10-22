@@ -75,7 +75,7 @@ MainWindow::MainWindow(QWidget *parent):
 
     timer->setInterval(animation_speed*msec); 
 
-    env = Enviroment();
+    env = Enviroment(conf);
     env.set_random_carstate();
     //env.car = CarState::generate_random_state();;
     state_encoded = env.car.discretize_state(); //state_encoded = som.findBMU(car_st_vect);

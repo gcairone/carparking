@@ -5,6 +5,8 @@
 #include <QLineF>
 #include "utils.h"
 #include <vector>
+#include <map>
+#include <string>
 
 /**
  * @brief Class that contains the state of the car.
@@ -18,13 +20,24 @@ public:
     float x;     ///< The x-coordinate of the car.
     float y;     ///< The y-coordinate of the car.
     float theta; ///< The orientation of the car in radians (angle).
+    float len;
+    float width;
+    /**
+     * @brief Default constructor for CarState.
+     * 
+     * Initializes the car's state with default values (x = 0, y = 0, theta = 0).
+     */
+    CarState() : x(0), y(0), theta(0), len(0), width(0) {};
+
 
     /**
      * @brief Default constructor for CarState.
      * 
      * Initializes the car's state with default values (x = 0, y = 0, theta = 0).
      */
-    CarState() : x(0), y(0), theta(0) {};
+    CarState(std::map<std::string, std::string> conf);
+
+
 
     /**
      * @brief Constructor for CarState with specified values.
@@ -33,7 +46,7 @@ public:
      * @param y The y-coordinate of the car.
      * @param theta The orientation (angle) of the car in radians.
      */
-    CarState(float x, float y, float theta) : x(x), y(y), theta(theta) {};
+    CarState(float x, float y, float theta, float len, float width) : x(x), y(y), theta(theta), len(len), width(width) {};
 
     /**
      * @brief Converts the car's state to a polygon representation.
@@ -98,6 +111,7 @@ public:
     //float reward_for_nothing;
     //float reward_for_park;
     Enviroment();
+    Enviroment(std::map<std::string, std::string> conf);
     bool car_parked();
     bool car_allowed();
     float reward();
