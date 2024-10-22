@@ -170,6 +170,9 @@ private:
 
     std::vector<float> speed_actions;
     std::vector<float> steering_actions;
+
+    float avg_tdr_sp;
+    float avg_tdr_st;
 };
 
 /**

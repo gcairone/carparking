@@ -40,7 +40,9 @@ MainWindow::MainWindow(QWidget *parent):
     hit_counter(0), 
     success_counter(0),
     last_speed_action(0),
-    last_steering_action(0)
+    last_steering_action(0),
+    avg_tdr_sp(0),
+    avg_tdr_st(0)
 {
     setlocale(LC_NUMERIC, "C");
     conf = readConfig("configuration/default.conf");
@@ -201,6 +203,9 @@ void MainWindow::model_iteration() {
         float tdr_sp = speed_controller.train(state_encoded, speed_action, reward, new_state_encoded);
         float tdr_st = steering_controller.train(state_encoded, steering_action, reward, new_state_encoded);
 
+        int i = iter/time_ratio;
+        avg_tdr_sp = (i*avg_tdr_sp+abs(tdr_sp))/(i+1);
+        avg_tdr_st = (i*avg_tdr_st+abs(tdr_st))/(i+1);
     }
 
 
@@ -230,10 +235,12 @@ void MainWindow::on_trainButton_clicked()
         model_iteration();
         enviroment_iteration(animation_speed*msec*time_ratio);
         if((i+1)%LOG_FREQ==0) {
-            cout << "{\"iteration\": \"" << i+1 << "\", \"hit\": \"" << hit_counter << "\", \"success\": \"" << success_counter << "\", \"success_ratio\": \""<< 100 * success_counter / (float)(success_counter+hit_counter) << '%' << "\", \"lr\": \""<< speed_controller.lr << "\", \"er\": \"" << speed_controller.exploration_rate << "\"}"<< endl;
-            file << "{\"iteration\": \"" << i+1 << "\", \"hit\": \"" << hit_counter << "\", \"success\": \"" << success_counter << "\", \"success_ratio\": \""<< 100 * success_counter / (float)(success_counter+hit_counter) << '%' << "\", \"lr\": \""<< speed_controller.lr << "\", \"er\": \"" << speed_controller.exploration_rate << "\"}"<< endl;
+            cout << "{\"iteration\": \"" << i+1 << "\", \"hit\": \"" << hit_counter << "\", \"success\": \"" << success_counter << "\", \"success_ratio\": \""<< 100 * success_counter / (float)(success_counter+hit_counter) << '%' << "\", \"lr\": \""<< speed_controller.lr << "\", \"er\": \"" << speed_controller.exploration_rate << "\", \"avg_tdr_sp\": \"" << avg_tdr_sp << "\", \"avg_tdr_st\": \"" << avg_tdr_st <<"\"}"<< endl;
+            file << "{\"iteration\": \"" << i+1 << "\", \"hit\": \"" << hit_counter << "\", \"success\": \"" << success_counter << "\", \"success_ratio\": \""<< 100 * success_counter / (float)(success_counter+hit_counter) << '%' << "\", \"lr\": \""<< speed_controller.lr << "\", \"er\": \"" << speed_controller.exploration_rate << "\", \"avg_tdr_sp\": \"" << avg_tdr_sp << "\", \"avg_tdr_st\": \"" << avg_tdr_st <<"\"}"<< endl;
             hit_counter=0;
             success_counter=0;
+            avg_tdr_sp = 0;
+            avg_tdr_st = 0;
             update();
         }
     }
