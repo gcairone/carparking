@@ -69,28 +69,6 @@ public:
      */
     CarState compute_new_state(float speed, float steering, int timestep, bool approx_motion);
 
-    /**
-     * @brief Generates a random car state.
-     * 
-     * Creates a random state for the car, typically used for exploration or
-     * initializing a simulation.
-     * 
-     * @return A randomly generated CarState.
-     */
-    //static CarState generate_random_state();
-
-
-
-
-    /**
-     * @brief Discretizes the car's state for grid-based processing.
-     * 
-     * Divides the state space (x, y, theta) into discrete intervals for
-     * quantization, which is often used in simulation or reinforcement learning.
-     * 
-     * @return An integer representing the discrete state.
-     */
-    //int discretize_state();
 
     /**
      * @brief Destructor for CarState.

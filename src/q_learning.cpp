@@ -1,5 +1,7 @@
 #include "q_learning.h"
 #include <algorithm>
+
+using namespace std;
 QLearningModel::QLearningModel() {
 
 }
