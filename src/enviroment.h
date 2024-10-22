@@ -68,15 +68,6 @@ public:
 
 
 
-    /**
-     * @brief Converts the car's state to a normalized vector.
-     * 
-     * Returns a vector where each state component (x, y, theta) is normalized to a
-     * scale suitable for input into machine learning models or algorithms.
-     * 
-     * @return A vector of normalized state values.
-     */
-    std::vector<float> to_vector_normalized();
 
     /**
      * @brief Discretizes the car's state for grid-based processing.
@@ -98,13 +89,6 @@ public:
 
 
 
-/**
-* @brief Builder of the enviroment
-* Build the enviroment, with walls and the parking slot
-* 
-* @return A QPolygonF object that contains the entire enviroment 
-*/
-QPolygonF build_env();
 
 class Enviroment {
 public:

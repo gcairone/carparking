@@ -18,7 +18,6 @@ const int y_divide = 8;
 const int theta_divide = 20;
 
 
-
 QPolygonF CarState::to_polygon() {
     float sin_t = sin(this->theta);
     float cos_t = cos(this->theta);
@@ -107,37 +106,7 @@ CarState CarState::generate_random_state() {
     return CarState(x_new, y_new, theta_new);
 }
 
-QPolygonF build_env() {
-    // animation is in the top-left corner of the window
-    float len_park = len_car + 2 * tol;
-    float width_park = width_car + tol;
-    QVector<QPointF> vertices = {
-        QPointF(0, 0),  // top-left corner
-        QPointF(0, len_env),  //   Bottom-left corner
-        QPointF(width_env-width_park, len_env),  // Bottom-right corner
-        QPointF(width_env-width_park, len_env-free_park*len_park), // PARK CORNER  bottom-right
-        QPointF(width_env, len_env-free_park*len_park), // PARK CORNER  bottom-left
-        QPointF(width_env, len_env-(free_park+1)*len_park), // PARK CORNER  top-left
-        QPointF(width_env-width_park, len_env-(free_park+1)*len_park),  // PARK CORNER  top-right
-        QPointF(width_env-width_park, 0),  // Top-right corner
-    };
 
-    QPolygonF env(vertices);
-
-    return env;
-
-}
-
-
-
-
-std::vector<float> CarState::to_vector_normalized() {
-    float theta_norm = fmod(theta, 2.0 * M_PI);
-    if (theta_norm < 0)
-        theta_norm += 2.0 * M_PI;
-    theta_norm /= (float)(2*M_PI);
-    return {x/width_env, y/len_env, theta_norm};
-}
 
 
 int CarState::discretize_state() {
