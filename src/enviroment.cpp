@@ -1,10 +1,8 @@
 #include "enviroment.h"
-#include <cmath>
-#include <QLineF>
-
-CarState::CarState(std::map<std::string, std::string> conf) {
-    len = std::stof(conf["LEN_CAR"]);
-    width = std::stof(conf["WIDTH_CAR"]);
+using namespace std;
+CarState::CarState(map<string, string> conf) {
+    len = stof(conf["LEN_CAR"]);
+    width = stof(conf["WIDTH_CAR"]);
 }
 
 
@@ -79,8 +77,8 @@ CarState CarState::compute_new_state(float speed, float steering, int timestep, 
         float y_next = (x-x_cr)*sin(alpha) + (y-y_cr)*cos(alpha) + y_cr;
         float theta_next = theta-alpha;
         
-        if(std::isnan(x_next)) {
-            std::cout << "TROVATO NAN" << " alpha: " << alpha << " x_cr: " <<x_cr<< " y_cr: " <<y_cr << std::endl;
+        if(isnan(x_next)) {
+            cout << "TROVATO NAN" << " alpha: " << alpha << " x_cr: " <<x_cr<< " y_cr: " <<y_cr << endl;
         }
 
         return CarState(x_next, y_next, theta_next, len, width);
@@ -109,21 +107,21 @@ Enviroment::Enviroment() {
 
 }
 
-Enviroment::Enviroment(std::map<std::string, std::string> conf) {
+Enviroment::Enviroment(map<string, string> conf) {
     car = CarState(conf);
 
-    len_env = std::stof(conf["LEN_ENV"]);
-    width_env = std::stof(conf["WIDTH_ENV"]);
-    tol = std::stof(conf["TOL"]);
-    free_park = std::stof(conf["FREE_PARK"]);
+    len_env = stof(conf["LEN_ENV"]);
+    width_env = stof(conf["WIDTH_ENV"]);
+    tol = stof(conf["TOL"]);
+    free_park = stof(conf["FREE_PARK"]);
 
-    reward_for_hit = std::stof(conf["REWARD_FOR_HIT"]);
-    reward_for_park = std::stof(conf["REWARD_FOR_PARK"]);
-    reward_for_nothing = std::stof(conf["REWARD_FOR_NOTHING"]);
+    reward_for_hit = stof(conf["REWARD_FOR_HIT"]);
+    reward_for_park = stof(conf["REWARD_FOR_PARK"]);
+    reward_for_nothing = stof(conf["REWARD_FOR_NOTHING"]);
 
-    x_divide = std::stoi(conf["X_DIVIDE"]);
-    y_divide = std::stoi(conf["Y_DIVIDE"]);
-    theta_divide = std::stoi(conf["THETA_DIVIDE"]);
+    x_divide = stoi(conf["X_DIVIDE"]);
+    y_divide = stoi(conf["Y_DIVIDE"]);
+    theta_divide = stoi(conf["THETA_DIVIDE"]);
 
 
     approx_motion = (conf["APPROX_MOTION"] == "1");

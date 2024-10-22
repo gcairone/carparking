@@ -3,7 +3,7 @@
 
 // log constant
 #define LOG_FREQ 1000000 // how many iterations between each log
-
+using namespace std;
 
 QPoint map_into_window(const QPointF &p, int m, int r) {
     return QPoint((int)(m + r*p.x()), (int)(m + r*p.y()));
@@ -42,7 +42,7 @@ MainWindow::MainWindow(QWidget *parent):
     last_speed_action(0),
     last_steering_action(0)
 {
-    std::setlocale(LC_NUMERIC, "C");
+    setlocale(LC_NUMERIC, "C");
     conf = readConfig("configuration/default.conf");
     conf["N_ACTIONS"] = conf["N_SPEED_ACTIONS"];
     speed_controller = QLearningModel(conf);
@@ -51,14 +51,14 @@ MainWindow::MainWindow(QWidget *parent):
     ui->setupUi(this);
     setWindowTitle("Animation Controller");
 
-    resize(std::stoi(conf["WINDOW_WIDTH"]), std::stoi(conf["WINDOW_HEIGHT"]));
+    resize(stoi(conf["WINDOW_WIDTH"]), stoi(conf["WINDOW_HEIGHT"]));
 
-    msec = std::stoi(conf["MSEC"]);
-    animation_speed = std::stoi(conf["ANIMATION_SPEED"]);
-    time_ratio = std::stoi(conf["TIME_RATIO"]);
+    msec = stoi(conf["MSEC"]);
+    animation_speed = stoi(conf["ANIMATION_SPEED"]);
+    time_ratio = stoi(conf["TIME_RATIO"]);
 
-    speed_actions = progression(std::stoi(conf["N_SPEED_ACTIONS"]), std::stof(conf["SPEED_UNITY"]));
-    steering_actions = progression(std::stoi(conf["N_STEERING_ACTIONS"]), M_PI*std::stof(conf["STEERING_UNITY"]));
+    speed_actions = progression(stoi(conf["N_SPEED_ACTIONS"]), stof(conf["SPEED_UNITY"]));
+    steering_actions = progression(stoi(conf["N_STEERING_ACTIONS"]), M_PI*stof(conf["STEERING_UNITY"]));
 
 
 
@@ -82,8 +82,8 @@ MainWindow::MainWindow(QWidget *parent):
 
 
 
-    int m = std::stoi(conf["MARGIN"]);
-    int r = std::stoi(conf["PIXEL_RATIO"]);
+    int m = stoi(conf["MARGIN"]);
+    int r = stoi(conf["PIXEL_RATIO"]);
     car_picture = map_into_window(env.car.to_polygon(), m, r);
     env_picture = map_into_window(env.env_polygon, m, r);
 
@@ -118,8 +118,8 @@ void MainWindow::on_stopButton_clicked()
 {
     //env.car = CarState::generate_random_state();
     env.set_random_carstate();
-    int m = std::stoi(conf["MARGIN"]);
-    int r = std::stoi(conf["PIXEL_RATIO"]);
+    int m = stoi(conf["MARGIN"]);
+    int r = stoi(conf["PIXEL_RATIO"]);
     car_picture = map_into_window(env.car.to_polygon(), m, r);
     update();
     timer->stop();
@@ -134,8 +134,8 @@ void MainWindow::paintEvent(QPaintEvent *event)
     painter.setBrush(Qt::black);
     painter.drawPolygon(env_picture);
     painter.setBrush(Qt::blue); // Set car_picture color
-    int m = std::stoi(conf["MARGIN"]);
-    int r = std::stoi(conf["PIXEL_RATIO"]);
+    int m = stoi(conf["MARGIN"]);
+    int r = stoi(conf["PIXEL_RATIO"]);
 
     car_picture = map_into_window(env.car.to_polygon(), m, r);
     painter.drawPolygon(car_picture);
@@ -219,9 +219,9 @@ void MainWindow::on_trainButton_clicked()
     speed_controller.exploration_rate_max = ui->epsilon->value();
     steering_controller.exploration_rate_max = ui->epsilon->value();
 
-    std::ofstream file("log/log0.txt");
+    ofstream file("log/log0.txt");
     if (!file.is_open()) {
-        std::cerr << "Failed to open file: log/log0.txt" << std::endl;
+        cerr << "Failed to open file: log/log0.txt" << endl;
     }
 
     int num_iter = ui->num_iterations->value();
@@ -229,15 +229,15 @@ void MainWindow::on_trainButton_clicked()
         model_iteration();
         enviroment_iteration(animation_speed*msec*time_ratio);
         if((i+1)%LOG_FREQ==0) {
-            std::cout << "{\"iteration\": \"" << i+1 << "\", \"hit\": \"" << hit_counter << "\", \"success\": \"" << success_counter << "\", \"success_ratio\": \""<< 100 * success_counter / (float)(success_counter+hit_counter) << '%' << "\", \"lr\": \""<< speed_controller.lr << "\", \"er\": \"" << speed_controller.exploration_rate << "\"}"<< std::endl;
-            file << "{\"iteration\": \"" << i+1 << "\", \"hit\": \"" << hit_counter << "\", \"success\": \"" << success_counter << "\", \"success_ratio\": \""<< 100 * success_counter / (float)(success_counter+hit_counter) << '%' << "\", \"lr\": \""<< speed_controller.lr << "\", \"er\": \"" << speed_controller.exploration_rate << "\"}"<< std::endl;
+            cout << "{\"iteration\": \"" << i+1 << "\", \"hit\": \"" << hit_counter << "\", \"success\": \"" << success_counter << "\", \"success_ratio\": \""<< 100 * success_counter / (float)(success_counter+hit_counter) << '%' << "\", \"lr\": \""<< speed_controller.lr << "\", \"er\": \"" << speed_controller.exploration_rate << "\"}"<< endl;
+            file << "{\"iteration\": \"" << i+1 << "\", \"hit\": \"" << hit_counter << "\", \"success\": \"" << success_counter << "\", \"success_ratio\": \""<< 100 * success_counter / (float)(success_counter+hit_counter) << '%' << "\", \"lr\": \""<< speed_controller.lr << "\", \"er\": \"" << speed_controller.exploration_rate << "\"}"<< endl;
             hit_counter=0;
             success_counter=0;
             update();
         }
     }
     
-    std::cout << "Trained "<< num_iter <<std::endl;
+    cout << "Trained "<< num_iter <<endl;
     file.close();
 
 }
@@ -246,7 +246,7 @@ void MainWindow::on_trainButton_clicked()
 void MainWindow::on_resetButton_clicked() {
     speed_controller.reset();
     steering_controller.reset();
-    std::cout << "Q-Table reset" << std::endl;
+    cout << "Q-Table reset" << endl;
 }
 
 void MainWindow::on_qtable_load_sp_clicked()

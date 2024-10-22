@@ -8,6 +8,7 @@
 #include <string>
 #include <sstream>
 #include <map>
+#include <algorithm>
 
 /**
  * @brief Class that implements a Q-Learning model for reinforcement learning.

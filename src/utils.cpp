@@ -1,58 +1,56 @@
 #include "utils.h"
 
-
+using namespace std;
 float randomFloat(float a, float b) {
     if(a > b) {
-        std::cerr << "in interval linf > lsup" << std::endl;
+        cerr << "in interval linf > lsup" << endl;
     }
-    std::random_device rd;
-    std::mt19937 gen(rd());
-    std::uniform_real_distribution<float> distribution(a, b);
+    random_device rd;
+    mt19937 gen(rd());
+    uniform_real_distribution<float> distribution(a, b);
     return distribution(gen);
 }
 
-float euclideanDistance(const std::vector<float>& v1, const std::vector<float>& v2) {
+float euclideanDistance(const vector<float>& v1, const vector<float>& v2) {
     float sum = 0.0f;
-    for (std::size_t i = 0; i < v1.size(); ++i) {
-        sum += std::pow(v1[i] - v2[i], 2);
+    for (size_t i = 0; i < v1.size(); ++i) {
+        sum += pow(v1[i] - v2[i], 2);
     }
-    return std::sqrt(sum);
+    return sqrt(sum);
 }
 
-void printMatrix(const std::vector<std::vector<float>>& matrix) {
+void printMatrix(const vector<vector<float>>& matrix) {
     for (const auto& row : matrix) {
         for (float element : row) {
-            std::cout << element << "\t";
+            cout << element << "\t";
         }
-        std::cout << std::endl;
+        cout << endl;
     }
-    std::cout << std::endl;
+    cout << endl;
 }
 
-std::map<std::string, std::string> readConfig(const std::string& filePath) {
+map<string, string> readConfig(const string& filePath) {
 
-    std::map<std::string, std::string> config;
-    std::ifstream file(filePath);
+    map<string, string> config;
+    ifstream file(filePath);
     if (!file.is_open()) {
-        std::cout << "Somthing wrong in .conf opening" << std::endl;
+        cout << "Somthing wrong in .conf opening" << endl;
         return config;
     }
 
-    std::regex pattern(R"(^\s*([^\s#]+)\s*=\s*([^#]+?)\s*$)");
-    std::smatch match;
-    std::string line;
+    regex pattern(R"(^\s*([^\s#]+)\s*=\s*([^#]+?)\s*$)");
+    smatch match;
+    string line;
 
-    while (std::getline(file, line)) {
-        // Remove anything after '#' as it's considered a comment
+    while (getline(file, line)) {
         size_t commentPos = line.find('#');
-        if (commentPos != std::string::npos) {
-            line = line.substr(0, commentPos); // Keep only part before the comment
+        if (commentPos != string::npos) {
+            line = line.substr(0, commentPos); 
         }
 
-        // Trim any trailing whitespace that might have remained after removing comment
-        line = std::regex_replace(line, std::regex(R"(\s+$)"), "");
+        line = regex_replace(line, regex(R"(\s+$)"), "");
 
-        if (std::regex_match(line, match, pattern)) {
+        if (regex_match(line, match, pattern)) {
             config[match[1]] = match[2];
         }
     }
@@ -60,8 +58,8 @@ std::map<std::string, std::string> readConfig(const std::string& filePath) {
     return config;
 }
 
-std::vector<float> progression(int n, float unity) {
-    std::vector<float> ret(n);
+vector<float> progression(int n, float unity) {
+    vector<float> ret(n);
     float start = -(n/2)*unity;
     if(n%2==0) start += unity/2;
     for(int i=0; i<n; i++) ret[i] = start + i*unity;
