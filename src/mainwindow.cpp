@@ -150,10 +150,10 @@ void MainWindow::enviroment_iteration(int timestep) {
     int speed_action = last_speed_action;
     int steering_action = last_steering_action;
 
-    auto new_env_st = env.compute_new_state(speed_actions[speed_action], steering_actions[steering_action], timestep);
+    Enviroment new_env_st = env.compute_new_state(speed_actions[speed_action], steering_actions[steering_action], timestep);
 
 
-    auto new_state_encoded = new_env_st.car.discretize_state();
+    int new_state_encoded = new_env_st.car.discretize_state();
 
 
     if(!new_env_st.car_allowed()) {
@@ -189,7 +189,7 @@ void MainWindow::model_iteration() {
     Enviroment new_env_st = env.compute_new_state(speed_actions[speed_action], steering_actions[steering_action], msec*time_ratio * animation_speed);
 
 
-    auto new_state_encoded = new_env_st.car.discretize_state();//auto new_state_encoded = som.findBMU(new_car_st_vect);
+    int new_state_encoded = new_env_st.car.discretize_state();//auto new_state_encoded = som.findBMU(new_car_st_vect);
 
     if(!ui->eval->isChecked()) {
 
