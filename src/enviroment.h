@@ -64,7 +64,7 @@ public:
      * 
      * @return A randomly generated CarState.
      */
-    static CarState generate_random_state();
+    //static CarState generate_random_state();
 
 
 
@@ -101,6 +101,7 @@ public:
     bool car_parked();
     bool car_allowed();
     float reward();
+    void set_random_carstate();
     Enviroment compute_new_state(float speed, float steering, int timestep);
 };
 

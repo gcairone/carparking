@@ -76,7 +76,8 @@ MainWindow::MainWindow(QWidget *parent):
     timer->setInterval(animation_speed*msec); 
 
     env = Enviroment();
-    env.car = CarState::generate_random_state();;
+    env.set_random_carstate();
+    //env.car = CarState::generate_random_state();;
     state_encoded = env.car.discretize_state(); //state_encoded = som.findBMU(car_st_vect);
 
 
@@ -115,7 +116,8 @@ void MainWindow::on_pauseButton_clicked()
 
 void MainWindow::on_stopButton_clicked()
 {
-    env.car = CarState::generate_random_state();
+    //env.car = CarState::generate_random_state();
+    env.set_random_carstate();
     int m = std::stoi(conf["MARGIN"]);
     int r = std::stoi(conf["PIXEL_RATIO"]);
     car_picture = map_into_window(env.car.to_polygon(), m, r);
@@ -158,14 +160,16 @@ void MainWindow::enviroment_iteration(int timestep) {
 
     if(!new_env_st.car_allowed()) {
         hit_counter++;
-        env.car = CarState::generate_random_state();;
+        //env.car = CarState::generate_random_state();
+        env.set_random_carstate();
         state_encoded = env.car.discretize_state(); 
         last_speed_action = speed_controller.chooseAction(state_encoded, ui->eval->isChecked());
         last_steering_action = steering_controller.chooseAction(state_encoded, ui->eval->isChecked());
     }
     else if(new_env_st.car_parked()) {
         success_counter++;
-        env.car = CarState::generate_random_state();;
+        //env.car = CarState::generate_random_state();
+        env.set_random_carstate();
         state_encoded = env.car.discretize_state();
         last_speed_action = speed_controller.chooseAction(state_encoded, ui->eval->isChecked());
         last_steering_action = steering_controller.chooseAction(state_encoded, ui->eval->isChecked());

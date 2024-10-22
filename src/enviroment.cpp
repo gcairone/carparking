@@ -95,7 +95,7 @@ CarState CarState::compute_new_state(float speed, float steering, int timestep) 
     }
 }
 
-
+/*
 CarState CarState::generate_random_state() {
 
     float x_new = randomFloat(width_car*0.75, width_env - 1.75*width_car - tol);
@@ -107,6 +107,8 @@ CarState CarState::generate_random_state() {
 }
 
 
+
+*/
 
 
 int CarState::discretize_state() {
@@ -192,4 +194,15 @@ Enviroment Enviroment::compute_new_state(float speed, float steering, int timest
     Enviroment e = *this;
     e.car = e.car.compute_new_state(speed, steering, timestep);
     return e;
+}
+
+void Enviroment::set_random_carstate() {
+    float x_new = randomFloat(width_car*0.75, width_env - 1.75*width_car - tol);
+    float y_new = randomFloat(len_car*0.75, len_env - len_car*0.75);
+    float theta_new = M_PI*0.5;
+    if(randomFloat(0.0, 1.0)>0.5) theta_new = -M_PI*0.5;
+
+    car.x = x_new;
+    car.y = y_new;
+    car.theta = theta_new;
 }
