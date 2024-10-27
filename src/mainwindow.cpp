@@ -98,7 +98,7 @@ MainWindow::MainWindow(QWidget *parent):
         cerr << "Failed to open file" << endl;
     }
 
-    int num_iter = 10000000;
+    int num_iter = 50000000;
     for(int i=0; i<num_iter; ++i) {
         model_iteration();
         enviroment_iteration(animation_speed*msec*time_ratio);
