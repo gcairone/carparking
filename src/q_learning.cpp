@@ -27,13 +27,13 @@ QLearningModel::QLearningModel(map<string, string> config) {
 
     action_count = stoi(config["N_ACTIONS"]);
 
-    lr_max = stof(config["LEARNING_RATE"]);
-    lr_min = lr_max;
-    lr_half_life = 1000; // no life
+    lr_max = stof(config["Q_LR_MAX"]);
+    lr_min = stof(config["Q_LR_MIN"]);
+    lr_half_life = stoi(config["Q_LR_HL"]);
     discount_factor = stof(config["DISCOUNT_FACTOR"]);
     exploration_rate_max = stof(config["ER_MAX"]);
     exploration_rate_min = 0;
-    er_half_life = stof(config["ER_HALF_LIFE"]);
+    er_half_life = stof(config["ER_HL"]);
 
     lr = lr_max;
     exploration_rate = exploration_rate_max;
@@ -65,7 +65,7 @@ void QLearningModel::reset() {
 }
 
 int QLearningModel::chooseAction(int state, bool eval) {
-    if(state >= state_count) {
+    if(state >= state_count || state < 0) {
         cerr << "non valid state " << state << endl;
         throw 0;
     }
