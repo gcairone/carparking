@@ -19,6 +19,17 @@ float euclideanDistance(const vector<float>& v1, const vector<float>& v2) {
     return sqrt(sum);
 }
 
+float anglediff(float x, float y) {
+    if(x==y) return 0.0;
+    x = fmod(x, 2*M_PI);
+    if(x<0) x+=2*M_PI;
+    y = fmod(y, 2*M_PI);
+    if(y<0) y+=2*M_PI;
+    float min_ = min(x, y);
+    float max_ = max(x, y);
+    return min((max_-min_), (float)(min_+2*M_PI-max_));
+}
+
 void printMatrix(const vector<vector<float>>& matrix) {
     for (const auto& row : matrix) {
         for (float element : row) {
