@@ -191,6 +191,7 @@ bool Enviroment::car_parked() {
     for(auto point: car_rect) {
         if(!parkspace.containsPoint(point, Qt::OddEvenFill)) return false;
     }
+    if(anglediff(M_PI*0.5, car.theta) > M_PI*0.25) return false;
     return true;
 }
 
@@ -213,7 +214,7 @@ void Enviroment::set_random_carstate() {
     float x_new = randomFloat(car.width*0.75, width_env - 1.75*car.width - tol);
     float y_new = randomFloat(car.len*0.75, len_env - car.len*0.75);
     float theta_new = M_PI*0.5;
-    if(randomFloat(0.0, 1.0)>0.5) theta_new = -M_PI*0.5;
+    //if(randomFloat(0.0, 1.0)>0.5) theta_new = -M_PI*0.5;
 
     car.x = x_new;
     car.y = y_new;
