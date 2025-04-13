@@ -34,8 +34,8 @@ QVector<QLine> map_into_window(const QVector<QLineF> &v, int m, int r) {
 MainWindow::MainWindow(QWidget *parent): 
     QMainWindow(parent), 
     ui(new Ui::MainWindow), 
-    //speed_controller(state_count, speed_actions.size(), learning_rate, discount_factor, exploration_rate_max, er_half_life), 
-    //steering_controller(state_count, steering_actions.size(), learning_rate, discount_factor, exploration_rate_max, er_half_life),
+    //speed_controller(state_count, speed_actions.size(), learning_rate, discount_factor, er_max, er_half_life), 
+    //steering_controller(state_count, steering_actions.size(), learning_rate, discount_factor, er_max, er_half_life),
     iter(0), 
     hit_counter(0), 
     success_counter(0),
@@ -66,19 +66,40 @@ MainWindow::MainWindow(QWidget *parent):
 
     ui->learning_rate->setValue(speed_controller.lr_max);
     ui->discount_factor->setValue(speed_controller.discount_factor);
-    ui->epsilon->setValue(speed_controller.exploration_rate_max);
+    ui->epsilon->setValue(speed_controller.er_max);
     timer = new QTimer(this);
     connect(timer, &QTimer::timeout, this, [this]() {
-        if(iter % time_ratio == 0) model_iteration();
-        enviroment_iteration(animation_speed*msec);
+        //if(iter % time_ratio == 0) model_iteration();
+        //enviroment_iteration(animation_speed*msec);
+        float sp = 0.0;
+        float st = 0.0;
+        if(iter < 5) {
+            sp = -1.5;
+            st = 0.0;
+        }
+        else if(iter < 12) {
+            sp = -1.5;
+            st = -M_PI/4;
+        }
+        else {
+            sp = -1.5;
+            st = M_PI/4;
+        };
+        cout << sp << " " << st << endl;
+        auto new_env = env.compute_new_state(sp, st, 300);
+        if(!new_env.car_allowed()) timer->stop();
+        env = new_env;
         iter++;
         update();
     });
 
-    timer->setInterval(animation_speed*msec); 
+    timer->setInterval(300); 
 
     env = Enviroment(conf);
-    env.set_random_carstate();
+    env.car.x = env.car.width*1.75;
+    env.car.y = env.car.len*0.75;
+    env.car.theta = -M_PI*0.5;
+    //env.set_random_carstate();
     //env.car = CarState::generate_random_state();;
     state_encoded = env.discretize_state(); //state_encoded = som.findBMU(car_st_vect);
 
@@ -102,10 +123,10 @@ void MainWindow::on_playButton_clicked()
 {   
     speed_controller.lr = ui->learning_rate->value();
     steering_controller.lr = ui->learning_rate->value();
-    speed_controller.exploration_rate = ui->epsilon->value();
-    steering_controller.exploration_rate = ui->epsilon->value();
-    speed_controller.exploration_rate_max = ui->epsilon->value();
-    steering_controller.exploration_rate_max = ui->epsilon->value();
+    speed_controller.er = ui->epsilon->value();
+    steering_controller.er = ui->epsilon->value();
+    speed_controller.er_max = ui->epsilon->value();
+    steering_controller.er_max = ui->epsilon->value();
 
     timer->start();
 
@@ -144,6 +165,13 @@ void MainWindow::paintEvent(QPaintEvent *event)
 
     painter.setBrush(Qt::red); // Set car_picture color
     painter.drawEllipse(map_into_window(QPointF(env.car.x, env.car.y), m, r), 2, 2);
+
+    float sin_t = sin(env.car.theta);
+    float cos_t = cos(env.car.theta);
+
+    float xR = env.car.x - 0.5*env.car.len*cos_t;
+    float yR = env.car.y - 0.5*env.car.len*sin_t;
+    painter.drawEllipse(map_into_window(QPointF(xR, yR), m, r), 2, 2);
 
 
 }
@@ -220,10 +248,10 @@ void MainWindow::on_trainButton_clicked()
 {
     speed_controller.lr = ui->learning_rate->value();
     steering_controller.lr = ui->learning_rate->value();
-    speed_controller.exploration_rate = ui->epsilon->value();
-    steering_controller.exploration_rate = ui->epsilon->value();
-    speed_controller.exploration_rate_max = ui->epsilon->value();
-    steering_controller.exploration_rate_max = ui->epsilon->value();
+    speed_controller.er = ui->epsilon->value();
+    steering_controller.er = ui->epsilon->value();
+    speed_controller.er_max = ui->epsilon->value();
+    steering_controller.er_max = ui->epsilon->value();
 
     ofstream file("log/log0.txt");
     if (!file.is_open()) {
@@ -235,8 +263,8 @@ void MainWindow::on_trainButton_clicked()
         model_iteration();
         enviroment_iteration(animation_speed*msec*time_ratio);
         if((i+1)%LOG_FREQ==0) {
-            cout << "{\"iteration\": \"" << i+1 << "\", \"hit\": \"" << hit_counter << "\", \"success\": \"" << success_counter << "\", \"success_ratio\": \""<< 100 * success_counter / (float)(success_counter+hit_counter) << '%' << "\", \"lr\": \""<< speed_controller.lr << "\", \"er\": \"" << speed_controller.exploration_rate << "\", \"avg_tdr_sp\": \"" << avg_tdr_sp << "\", \"avg_tdr_st\": \"" << avg_tdr_st <<"\"}"<< endl;
-            file << "{\"iteration\": \"" << i+1 << "\", \"hit\": \"" << hit_counter << "\", \"success\": \"" << success_counter << "\", \"success_ratio\": \""<< 100 * success_counter / (float)(success_counter+hit_counter) << '%' << "\", \"lr\": \""<< speed_controller.lr << "\", \"er\": \"" << speed_controller.exploration_rate << "\", \"avg_tdr_sp\": \"" << avg_tdr_sp << "\", \"avg_tdr_st\": \"" << avg_tdr_st <<"\"}"<< endl;
+            cout << "{\"iteration\": \"" << i+1 << "\", \"hit\": \"" << hit_counter << "\", \"success\": \"" << success_counter << "\", \"success_ratio\": \""<< 100 * success_counter / (float)(success_counter+hit_counter) << '%' << "\", \"lr\": \""<< speed_controller.lr << "\", \"er\": \"" << speed_controller.er << "\", \"avg_tdr_sp\": \"" << avg_tdr_sp << "\", \"avg_tdr_st\": \"" << avg_tdr_st <<"\"}"<< endl;
+            file << "{\"iteration\": \"" << i+1 << "\", \"hit\": \"" << hit_counter << "\", \"success\": \"" << success_counter << "\", \"success_ratio\": \""<< 100 * success_counter / (float)(success_counter+hit_counter) << '%' << "\", \"lr\": \""<< speed_controller.lr << "\", \"er\": \"" << speed_controller.er << "\", \"avg_tdr_sp\": \"" << avg_tdr_sp << "\", \"avg_tdr_st\": \"" << avg_tdr_st <<"\"}"<< endl;
             hit_counter=0;
             success_counter=0;
             avg_tdr_sp = 0;
