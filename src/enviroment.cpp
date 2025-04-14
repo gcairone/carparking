@@ -75,7 +75,7 @@ CarState CarState::compute_new_state(float speed, float steering, int timestep, 
         // next state as rotation of (x, y, theta) respect to (x_cr, y_cr) of angle alpha
         float x_next = (x-x_cr)*cos(alpha) - (y-y_cr)*sin(alpha) + x_cr;
         float y_next = (x-x_cr)*sin(alpha) + (y-y_cr)*cos(alpha) + y_cr;
-        float theta_next = theta-alpha;
+        float theta_next = theta+alpha;
         
         if(isnan(x_next)) {
             cout << "TROVATO NAN" << " alpha: " << alpha << " x_cr: " <<x_cr<< " y_cr: " <<y_cr << endl;

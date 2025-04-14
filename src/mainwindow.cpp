@@ -73,19 +73,15 @@ MainWindow::MainWindow(QWidget *parent):
         //enviroment_iteration(animation_speed*msec);
         float sp = 0.0;
         float st = 0.0;
-        if(iter < 5) {
+        if(iter < 7) {
             sp = -1.5;
-            st = 0.0;
-        }
-        else if(iter < 12) {
-            sp = -1.5;
-            st = -M_PI/4;
+            st = M_PI/4;
         }
         else {
             sp = -1.5;
-            st = M_PI/4;
+            st = -M_PI/4;
         };
-        cout << sp << " " << st << endl;
+        //cout << sp << " " << st << endl;
         auto new_env = env.compute_new_state(sp, st, 300);
         if(!new_env.car_allowed()) timer->stop();
         env = new_env;
@@ -96,9 +92,9 @@ MainWindow::MainWindow(QWidget *parent):
     timer->setInterval(300); 
 
     env = Enviroment(conf);
-    env.car.x = env.car.width*1.75;
-    env.car.y = env.car.len*0.75;
-    env.car.theta = -M_PI*0.5;
+    env.car.x = env.car.width*2.15;
+    env.car.y = env.car.len*1.60;
+    env.car.theta = -M_PI/2;
     //env.set_random_carstate();
     //env.car = CarState::generate_random_state();;
     state_encoded = env.discretize_state(); //state_encoded = som.findBMU(car_st_vect);
