@@ -67,7 +67,7 @@ public:
      * @param timestep The time step for the state change.
      * @return The new CarState after applying the inputs.
      */
-    CarState compute_new_state(float speed, float steering, int timestep, float len, bool approx_motion);
+    CarState compute_new_state(float speed, float steering, int timestep, float len, float front_overhang, float rear_overhang, bool approx_motion);
 
 
     /**
@@ -91,6 +91,10 @@ public:
     
     float len_slot;
     float width_slot;
+
+    float front_overhang;
+    float rear_overhang;
+
     float free_park;
 
     float len_car;

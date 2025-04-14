@@ -41,18 +41,18 @@ CarState::~CarState() {}
 
 
 
-CarState CarState::compute_new_state(float speed, float steering, int timestep, float len, bool approx_motion) {
+CarState CarState::compute_new_state(float speed, float steering, int timestep, float len, float front_overhang, float rear_overhang, bool approx_motion) {
     float dt = timestep / 1000.0;
 
     if(approx_motion) {
-        float x_r = x - 0.5 * len * cos(this->theta); // x ruota dietro
-        float y_r = y - 0.5 * len * sin(this->theta); // y ruota dietro
+        float x_r = x - 0.5 * len * cos(theta); // x ruota dietro
+        float y_r = y - 0.5 * len * sin(theta); // y ruota dietro
 
-        float x_r_next = x_r + dt * cos(this->theta) * speed;
-        float y_r_next = y_r + dt * sin(this->theta) * speed;
+        float x_r_next = x_r + dt * cos(theta) * speed;
+        float y_r_next = y_r + dt * sin(theta) * speed;
 
-        float x_next = x_r_next + 0.5*len*cos(this->theta);
-        float y_next = y_r_next + 0.5*len*sin(this->theta);
+        float x_next = x_r_next + 0.5*len*cos(theta);
+        float y_next = y_r_next + 0.5*len*sin(theta);
         float theta_next = theta - dt * sin(steering) * speed / len;
 
         return CarState(x_next, y_next, theta_next);
@@ -66,10 +66,10 @@ CarState CarState::compute_new_state(float speed, float steering, int timestep, 
             );
         }
         // angle of rotation
-        float alpha = dt*speed*tan(steering)/len;
+        float alpha = dt*speed*tan(steering)/(len-front_overhang-rear_overhang);
         // center of rotation
-        float x_cr = x - 0.5*len*cos(theta) - len*sin(theta)/tan(steering);
-        float y_cr = y - 0.5*len*sin(theta) + len*cos(theta)/tan(steering);
+        float x_cr = x - (0.5*len-rear_overhang)*cos(theta) - (len-front_overhang-rear_overhang)*sin(theta)/tan(steering);
+        float y_cr = y - (0.5*len-rear_overhang)*sin(theta) + (len-front_overhang-rear_overhang)*cos(theta)/tan(steering);
         // next state as rotation of (x, y, theta) respect to (x_cr, y_cr) of angle alpha
         float x_next = (x-x_cr)*cos(alpha) - (y-y_cr)*sin(alpha) + x_cr;
         float y_next = (x-x_cr)*sin(alpha) + (y-y_cr)*cos(alpha) + y_cr;
@@ -116,6 +116,9 @@ Enviroment::Enviroment(map<string, string> conf) {
 
     len_slot = stof(conf["LEN_SLOT"]);
     width_slot = stof(conf["WIDTH_SLOT"]);
+
+    front_overhang = stof(conf["FRONT_OVERHANG"]);
+    rear_overhang = stof(conf["REAR_OVERHANG"]);
 
     free_park = stof(conf["FREE_PARK"]);
 
@@ -210,7 +213,15 @@ float Enviroment::reward() {
 
 Enviroment Enviroment::compute_new_state(float speed, float steering, int timestep) {
     Enviroment e = *this;
-    e.car = e.car.compute_new_state(speed, steering, timestep, len_car, approx_motion);
+    e.car = e.car.compute_new_state(
+        speed, 
+        steering, 
+        timestep, 
+        len_car, 
+        front_overhang,
+        rear_overhang,
+        approx_motion
+    );
     return e;
 }
 

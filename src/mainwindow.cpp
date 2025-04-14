@@ -1,8 +1,10 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-
+#include <chrono>
 // log constant
 #define LOG_FREQ 1000000 // how many iterations between each log
+#define WHEEL_RADIUS 0.3
+#define SHOW_WHEEL 1
 using namespace std;
 
 QPoint map_into_window(const QPointF &p, int m, int r) {
@@ -73,23 +75,39 @@ MainWindow::MainWindow(QWidget *parent):
         //enviroment_iteration(animation_speed*msec);
         float sp = 0.0;
         float st = 0.0;
-        if(iter < 7) {
+        if(iter < 30) {
+            sp = -1.5;
+            st = 0.0;
+            last_steering_action = 2;
+        }
+        else if(iter < 85) {
             sp = -1.5;
             st = M_PI/4;
+            last_steering_action = 4;
         }
         else {
             sp = -1.5;
             st = -M_PI/4;
+            last_steering_action = 0;
         };
         //cout << sp << " " << st << endl;
-        auto new_env = env.compute_new_state(sp, st, 300);
+        auto new_env = env.compute_new_state(sp, st, 30);
         if(!new_env.car_allowed()) timer->stop();
         env = new_env;
         iter++;
+        //auto start = std::chrono::high_resolution_clock::now();
         update();
+        //auto end = std::chrono::high_resolution_clock::now();
+
+        // Calcola la durata in millisecondi
+        //std::chrono::duration<float> duration = end - start;
+    
+        // Stampa il tempo impiegato
+        //std::cout << "Tempo impiegato per la funzione update(): " 
+        //          << duration.count() * 1000 << " millisecondi." << std::endl;
     });
 
-    timer->setInterval(300); 
+    timer->setInterval(30); 
 
     env = Enviroment(conf);
     env.car.x = env.width_car*2.15;
@@ -152,7 +170,7 @@ void MainWindow::paintEvent(QPaintEvent *event)
     QPainter painter(this);
     painter.setBrush(Qt::black);
     painter.drawPolygon(env_picture);
-    painter.setBrush(Qt::blue); // Set car_picture color
+    painter.setBrush(Qt::blue); 
     int m = stoi(conf["MARGIN"]);
     int r = stoi(conf["PIXEL_RATIO"]);
 
@@ -161,14 +179,77 @@ void MainWindow::paintEvent(QPaintEvent *event)
 
     painter.setBrush(Qt::red); // Set car_picture color
     painter.drawEllipse(map_into_window(QPointF(env.car.x, env.car.y), m, r), 2, 2);
-
+    // centro dell'asse posteriore 
     float sin_t = sin(env.car.theta);
     float cos_t = cos(env.car.theta);
 
-    float xR = env.car.x - 0.5*env.len_car*cos_t;
-    float yR = env.car.y - 0.5*env.len_car*sin_t;
+    float xR = env.car.x - (0.5*env.len_car-env.rear_overhang)*cos_t;
+    float yR = env.car.y - (0.5*env.len_car-env.rear_overhang)*sin_t;
     painter.drawEllipse(map_into_window(QPointF(xR, yR), m, r), 2, 2);
+    
+    if(SHOW_WHEEL) {
+        QPen pen(Qt::green);       // Imposta il colore della penna
+        pen.setWidth(3);           // Imposta lo spessore a 5px
+        
+        painter.setPen(pen);       // Applica la penna al painter
+        //painter.setBrush(Qt::red);
+        // ruota dietro destra
+        float xRR = xR - 0.5*env.width_car*sin_t;
+        float yRR = yR + 0.5*env.width_car*cos_t;
+        QLineF RR(
+            xRR - WHEEL_RADIUS*cos_t,
+            yRR - WHEEL_RADIUS*sin_t,
+            xRR + WHEEL_RADIUS*cos_t,
+            yRR + WHEEL_RADIUS*sin_t
+        );
+        painter.drawLine(map_into_window(RR, m, r));
 
+        // ruota dietro sinistra
+        float xRL = xR + 0.5*env.width_car*sin_t;
+        float yRL = yR - 0.5*env.width_car*cos_t;
+        QLineF RL(
+            xRL - WHEEL_RADIUS*cos_t,
+            yRL - WHEEL_RADIUS*sin_t,
+            xRL + WHEEL_RADIUS*cos_t,
+            yRL + WHEEL_RADIUS*sin_t
+        );
+        painter.drawLine(map_into_window(RL, m, r));
+        //painter.drawEllipse(map_into_window(QPointF(xRL, yRL), m, r), 2, 2);
+        
+        // ruota davanti destra
+        float sin_t_a = sin(env.car.theta+steering_actions[last_steering_action]);
+        float cos_t_a = cos(env.car.theta+steering_actions[last_steering_action]);
+        float xFR = xRR + (env.len_car-env.front_overhang-env.rear_overhang)*cos_t;
+        float yFR = yRR + (env.len_car-env.front_overhang-env.rear_overhang)*sin_t;
+        QLineF FR(
+            xFR - WHEEL_RADIUS*cos_t_a,
+            yFR - WHEEL_RADIUS*sin_t_a,
+            xFR + WHEEL_RADIUS*cos_t_a,
+            yFR + WHEEL_RADIUS*sin_t_a
+        );
+        painter.drawLine(map_into_window(FR, m, r));
+        //painter.drawEllipse(map_into_window(QPointF(xFR, yFR), m, r), 2, 2);
+
+        // ruota davanti sinistra
+        float xFL = xRL + (env.len_car-env.front_overhang-env.rear_overhang)*cos_t;
+        float yFL = yRL + (env.len_car-env.front_overhang-env.rear_overhang)*sin_t;
+        QLineF FL(
+            xFL - WHEEL_RADIUS*cos_t_a,
+            yFL - WHEEL_RADIUS*sin_t_a,
+            xFL + WHEEL_RADIUS*cos_t_a,
+            yFL + WHEEL_RADIUS*sin_t_a
+        );
+        //painter.drawEllipse(map_into_window(QPointF(xFL, yFL), m, r), 2, 2);
+        painter.drawLine(map_into_window(FL, m, r));
+
+        painter.setBrush(Qt::red);
+        painter.setPen(Qt::red);
+        painter.drawEllipse(map_into_window(QPointF(xRR, yRR), m, r), 2, 2);
+        painter.drawEllipse(map_into_window(QPointF(xRL, yRL), m, r), 2, 2);
+        painter.drawEllipse(map_into_window(QPointF(xFR, yFR), m, r), 2, 2);
+        painter.drawEllipse(map_into_window(QPointF(xFL, yFL), m, r), 2, 2);
+
+    }
 
 }
 
