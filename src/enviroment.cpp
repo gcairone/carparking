@@ -89,17 +89,17 @@ CarState CarState::compute_new_state(float speed, float steering, int timestep, 
 
 Enviroment::Enviroment() {
     car = CarState();
-    float len_park = len_car + 2 * tol;
-    float width_park = width_car + tol;
+    //float len_slot = len_car + 2 * tol;
+    //float width_slot = width_car + tol;
     QVector<QPointF> vertices = {
         QPointF(0, 0),  // top-left corner
         QPointF(0, len_env),  //   Bottom-left corner
-        QPointF(width_env-width_park, len_env),  // Bottom-right corner
-        QPointF(width_env-width_park, len_env-free_park*len_park), // PARK CORNER  bottom-right
-        QPointF(width_env, len_env-free_park*len_park), // PARK CORNER  bottom-left
-        QPointF(width_env, len_env-(free_park+1)*len_park), // PARK CORNER  top-left
-        QPointF(width_env-width_park, len_env-(free_park+1)*len_park),  // PARK CORNER  top-right
-        QPointF(width_env-width_park, 0),  // Top-right corner
+        QPointF(width_env-width_slot, len_env),  // Bottom-right corner
+        QPointF(width_env-width_slot, len_env-free_park*len_slot), // PARK CORNER  bottom-right
+        QPointF(width_env, len_env-free_park*len_slot), // PARK CORNER  bottom-left
+        QPointF(width_env, len_env-(free_park+1)*len_slot), // PARK CORNER  top-left
+        QPointF(width_env-width_slot, len_env-(free_park+1)*len_slot),  // PARK CORNER  top-right
+        QPointF(width_env-width_slot, 0),  // Top-right corner
     };
     env_polygon = QPolygonF(vertices);
 
@@ -113,7 +113,10 @@ Enviroment::Enviroment(map<string, string> conf) {
 
     len_env = stof(conf["LEN_ENV"]);
     width_env = stof(conf["WIDTH_ENV"]);
-    tol = stof(conf["TOL"]);
+
+    len_slot = stof(conf["LEN_SLOT"]);
+    width_slot = stof(conf["WIDTH_SLOT"]);
+
     free_park = stof(conf["FREE_PARK"]);
 
     reward_for_hit = stof(conf["REWARD_FOR_HIT"]);
@@ -128,17 +131,17 @@ Enviroment::Enviroment(map<string, string> conf) {
     approx_motion = (conf["APPROX_MOTION"] == "1");
 
 
-    float len_park = len_car + 2 * tol;
-    float width_park = width_car + tol;
+    //float len_slot = len_car + 2 * tol;
+    //float width_slot = width_car + tol;
     QVector<QPointF> vertices = {
         QPointF(0, 0),  // top-left corner
         QPointF(0, len_env),  //   Bottom-left corner
-        QPointF(width_env-width_park, len_env),  // Bottom-right corner
-        QPointF(width_env-width_park, len_env-free_park*len_park), // PARK CORNER  bottom-right
-        QPointF(width_env, len_env-free_park*len_park), // PARK CORNER  bottom-left
-        QPointF(width_env, len_env-(free_park+1)*len_park), // PARK CORNER  top-left
-        QPointF(width_env-width_park, len_env-(free_park+1)*len_park),  // PARK CORNER  top-right
-        QPointF(width_env-width_park, 0),  // Top-right corner
+        QPointF(width_env-width_slot, len_env),  // Bottom-right corner
+        QPointF(width_env-width_slot, len_env-free_park*len_slot), // PARK CORNER  bottom-right
+        QPointF(width_env, len_env-free_park*len_slot), // PARK CORNER  bottom-left
+        QPointF(width_env, len_env-(free_park+1)*len_slot), // PARK CORNER  top-left
+        QPointF(width_env-width_slot, len_env-(free_park+1)*len_slot),  // PARK CORNER  top-right
+        QPointF(width_env-width_slot, 0),  // Top-right corner
     };
     env_polygon = QPolygonF(vertices);
 
@@ -212,7 +215,7 @@ Enviroment Enviroment::compute_new_state(float speed, float steering, int timest
 }
 
 void Enviroment::set_random_carstate() {
-    float x_new = randomFloat(width_car*0.75, width_env - 1.75*width_car - tol);
+    float x_new = randomFloat(width_car*0.75, width_env - 1.75*width_car);
     float y_new = randomFloat(len_car*0.75, len_env - len_car*0.75);
     float theta_new = M_PI*0.5;
     //if(randomFloat(0.0, 1.0)>0.5) theta_new = -M_PI*0.5;

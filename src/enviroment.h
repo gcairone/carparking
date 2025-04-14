@@ -88,7 +88,9 @@ public:
 
     float len_env;   // y-axis  
     float width_env; // x-axis
-    float tol;                    
+    
+    float len_slot;
+    float width_slot;
     float free_park;
 
     float len_car;
