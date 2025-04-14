@@ -20,14 +20,14 @@ public:
     float x;     ///< The x-coordinate of the car.
     float y;     ///< The y-coordinate of the car.
     float theta; ///< The orientation of the car in radians (angle).
-    float len;
-    float width;
+    //float len;
+    //float width;
     /**
      * @brief Default constructor for CarState.
      * 
      * Initializes the car's state with default values (x = 0, y = 0, theta = 0).
      */
-    CarState() : x(0), y(0), theta(0), len(0), width(0) {};
+    CarState() : x(0), y(0), theta(0) {};
 
 
     /**
@@ -35,7 +35,7 @@ public:
      * 
      * Initializes the car's state with default values (x = 0, y = 0, theta = 0).
      */
-    CarState(std::map<std::string, std::string> conf);
+    //CarState(std::map<std::string, std::string> conf);
 
 
 
@@ -46,14 +46,14 @@ public:
      * @param y The y-coordinate of the car.
      * @param theta The orientation (angle) of the car in radians.
      */
-    CarState(float x, float y, float theta, float len, float width) : x(x), y(y), theta(theta), len(len), width(width) {};
+    CarState(float x, float y, float theta) : x(x), y(y), theta(theta) {};
 
     /**
      * @brief Converts the car's state to a polygon representation.
      * 
      * @return A QPolygonF representing the car's shape in the current state.
      */
-    QPolygonF to_polygon();
+    //QPolygonF to_polygon();
 
 
     /**
@@ -67,7 +67,7 @@ public:
      * @param timestep The time step for the state change.
      * @return The new CarState after applying the inputs.
      */
-    CarState compute_new_state(float speed, float steering, int timestep, bool approx_motion);
+    CarState compute_new_state(float speed, float steering, int timestep, float len, bool approx_motion);
 
 
     /**
@@ -91,6 +91,9 @@ public:
     float tol;                    
     float free_park;
 
+    float len_car;
+    float width_car;
+
     float reward_for_hit;
     float reward_for_park;
     float reward_for_nothing;
@@ -107,6 +110,7 @@ public:
     float reward();
     void set_random_carstate();
     int discretize_state();
+    QPolygonF car_polygon();
     Enviroment compute_new_state(float speed, float steering, int timestep);
 };
 

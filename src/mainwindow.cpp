@@ -92,8 +92,8 @@ MainWindow::MainWindow(QWidget *parent):
     timer->setInterval(300); 
 
     env = Enviroment(conf);
-    env.car.x = env.car.width*2.15;
-    env.car.y = env.car.len*1.60;
+    env.car.x = env.width_car*2.15;
+    env.car.y = env.len_car*1.60;
     env.car.theta = -M_PI/2;
     //env.set_random_carstate();
     //env.car = CarState::generate_random_state();;
@@ -103,7 +103,7 @@ MainWindow::MainWindow(QWidget *parent):
 
     int m = stoi(conf["MARGIN"]);
     int r = stoi(conf["PIXEL_RATIO"]);
-    car_picture = map_into_window(env.car.to_polygon(), m, r);
+    car_picture = map_into_window(env.car_polygon(), m, r);
     env_picture = map_into_window(env.env_polygon, m, r);
 
 
@@ -139,7 +139,7 @@ void MainWindow::on_stopButton_clicked()
     env.set_random_carstate();
     int m = stoi(conf["MARGIN"]);
     int r = stoi(conf["PIXEL_RATIO"]);
-    car_picture = map_into_window(env.car.to_polygon(), m, r);
+    car_picture = map_into_window(env.car_polygon(), m, r);
     update();
     timer->stop();
 
@@ -156,7 +156,7 @@ void MainWindow::paintEvent(QPaintEvent *event)
     int m = stoi(conf["MARGIN"]);
     int r = stoi(conf["PIXEL_RATIO"]);
 
-    car_picture = map_into_window(env.car.to_polygon(), m, r);
+    car_picture = map_into_window(env.car_polygon(), m, r);
     painter.drawPolygon(car_picture);
 
     painter.setBrush(Qt::red); // Set car_picture color
@@ -165,8 +165,8 @@ void MainWindow::paintEvent(QPaintEvent *event)
     float sin_t = sin(env.car.theta);
     float cos_t = cos(env.car.theta);
 
-    float xR = env.car.x - 0.5*env.car.len*cos_t;
-    float yR = env.car.y - 0.5*env.car.len*sin_t;
+    float xR = env.car.x - 0.5*env.len_car*cos_t;
+    float yR = env.car.y - 0.5*env.len_car*sin_t;
     painter.drawEllipse(map_into_window(QPointF(xR, yR), m, r), 2, 2);
 
 

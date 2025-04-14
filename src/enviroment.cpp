@@ -1,26 +1,26 @@
 #include "enviroment.h"
 using namespace std;
-CarState::CarState(map<string, string> conf) {
-    len = stof(conf["LEN_CAR"]);
-    width = stof(conf["WIDTH_CAR"]);
-}
+//CarState::CarState(map<string, string> conf) {
+    //len = stof(conf["LEN_CAR"]);
+    //width = stof(conf["WIDTH_CAR"]);
+//}
 
 
-QPolygonF CarState::to_polygon() {
-    float sin_t = sin(this->theta);
-    float cos_t = cos(this->theta);
+QPolygonF Enviroment::car_polygon() {
+    float sin_t = sin(car.theta);
+    float cos_t = cos(car.theta);
 
-    float xA = x + 0.5*len*cos_t + 0.5*width*sin_t;
-    float yA = y + 0.5*len*sin_t - 0.5*width*cos_t;
+    float xA = car.x + 0.5*len_car*cos_t + 0.5*width_car*sin_t;
+    float yA = car.y + 0.5*len_car*sin_t - 0.5*width_car*cos_t;
 
-    float xB = x + 0.5*len*cos_t - 0.5*width*sin_t;
-    float yB = y + 0.5*len*sin_t + 0.5*width*cos_t;
+    float xB = car.x + 0.5*len_car*cos_t - 0.5*width_car*sin_t;
+    float yB = car.y + 0.5*len_car*sin_t + 0.5*width_car*cos_t;
 
-    float xC = x - 0.5*len*cos_t - 0.5*width*sin_t;
-    float yC = y - 0.5*len*sin_t + 0.5*width*cos_t;
+    float xC = car.x - 0.5*len_car*cos_t - 0.5*width_car*sin_t;
+    float yC = car.y - 0.5*len_car*sin_t + 0.5*width_car*cos_t;
 
-    float xD = x - 0.5*len*cos_t + 0.5*width*sin_t;
-    float yD = y - 0.5*len*sin_t - 0.5*width*cos_t;
+    float xD = car.x - 0.5*len_car*cos_t + 0.5*width_car*sin_t;
+    float yD = car.y - 0.5*len_car*sin_t - 0.5*width_car*cos_t;
 
 
     QVector<QPointF> vertices = {
@@ -41,30 +41,28 @@ CarState::~CarState() {}
 
 
 
-CarState CarState::compute_new_state(float speed, float steering, int timestep, bool approx_motion) {
+CarState CarState::compute_new_state(float speed, float steering, int timestep, float len, bool approx_motion) {
     float dt = timestep / 1000.0;
 
     if(approx_motion) {
         float x_r = x - 0.5 * len * cos(this->theta); // x ruota dietro
-        float y_r = y - 0.5 * width * sin(this->theta); // y ruota dietro
+        float y_r = y - 0.5 * len * sin(this->theta); // y ruota dietro
 
         float x_r_next = x_r + dt * cos(this->theta) * speed;
         float y_r_next = y_r + dt * sin(this->theta) * speed;
 
         float x_next = x_r_next + 0.5*len*cos(this->theta);
-        float y_next = y_r_next + 0.5*width*sin(this->theta);
+        float y_next = y_r_next + 0.5*len*sin(this->theta);
         float theta_next = theta - dt * sin(steering) * speed / len;
 
-        return CarState(x_next, y_next, theta_next, len, width);
+        return CarState(x_next, y_next, theta_next);
     }
     else {
         if(steering==0.0) { // if there is no steering, rotation do not make sense
             return CarState(
                 x + dt*speed*cos(theta), 
                 y + dt*speed*sin(theta),
-                theta,
-                len,
-                width
+                theta
             );
         }
         // angle of rotation
@@ -81,7 +79,7 @@ CarState CarState::compute_new_state(float speed, float steering, int timestep, 
             cout << "TROVATO NAN" << " alpha: " << alpha << " x_cr: " <<x_cr<< " y_cr: " <<y_cr << endl;
         }
 
-        return CarState(x_next, y_next, theta_next, len, width);
+        return CarState(x_next, y_next, theta_next);
     }
 }
 
@@ -91,8 +89,8 @@ CarState CarState::compute_new_state(float speed, float steering, int timestep, 
 
 Enviroment::Enviroment() {
     car = CarState();
-    float len_park = car.len + 2 * tol;
-    float width_park = car.width + tol;
+    float len_park = len_car + 2 * tol;
+    float width_park = width_car + tol;
     QVector<QPointF> vertices = {
         QPointF(0, 0),  // top-left corner
         QPointF(0, len_env),  //   Bottom-left corner
@@ -108,7 +106,10 @@ Enviroment::Enviroment() {
 }
 
 Enviroment::Enviroment(map<string, string> conf) {
-    car = CarState(conf);
+    car = CarState();
+
+    len_car = stof(conf["LEN_CAR"]);
+    width_car = stof(conf["WIDTH_CAR"]);
 
     len_env = stof(conf["LEN_ENV"]);
     width_env = stof(conf["WIDTH_ENV"]);
@@ -127,8 +128,8 @@ Enviroment::Enviroment(map<string, string> conf) {
     approx_motion = (conf["APPROX_MOTION"] == "1");
 
 
-    float len_park = car.len + 2 * tol;
-    float width_park = car.width + tol;
+    float len_park = len_car + 2 * tol;
+    float width_park = width_car + tol;
     QVector<QPointF> vertices = {
         QPointF(0, 0),  // top-left corner
         QPointF(0, len_env),  //   Bottom-left corner
@@ -165,7 +166,7 @@ int Enviroment::discretize_state() {
 
 
 bool Enviroment::car_allowed() {
-    QPolygonF car_rect = car.to_polygon();
+    QPolygonF car_rect = car_polygon();
 
     for(auto point: car_rect) {
         if(!env_polygon.containsPoint(point, Qt::OddEvenFill)) {
@@ -184,7 +185,7 @@ bool Enviroment::car_allowed() {
 
 
 bool Enviroment::car_parked() {
-    QVector<QPointF> car_rect = car.to_polygon();
+    QVector<QPointF> car_rect = car_polygon();
 
     QPolygonF parkspace({env_polygon[3], env_polygon[4], env_polygon[5], env_polygon[6]});
 
@@ -206,13 +207,13 @@ float Enviroment::reward() {
 
 Enviroment Enviroment::compute_new_state(float speed, float steering, int timestep) {
     Enviroment e = *this;
-    e.car = e.car.compute_new_state(speed, steering, timestep, approx_motion);
+    e.car = e.car.compute_new_state(speed, steering, timestep, len_car, approx_motion);
     return e;
 }
 
 void Enviroment::set_random_carstate() {
-    float x_new = randomFloat(car.width*0.75, width_env - 1.75*car.width - tol);
-    float y_new = randomFloat(car.len*0.75, len_env - car.len*0.75);
+    float x_new = randomFloat(width_car*0.75, width_env - 1.75*width_car - tol);
+    float y_new = randomFloat(len_car*0.75, len_env - len_car*0.75);
     float theta_new = M_PI*0.5;
     //if(randomFloat(0.0, 1.0)>0.5) theta_new = -M_PI*0.5;
 
