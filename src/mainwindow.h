@@ -160,8 +160,8 @@ private:
 
     int last_speed_action; ///< Last speed action taken by the speed controller.
     int last_steering_action; ///< Last steering action taken by the steering controller.
-    QLearningModel speed_controller; ///< Q-learning model for speed control.
-    QLearningModel steering_controller; ///< Q-learning model for steering control.
+    QLearningModel controller; ///< Q-learning model for speed control.
+    //QLearningModel steering_controller; ///< Q-learning model for steering control.
 
     std::map<std::string, std::string> conf;
     int msec;
@@ -171,8 +171,8 @@ private:
     std::vector<float> speed_actions;
     std::vector<float> steering_actions;
 
-    float avg_tdr_sp;
-    float avg_tdr_st;
+    float avg_tdr;
+    //float avg_tdr_st;
 };
 
 /**

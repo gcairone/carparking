@@ -36,22 +36,25 @@ QVector<QLine> map_into_window(const QVector<QLineF> &v, int m, int r) {
 MainWindow::MainWindow(QWidget *parent): 
     QMainWindow(parent), 
     ui(new Ui::MainWindow), 
-    //speed_controller(state_count, speed_actions.size(), learning_rate, discount_factor, er_max, er_half_life), 
-    //steering_controller(state_count, steering_actions.size(), learning_rate, discount_factor, er_max, er_half_life),
+    //controller(state_count, speed_actions.size(), learning_rate, discount_factor, er_max, er_half_life), 
+    //controller(state_count, steering_actions.size(), learning_rate, discount_factor, er_max, er_half_life),
     iter(0), 
     hit_counter(0), 
     success_counter(0),
     last_speed_action(0),
     last_steering_action(0),
-    avg_tdr_sp(0),
-    avg_tdr_st(0)
+    avg_tdr(0)
 {
     setlocale(LC_NUMERIC, "C");
     conf = readConfig("configuration/default.conf");
-    conf["N_ACTIONS"] = conf["N_SPEED_ACTIONS"];
-    speed_controller = QLearningModel(conf);
-    conf["N_ACTIONS"] = conf["N_STEERING_ACTIONS"];
-    steering_controller = QLearningModel(conf);
+
+    int n_steering_actions = stoi(conf["N_STEERING_ACTIONS"]);
+    int n_speed_actions = stoi(conf["N_SPEED_ACTIONS"]);
+    conf["N_ACTIONS"] = to_string(n_steering_actions*n_speed_actions);
+    conf["N_STATES"] = to_string(stoi(conf["X_DIVIDE"]) * stoi(conf["Y_DIVIDE"]) * stoi(conf["THETA_DIVIDE"]));
+    cout << stoi(conf["N_STATES"])*stoi(conf["N_ACTIONS"])  << endl;
+    controller = QLearningModel(conf);
+
     ui->setupUi(this);
     setWindowTitle("Animation Controller");
 
@@ -62,61 +65,34 @@ MainWindow::MainWindow(QWidget *parent):
     time_ratio = stoi(conf["TIME_RATIO"]);
 
     speed_actions = progression(stoi(conf["N_SPEED_ACTIONS"]), stof(conf["SPEED_UNITY"]));
-    steering_actions = progression(stoi(conf["N_STEERING_ACTIONS"]), M_PI*stof(conf["STEERING_UNITY"]));
+    steering_actions = progression(stoi(conf["N_STEERING_ACTIONS"]), M_PI*stof(conf["STEERING_UNITY"])/180);
 
 
 
-    ui->learning_rate->setValue(speed_controller.lr_max);
-    ui->discount_factor->setValue(speed_controller.discount_factor);
-    ui->epsilon->setValue(speed_controller.er_max);
+    ui->learning_rate->setValue(controller.lr_max);
+    ui->discount_factor->setValue(controller.discount_factor);
+    ui->epsilon->setValue(controller.er_max);
     timer = new QTimer(this);
     connect(timer, &QTimer::timeout, this, [this]() {
-        //if(iter % time_ratio == 0) model_iteration();
-        //enviroment_iteration(animation_speed*msec);
-        float sp = 0.0;
-        float st = 0.0;
-        if(iter < 30) {
-            sp = -1.5;
-            st = 0.0;
-            last_steering_action = 2;
+        if(iter % time_ratio == 0) {
+            //cout << "**********************************************" << endl;
+            model_iteration();
         }
-        else if(iter < 85) {
-            sp = -1.5;
-            st = M_PI/4;
-            last_steering_action = 4;
-        }
-        else {
-            sp = -1.5;
-            st = -M_PI/4;
-            last_steering_action = 0;
-        };
-        //cout << sp << " " << st << endl;
-        auto new_env = env.compute_new_state(sp, st, 30);
-        if(!new_env.car_allowed()) timer->stop();
-        env = new_env;
+        enviroment_iteration(animation_speed*msec);
         iter++;
-        //auto start = std::chrono::high_resolution_clock::now();
         update();
-        //auto end = std::chrono::high_resolution_clock::now();
-
-        // Calcola la durata in millisecondi
-        //std::chrono::duration<float> duration = end - start;
-    
-        // Stampa il tempo impiegato
-        //std::cout << "Tempo impiegato per la funzione update(): " 
-        //          << duration.count() * 1000 << " millisecondi." << std::endl;
     });
 
-    timer->setInterval(30); 
+    timer->setInterval(msec); 
 
     env = Enviroment(conf);
-    env.car.x = env.width_car*2.15;
-    env.car.y = env.len_car*1.60;
-    env.car.theta = -M_PI/2;
-    //env.set_random_carstate();
+    //env.car.x = env.width_car*2.15;
+    //env.car.y = env.len_car*1.60;
+    //env.car.theta = -M_PI/2;
+    env.set_random_carstate();
+    //cout << "Inizializzato e settato stato casuale:" << endl;
     //env.car = CarState::generate_random_state();;
-    state_encoded = env.discretize_state(); //state_encoded = som.findBMU(car_st_vect);
-
+    state_encoded = env.discretize_state();
 
 
     int m = stoi(conf["MARGIN"]);
@@ -135,12 +111,12 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_playButton_clicked()
 {   
-    speed_controller.lr = ui->learning_rate->value();
-    steering_controller.lr = ui->learning_rate->value();
-    speed_controller.er = ui->epsilon->value();
-    steering_controller.er = ui->epsilon->value();
-    speed_controller.er_max = ui->epsilon->value();
-    steering_controller.er_max = ui->epsilon->value();
+    controller.lr = ui->learning_rate->value();
+    //controller.lr = ui->learning_rate->value();
+    controller.er = ui->epsilon->value();
+    //controller.er = ui->epsilon->value();
+    controller.er_max = ui->epsilon->value();
+    //controller.er_max = ui->epsilon->value();
 
     timer->start();
 
@@ -256,61 +232,69 @@ void MainWindow::paintEvent(QPaintEvent *event)
 
 
 void MainWindow::enviroment_iteration(int timestep) {
+    //cout << "--ENV ITERATION--" << endl;
     int speed_action = last_speed_action;
     int steering_action = last_steering_action;
+    //cout << "Recuperate azioni: " << last_speed_action << ", " << last_steering_action << endl;
 
     Enviroment new_env_st = env.compute_new_state(speed_actions[speed_action], steering_actions[steering_action], timestep);
 
-
+    //cout << "Stato successivo: ";
     int new_state_encoded = new_env_st.discretize_state();
 
 
     if(!new_env_st.car_allowed()) {
+        //cout << "Urto, setto nuovo stato casuale:" << endl;
         hit_counter++;
         //env.car = CarState::generate_random_state();
         env.set_random_carstate();
         state_encoded = env.discretize_state(); 
-        last_speed_action = speed_controller.chooseAction(state_encoded, ui->eval->isChecked());
-        last_steering_action = steering_controller.chooseAction(state_encoded, ui->eval->isChecked());
+        int action = controller.chooseAction(state_encoded, ui->eval->isChecked());
+        last_speed_action = action / steering_actions.size();
+        last_steering_action = action % steering_actions.size();
+        //cout << "Scelgo " << last_speed_action << ", " << last_steering_action << endl;
     }
     else if(new_env_st.car_parked()) {
+        //cout << "Parcheggio, setto nuovo stato causuale" << endl;
         success_counter++;
         //env.car = CarState::generate_random_state();
         env.set_random_carstate();
         state_encoded = env.discretize_state();
-        last_speed_action = speed_controller.chooseAction(state_encoded, ui->eval->isChecked());
-        last_steering_action = steering_controller.chooseAction(state_encoded, ui->eval->isChecked());
+        int action = controller.chooseAction(state_encoded, ui->eval->isChecked());
+        last_speed_action = action / steering_actions.size();
+        last_steering_action = action % steering_actions.size();
+        //cout << "Scelgo " << last_speed_action << ", " << last_steering_action << endl;
     }
 
     else {
-       env = new_env_st;
-       state_encoded = new_state_encoded;
+        //cout << "Buono, aggiorno lo stato" << endl;
+        env = new_env_st;
+        state_encoded = new_state_encoded;
     }
 }
 
 void MainWindow::model_iteration() {
-
-    int speed_action = speed_controller.chooseAction(state_encoded, ui->eval->isChecked());
-    int steering_action = steering_controller.chooseAction(state_encoded, ui->eval->isChecked());
-
-    last_speed_action = speed_action;
-    last_steering_action = steering_action;
+    //cout << "--MODEL ITERATION--" << endl;
+    int action = controller.chooseAction(state_encoded, ui->eval->isChecked());
+    last_speed_action = action / steering_actions.size();
+    last_steering_action = action % steering_actions.size();
+    //cout << "Scelgo " << last_speed_action << ", " << last_steering_action << endl;
 
     //CarState new_car_st = env.car.compute_new_state(speed_actions[speed_action], steering_actions[steering_action], msec*time_ratio * animation_speed);
-    Enviroment new_env_st = env.compute_new_state(speed_actions[speed_action], steering_actions[steering_action], msec*time_ratio * animation_speed);
+    Enviroment new_env_st = env.compute_new_state(speed_actions[last_speed_action], steering_actions[last_steering_action], msec*time_ratio * animation_speed);
+    //cout << "Stato successivo sarà: ";
 
-
+    ////cout << "Prova" << endl;
     int new_state_encoded = new_env_st.discretize_state();//auto new_state_encoded = som.findBMU(new_car_st_vect);
 
     if(!ui->eval->isChecked()) {
 
         float reward = new_env_st.reward();
-        float tdr_sp = speed_controller.train(state_encoded, speed_action, reward, new_state_encoded);
-        float tdr_st = steering_controller.train(state_encoded, steering_action, reward, new_state_encoded);
-
+        
+        float tdr = controller.train(state_encoded, action, reward, new_state_encoded);
+        //cout << "Reward, tdr: " << reward << ", " << tdr << endl;
         int i = iter/time_ratio;
-        avg_tdr_sp = (i*avg_tdr_sp+abs(tdr_sp))/(i+1);
-        avg_tdr_st = (i*avg_tdr_st+abs(tdr_st))/(i+1);
+        avg_tdr = (i*avg_tdr+abs(tdr))/(i+1);
     }
 
 
@@ -323,12 +307,9 @@ void MainWindow::model_iteration() {
 
 void MainWindow::on_trainButton_clicked()
 {
-    speed_controller.lr = ui->learning_rate->value();
-    steering_controller.lr = ui->learning_rate->value();
-    speed_controller.er = ui->epsilon->value();
-    steering_controller.er = ui->epsilon->value();
-    speed_controller.er_max = ui->epsilon->value();
-    steering_controller.er_max = ui->epsilon->value();
+    controller.lr = ui->learning_rate->value();
+    controller.er = ui->epsilon->value();
+    controller.er_max = ui->epsilon->value();
 
     ofstream file("log/log0.txt");
     if (!file.is_open()) {
@@ -340,12 +321,11 @@ void MainWindow::on_trainButton_clicked()
         model_iteration();
         enviroment_iteration(animation_speed*msec*time_ratio);
         if((i+1)%LOG_FREQ==0) {
-            cout << "{\"iteration\": \"" << i+1 << "\", \"hit\": \"" << hit_counter << "\", \"success\": \"" << success_counter << "\", \"success_ratio\": \""<< 100 * success_counter / (float)(success_counter+hit_counter) << '%' << "\", \"lr\": \""<< speed_controller.lr << "\", \"er\": \"" << speed_controller.er << "\", \"avg_tdr_sp\": \"" << avg_tdr_sp << "\", \"avg_tdr_st\": \"" << avg_tdr_st <<"\"}"<< endl;
-            file << "{\"iteration\": \"" << i+1 << "\", \"hit\": \"" << hit_counter << "\", \"success\": \"" << success_counter << "\", \"success_ratio\": \""<< 100 * success_counter / (float)(success_counter+hit_counter) << '%' << "\", \"lr\": \""<< speed_controller.lr << "\", \"er\": \"" << speed_controller.er << "\", \"avg_tdr_sp\": \"" << avg_tdr_sp << "\", \"avg_tdr_st\": \"" << avg_tdr_st <<"\"}"<< endl;
+            cout << "{\"iteration\": \"" << i+1 << "\", \"hit\": \"" << hit_counter << "\", \"success\": \"" << success_counter << "\", \"success_ratio\": \""<< 100 * success_counter / (float)(success_counter+hit_counter) << '%' << "\", \"lr\": \""<< controller.lr << "\", \"er\": \"" << controller.er << "\", \"avg_tdr\": \"" << avg_tdr <<"\"}"<< endl;
+            file << "{\"iteration\": \"" << i+1 << "\", \"hit\": \"" << hit_counter << "\", \"success\": \"" << success_counter << "\", \"success_ratio\": \""<< 100 * success_counter / (float)(success_counter+hit_counter) << '%' << "\", \"lr\": \""<< controller.lr << "\", \"er\": \"" << controller.er << "\", \"avg_tdr\": \"" << avg_tdr <<"\"}"<< endl;
             hit_counter=0;
             success_counter=0;
-            avg_tdr_sp = 0;
-            avg_tdr_st = 0;
+            avg_tdr = 0;
             update();
         }
     }
@@ -357,28 +337,27 @@ void MainWindow::on_trainButton_clicked()
 
 
 void MainWindow::on_resetButton_clicked() {
-    speed_controller.reset();
-    steering_controller.reset();
+    controller.reset();
     cout << "Q-Table reset" << endl;
 }
 
 void MainWindow::on_qtable_load_sp_clicked()
 {
-    speed_controller.loadWeights(ui->file_name->text().toStdString());
+    controller.loadWeights(ui->file_name->text().toStdString());
 }
 
 void MainWindow::on_qtable_store_sp_clicked()
 {
-    speed_controller.storeWeights(ui->file_name->text().toStdString());
+    controller.storeWeights(ui->file_name->text().toStdString());
 }
 
 void MainWindow::on_qtable_load_st_clicked()
 {
-    steering_controller.loadWeights(ui->file_name->text().toStdString());
+    controller.loadWeights(ui->file_name->text().toStdString());
 }
 
 void MainWindow::on_qtable_store_st_clicked()
 {
-    steering_controller.storeWeights(ui->file_name->text().toStdString());
+    controller.storeWeights(ui->file_name->text().toStdString());
 }
 

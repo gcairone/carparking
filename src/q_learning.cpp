@@ -23,8 +23,8 @@ QLearningModel::QLearningModel(int state_count, int action_count, float lr_max, 
 }
 
 QLearningModel::QLearningModel(map<string, string> config) {
-    state_count = stoi(config["X_DIVIDE"]) * stoi(config["Y_DIVIDE"]) * stoi(config["THETA_DIVIDE"]);
-
+    //state_count = stoi(config["X_DIVIDE"]) * stoi(config["Y_DIVIDE"]) * stoi(config["THETA_DIVIDE"]);
+    state_count = stoi(config["N_STATES"]);
     action_count = stoi(config["N_ACTIONS"]);
 
     lr_max = stof(config["Q_LR_MAX"]);
