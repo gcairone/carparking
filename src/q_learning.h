@@ -25,20 +25,20 @@ private:
     std::mt19937 rng; ///< Mersenne Twister random number generator for stochastic actions.
 
 public:
-    float lr_max;          ///< The maximum learning rate.
-    float lr_min;          ///< The minimum learning rate.
-    float lr_half_life;    ///< The half-life for reducing the learning rate.
-    float lr_ratio;        ///< The ratio by which the learning rate decreases each iteration.
+    double lr_max;          ///< The maximum learning rate.
+    double lr_min;          ///< The minimum learning rate.
+    double lr_half_life;    ///< The half-life for reducing the learning rate.
+    double lr_ratio;        ///< The ratio by which the learning rate decreases each iteration.
 
     float discount_factor; ///< The discount factor for future rewards.
 
-    float er_max; ///< The maximum exploration rate (epsilon in epsilon-greedy).
-    float er_min; ///< The minimum exploration rate.
-    float er_half_life;         ///< The half-life for reducing the exploration rate.
-    float er_ratio;             ///< The ratio by which the exploration rate decreases over time.
+    double er_max; ///< The maximum exploration rate (epsilon in epsilon-greedy).
+    double er_min; ///< The minimum exploration rate.
+    double er_half_life;         ///< The half-life for reducing the exploration rate.
+    double er_ratio;             ///< The ratio by which the exploration rate decreases over time.
 
-    float lr;             ///< Current learning rate (adjusted over time).
-    float er; ///< Current exploration rate (epsilon, adjusted over time).
+    double lr;             ///< Current learning rate (adjusted over time).
+    double er; ///< Current exploration rate (epsilon, adjusted over time).
 
     QLearningModel();
     /**
@@ -56,13 +56,13 @@ public:
      */
     QLearningModel(int state_count, 
                    int action_count, 
-                   float lr_max,
-                   float lr_min,
-                   float lr_half_life, 
+                   double lr_max,
+                   double lr_min,
+                   double lr_half_life, 
                    float discount_factor,
-                   float er_max,
-                   float er_min,
-                   float er_half_life);
+                   double er_max,
+                   double er_min,
+                   double er_half_life);
     /**
      * @brief Constructor for the QLearningModel class.
      * 

@@ -3,7 +3,7 @@
 using namespace std;
 QLearningModel::QLearningModel() {}
 
-QLearningModel::QLearningModel(int state_count, int action_count, float lr_max, float lr_min, float lr_half_life, float discount_factor, float er_max, float er_min, float er_half_life): 
+QLearningModel::QLearningModel(int state_count, int action_count, double lr_max, double lr_min, double lr_half_life, float discount_factor, double er_max, double er_min, double er_half_life): 
         q_table(state_count, vector<float>(action_count, 0)), 
         state_count(state_count), 
         action_count(action_count), 
@@ -39,6 +39,8 @@ QLearningModel::QLearningModel(map<string, string> config) {
     er = er_max;
     lr_ratio = pow(0.5, 1.0/lr_half_life);
     er_ratio = pow(0.5, 1.0/er_half_life);
+    cout << lr_ratio << endl;
+    cout << er_ratio << endl;
 
     q_table.resize(state_count); 
 
@@ -97,8 +99,8 @@ float QLearningModel::train(int state, int action, float reward, int nextState) 
     float tdr = reward + discount_factor * maxNextQValue - q_table[state][action];
     q_table[state][action] += lr * tdr;
 
-    er = er_min + er_ratio*(er - er_min);
-    lr = lr_min + lr_ratio*(lr - lr_min);
+    //er = er_min + er_ratio*(er - er_min);
+    //lr = lr_min + lr_ratio*(lr - lr_min);
 
     return tdr;
 }

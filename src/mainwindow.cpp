@@ -292,8 +292,16 @@ void MainWindow::model_iteration() {
         float reward = new_env_st.reward();
         
         float tdr = controller.train(state_encoded, action, reward, new_state_encoded);
+
         //cout << "Reward, tdr: " << reward << ", " << tdr << endl;
         int i = iter/time_ratio;
+        //cout << i << endl;
+        if(i % 1000 == 0) {
+            controller.er = controller.er_min + controller.er_ratio*(controller.er - controller.er_min);
+            controller.lr = controller.lr_min + controller.lr_ratio*(controller.lr - controller.lr_min);   
+            //cout << i << ", " << controller.er << endl; 
+        }
+
         avg_tdr = (i*avg_tdr+abs(tdr))/(i+1);
     }
 

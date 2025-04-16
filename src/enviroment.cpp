@@ -157,21 +157,24 @@ int Enviroment::discretize_state() {
     float theta_section = 2*M_PI / theta_divide;
 
     int x_state = (int)(car.x / x_section);
-    //if(x_state >= x_divide) x_state = x_divide - 1;
+    if(x_state >= x_divide) x_state = x_divide - 1;
     int y_state = (int)(car.y / y_section);
-    //if(y_state >= y_divide) y_state = y_divide - 1;
+    if(y_state >= y_divide) y_state = y_divide - 1;
     float theta_mod = fmod(car.theta, 2.0 * M_PI);
     if (theta_mod < 0)
         theta_mod += 2.0 * M_PI;
     int theta_state = (int)(theta_mod / theta_section);
-    //if(theta_state >= theta_divide) theta_state = theta_divide -1;
+    if(theta_state >= theta_divide) theta_state = theta_divide -1;
     int state_ret = theta_state + theta_divide * y_state + theta_divide * y_divide * x_state;
 
-    //cout << x_state << ", " << y_state << ", " << theta_state << endl;
 
 
 
-    if(state_ret >= x_divide*y_divide*theta_divide) cout << "ERRORE" << endl;
+    if(state_ret >= x_divide*y_divide*theta_divide) {
+        cout << "ERRORE, stato:" << endl;
+        cout << x_state << ", " << y_divide << ", " << theta_divide << endl;
+        return -1;
+    }
     return state_ret;
 
 }
@@ -204,7 +207,7 @@ bool Enviroment::car_parked() {
     for(auto point: car_rect) {
         if(!parkspace.containsPoint(point, Qt::OddEvenFill)) return false;
     }
-    if(anglediff(-M_PI*0.5, car.theta) > M_PI*0.25) return false;
+    if(anglediff(-M_PI*0.5, car.theta) > M_PI/6.0) return false;
     return true;
 }
 
@@ -233,7 +236,7 @@ Enviroment Enviroment::compute_new_state(float speed, float steering, int timest
 
 void Enviroment::set_random_carstate() {
     float x_new = randomFloat(width_car*0.6, width_env - width_car*0.6 - width_slot);
-    float y_new = randomFloat(len_car*0.6, len_env - len_car*0.6);
+    float y_new = randomFloat(len_car*0.6, len_env - len_car*2);
     float theta_new = -M_PI*0.5;
     //if(randomFloat(0.0, 1.0)>0.5) theta_new = -M_PI*0.5;
 
