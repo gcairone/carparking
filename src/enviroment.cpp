@@ -236,7 +236,7 @@ Enviroment Enviroment::compute_new_state(float speed, float steering, int timest
 
 void Enviroment::set_random_carstate() {
     float x_new = randomFloat(width_car*0.6, width_env - width_car*0.6 - width_slot);
-    float y_new = randomFloat(len_car*0.6, len_env - len_car*2);
+    float y_new = randomFloat(len_car*0.6, len_env - len_car*0.6);
     float theta_new = -M_PI*0.5;
     //if(randomFloat(0.0, 1.0)>0.5) theta_new = -M_PI*0.5;
 

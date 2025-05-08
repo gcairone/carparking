@@ -302,7 +302,7 @@ void MainWindow::model_iteration() {
             //cout << i << ", " << controller.er << endl; 
         }
 
-        avg_tdr = (i*avg_tdr+abs(tdr))/(i+1);
+        avg_tdr = (i*avg_tdr+abs(tdr*controller.lr))/(i+1);
     }
 
 
