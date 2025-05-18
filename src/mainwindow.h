@@ -145,11 +145,9 @@ private:
 
     QPolygon car_picture; ///< A polygon representing the drawable area of the car.
 
-    Enviroment env;
+    Enviroment env; ///< Enviroment state, with car state
 
     QPolygon env_picture; ///< The polygon representing the environment.
-
-    QVector<QLineF> lidar; ///< The lines representing lidar sensor readings.
 
     int state_encoded; ///< Encoded representation of the current state.
 

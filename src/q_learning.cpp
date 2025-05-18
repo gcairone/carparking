@@ -108,7 +108,7 @@ float QLearningModel::train(int state, int action, float reward, int nextState) 
 
 
 bool QLearningModel::storeWeights(const string& filename) {
-    string filepath = "parameters/" + filename; // Adjust the directory path here
+    string filepath = "parameters/" + filename; 
 
     ofstream file(filepath);
     if (!file.is_open()) {
@@ -129,16 +129,14 @@ bool QLearningModel::storeWeights(const string& filename) {
 }
 
 bool QLearningModel::loadWeights(const string& filename) {
-    string filepath = "parameters/" + filename; // Adjust the directory path here
+    string filepath = "parameters/" + filename; 
 
     ifstream file(filepath);
     if (!file.is_open()) {
         cerr << "Failed to open file: " << filename << endl;
         return false;
     }
-
     q_table.clear();
-
     vector<float> neuronWeights;
     float weight;
     while (file >> weight) {
@@ -149,7 +147,6 @@ bool QLearningModel::loadWeights(const string& filename) {
         }
     }
     cout << "q_table loaded from " << filename << endl;
-
     file.close();
     return true;
 }

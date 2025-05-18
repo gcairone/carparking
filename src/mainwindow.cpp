@@ -36,8 +36,6 @@ QVector<QLine> map_into_window(const QVector<QLineF> &v, int m, int r) {
 MainWindow::MainWindow(QWidget *parent): 
     QMainWindow(parent), 
     ui(new Ui::MainWindow), 
-    //controller(state_count, speed_actions.size(), learning_rate, discount_factor, er_max, er_half_life), 
-    //controller(state_count, steering_actions.size(), learning_rate, discount_factor, er_max, er_half_life),
     iter(0), 
     hit_counter(0), 
     success_counter(0),
@@ -75,7 +73,6 @@ MainWindow::MainWindow(QWidget *parent):
     timer = new QTimer(this);
     connect(timer, &QTimer::timeout, this, [this]() {
         if(iter % time_ratio == 0) {
-            //cout << "**********************************************" << endl;
             model_iteration();
         }
         enviroment_iteration(animation_speed*msec);
@@ -86,12 +83,7 @@ MainWindow::MainWindow(QWidget *parent):
     timer->setInterval(msec); 
 
     env = Enviroment(conf);
-    //env.car.x = env.width_car*2.15;
-    //env.car.y = env.len_car*1.60;
-    //env.car.theta = -M_PI/2;
     env.set_random_carstate();
-    //cout << "Inizializzato e settato stato casuale:" << endl;
-    //env.car = CarState::generate_random_state();;
     state_encoded = env.discretize_state();
 
 
@@ -112,11 +104,8 @@ MainWindow::~MainWindow()
 void MainWindow::on_playButton_clicked()
 {   
     controller.lr = ui->learning_rate->value();
-    //controller.lr = ui->learning_rate->value();
     controller.er = ui->epsilon->value();
-    //controller.er = ui->epsilon->value();
     controller.er_max = ui->epsilon->value();
-    //controller.er_max = ui->epsilon->value();
 
     timer->start();
 
@@ -129,7 +118,6 @@ void MainWindow::on_pauseButton_clicked()
 
 void MainWindow::on_stopButton_clicked()
 {
-    //env.car = CarState::generate_random_state();
     env.set_random_carstate();
     int m = stoi(conf["MARGIN"]);
     int r = stoi(conf["PIXEL_RATIO"]);
@@ -155,7 +143,6 @@ void MainWindow::paintEvent(QPaintEvent *event)
 
     painter.setBrush(Qt::red); // Set car_picture color
     painter.drawEllipse(map_into_window(QPointF(env.car.x, env.car.y), m, r), 2, 2);
-    // centro dell'asse posteriore 
     float sin_t = sin(env.car.theta);
     float cos_t = cos(env.car.theta);
 
@@ -164,12 +151,10 @@ void MainWindow::paintEvent(QPaintEvent *event)
     painter.drawEllipse(map_into_window(QPointF(xR, yR), m, r), 2, 2);
     
     if(SHOW_WHEEL) {
-        QPen pen(Qt::green);       // Imposta il colore della penna
-        pen.setWidth(3);           // Imposta lo spessore a 5px
+        QPen pen(Qt::green);      
+        pen.setWidth(3);         
         
-        painter.setPen(pen);       // Applica la penna al painter
-        //painter.setBrush(Qt::red);
-        // ruota dietro destra
+        painter.setPen(pen);       
         float xRR = xR - 0.5*env.width_car*sin_t;
         float yRR = yR + 0.5*env.width_car*cos_t;
         QLineF RR(
@@ -180,7 +165,6 @@ void MainWindow::paintEvent(QPaintEvent *event)
         );
         painter.drawLine(map_into_window(RR, m, r));
 
-        // ruota dietro sinistra
         float xRL = xR + 0.5*env.width_car*sin_t;
         float yRL = yR - 0.5*env.width_car*cos_t;
         QLineF RL(
@@ -190,9 +174,6 @@ void MainWindow::paintEvent(QPaintEvent *event)
             yRL + WHEEL_RADIUS*sin_t
         );
         painter.drawLine(map_into_window(RL, m, r));
-        //painter.drawEllipse(map_into_window(QPointF(xRL, yRL), m, r), 2, 2);
-        
-        // ruota davanti destra
         float sin_t_a = sin(env.car.theta+steering_actions[last_steering_action]);
         float cos_t_a = cos(env.car.theta+steering_actions[last_steering_action]);
         float xFR = xRR + (env.len_car-env.front_overhang-env.rear_overhang)*cos_t;
@@ -204,9 +185,6 @@ void MainWindow::paintEvent(QPaintEvent *event)
             yFR + WHEEL_RADIUS*sin_t_a
         );
         painter.drawLine(map_into_window(FR, m, r));
-        //painter.drawEllipse(map_into_window(QPointF(xFR, yFR), m, r), 2, 2);
-
-        // ruota davanti sinistra
         float xFL = xRL + (env.len_car-env.front_overhang-env.rear_overhang)*cos_t;
         float yFL = yRL + (env.len_car-env.front_overhang-env.rear_overhang)*sin_t;
         QLineF FL(
@@ -215,7 +193,6 @@ void MainWindow::paintEvent(QPaintEvent *event)
             xFL + WHEEL_RADIUS*cos_t_a,
             yFL + WHEEL_RADIUS*sin_t_a
         );
-        //painter.drawEllipse(map_into_window(QPointF(xFL, yFL), m, r), 2, 2);
         painter.drawLine(map_into_window(FL, m, r));
 
         painter.setBrush(Qt::red);
@@ -235,27 +212,21 @@ void MainWindow::enviroment_iteration(int timestep) {
     //cout << "--ENV ITERATION--" << endl;
     int speed_action = last_speed_action;
     int steering_action = last_steering_action;
-    //cout << "Recuperate azioni: " << last_speed_action << ", " << last_steering_action << endl;
 
     Enviroment new_env_st = env.compute_new_state(speed_actions[speed_action], steering_actions[steering_action], timestep);
 
-    //cout << "Stato successivo: ";
     int new_state_encoded = new_env_st.discretize_state();
 
 
     if(!new_env_st.car_allowed()) {
-        //cout << "Urto, setto nuovo stato casuale:" << endl;
         hit_counter++;
-        //env.car = CarState::generate_random_state();
         env.set_random_carstate();
         state_encoded = env.discretize_state(); 
         int action = controller.chooseAction(state_encoded, ui->eval->isChecked());
         last_speed_action = action / steering_actions.size();
         last_steering_action = action % steering_actions.size();
-        //cout << "Scelgo " << last_speed_action << ", " << last_steering_action << endl;
     }
     else if(new_env_st.car_parked()) {
-        //cout << "Parcheggio, setto nuovo stato causuale" << endl;
         success_counter++;
         //env.car = CarState::generate_random_state();
         env.set_random_carstate();
@@ -263,28 +234,21 @@ void MainWindow::enviroment_iteration(int timestep) {
         int action = controller.chooseAction(state_encoded, ui->eval->isChecked());
         last_speed_action = action / steering_actions.size();
         last_steering_action = action % steering_actions.size();
-        //cout << "Scelgo " << last_speed_action << ", " << last_steering_action << endl;
     }
 
     else {
-        //cout << "Buono, aggiorno lo stato" << endl;
         env = new_env_st;
         state_encoded = new_state_encoded;
     }
 }
 
 void MainWindow::model_iteration() {
-    //cout << "--MODEL ITERATION--" << endl;
     int action = controller.chooseAction(state_encoded, ui->eval->isChecked());
     last_speed_action = action / steering_actions.size();
     last_steering_action = action % steering_actions.size();
-    //cout << "Scelgo " << last_speed_action << ", " << last_steering_action << endl;
 
-    //CarState new_car_st = env.car.compute_new_state(speed_actions[speed_action], steering_actions[steering_action], msec*time_ratio * animation_speed);
     Enviroment new_env_st = env.compute_new_state(speed_actions[last_speed_action], steering_actions[last_steering_action], msec*time_ratio * animation_speed);
-    //cout << "Stato successivo sarà: ";
 
-    ////cout << "Prova" << endl;
     int new_state_encoded = new_env_st.discretize_state();//auto new_state_encoded = som.findBMU(new_car_st_vect);
 
     if(!ui->eval->isChecked()) {
@@ -357,16 +321,3 @@ void MainWindow::on_qtable_store_sp_clicked()
 {
     controller.storeWeights(ui->file_name->text().toStdString());
 }
-/*
-void MainWindow::on_qtable_load_st_clicked()
-{
-    controller.loadWeights(ui->file_name->text().toStdString());
-}
-
-void MainWindow::on_qtable_store_st_clicked()
-{
-    controller.storeWeights(ui->file_name->text().toStdString());
-}
-
-*/
-
