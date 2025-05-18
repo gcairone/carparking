@@ -113,14 +113,14 @@ private slots:
      * 
      * Loads the previously saved Q-table for the steering controller.
      */
-    void on_qtable_load_st_clicked();
+    //void on_qtable_load_st_clicked();
 
     /**
      * @brief Slot for storing the Q-table to a file for steering controller.
      * 
      * Saves the current Q-table for the steering controller to a file.
      */
-    void on_qtable_store_st_clicked();
+    //void on_qtable_store_st_clicked();
 
     /**
      * @brief Slot for reset Q-table for speed controller and steering controller

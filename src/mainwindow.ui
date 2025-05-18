@@ -131,7 +131,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>Load speed QTable</string>
+     <string>Load QTable</string>
     </property>
    </widget>
    <widget class="QPushButton" name="qtable_store_sp">
@@ -144,7 +144,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>Store speed QTable</string>
+     <string>Store QTable</string>
     </property>
    </widget>
    <widget class="Line" name="line">
@@ -158,32 +158,6 @@
     </property>
     <property name="orientation">
      <enum>Qt::Orientation::Horizontal</enum>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="qtable_store_st">
-    <property name="geometry">
-     <rect>
-      <x>620</x>
-      <y>130</y>
-      <width>151</width>
-      <height>23</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Store steering QTable</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="qtable_load_st">
-    <property name="geometry">
-     <rect>
-      <x>620</x>
-      <y>160</y>
-      <width>151</width>
-      <height>23</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Load steering QTable</string>
     </property>
    </widget>
    <widget class="QLabel" name="label">
@@ -280,7 +254,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>Initial epsilon</string>
+     <string>Exploration Rate</string>
     </property>
    </widget>
    <widget class="QDoubleSpinBox" name="epsilon">

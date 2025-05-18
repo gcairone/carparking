@@ -301,8 +301,7 @@ void MainWindow::model_iteration() {
             controller.lr = controller.lr_min + controller.lr_ratio*(controller.lr - controller.lr_min);   
             //cout << i << ", " << controller.er << endl; 
         }
-
-        avg_tdr = (i*avg_tdr+abs(tdr*controller.lr))/(i+1);
+        avg_tdr = (i*avg_tdr+abs(tdr)*controller.lr*controller.lr)/(i+1);
     }
 
 
@@ -319,7 +318,7 @@ void MainWindow::on_trainButton_clicked()
     controller.er = ui->epsilon->value();
     controller.er_max = ui->epsilon->value();
 
-    ofstream file("log/log0.txt");
+    ofstream file("log/log12.txt");
     if (!file.is_open()) {
         cerr << "Failed to open file: log/log0.txt" << endl;
     }
@@ -358,7 +357,7 @@ void MainWindow::on_qtable_store_sp_clicked()
 {
     controller.storeWeights(ui->file_name->text().toStdString());
 }
-
+/*
 void MainWindow::on_qtable_load_st_clicked()
 {
     controller.loadWeights(ui->file_name->text().toStdString());
@@ -368,4 +367,6 @@ void MainWindow::on_qtable_store_st_clicked()
 {
     controller.storeWeights(ui->file_name->text().toStdString());
 }
+
+*/
 
