@@ -13,7 +13,7 @@ This project simulates a car learning to park autonomously using a **Q-learning*
 - **Bicycle kinematic model** with oversteering simulation
 - **Collision detection** and boundary handling
 - **Map generation system** with customizable layouts
-- **Full [Q-learning](https://en.wikipedia.org/wiki/Q-learning) implementation** with sparse reward system 
+- **Full Q-Learning** with sparse reward system 
 - **Qt-based GUI** for visualization and interaction
 
 ##  Build Instructions
