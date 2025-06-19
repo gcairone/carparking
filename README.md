@@ -1,6 +1,6 @@
 # Car Parking Project
 
-![Simulation Screenshot](photo.png)
+![Simulation Screenshot](interface.png)
 
 An C++ application with Qt graphical interface to train and simulate autonomous car parking using **Q-learning**.  
 Developed entirely in C++ from scratch, including physics, learning, and UI. 
