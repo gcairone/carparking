@@ -1,30 +1,58 @@
 # Car Parking Project
 
-A C++ and Qt application to train a car to park in a slot using Q-learning.
+![Simulation Screenshot](res/photo.png)
 
-## Features
+An C++ application with Qt graphical interface to train and simulate autonomous car parking using **Q-learning**.  
+Developed entirely in C++ from scratch, including physics, learning, and UI. 
+This project is part of the *Neural Networks and Deep Learning* course by **Prof. Giorgio C. Buttazzo**  
+[Course link](http://retis.sssup.it/~giorgio/courses/neural/nn.html)
 
-- Car parking simulation
-- Q-learning model for training
-- Graphical interface
+## Overview
 
-## Building the Application
+This project simulates a car learning to park autonomously using a **Q-learning** reinforcement learning algorithm, complete with:
 
-1. **Install QT**
-2. **Run qmake**:
+- **Bicycle kinematic model** with oversteering simulation
+- **Collision detection** and boundary handling
+- **Map generation system** with customizable layouts
+- **Full Q-learning implementation** with sparse reward system ([Q-learning](https://en.wikipedia.org/wiki/Q-learning))
+- **Qt-based GUI** for visualization and interaction
+
+##  Build Instructions
+
+### Prerequisites
+
+- **Qt (version 5 or 6)** installed and in your system path
+
+### Steps
+
+1. **Clone the repository** (if not already done):
+
+    ```sh
+    git clone https://github.com/your-user/carparking.git
+    cd carparking
+    ```
+
+2. **Generate makefile using `qmake`:**
 
     ```sh
     qmake carparking.pro
     ```
 
-3. **Compile the project**:
+3. **Build the project:**
 
     ```sh
     make
     ```
 
-4. **Run the executable**:
+4. **Run the simulation:**
 
     ```sh
     ./bin/carparking
     ```
+
+## ⚙️ Configuration
+
+All main simulation and training parameters are stored in:
+
+```bash
+configuration/default.conf
