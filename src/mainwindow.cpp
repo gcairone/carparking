@@ -265,7 +265,7 @@ void MainWindow::model_iteration() {
             controller.lr = controller.lr_min + controller.lr_ratio*(controller.lr - controller.lr_min);   
             //cout << i << ", " << controller.er << endl; 
         }
-        avg_tdr = (i*avg_tdr+abs(tdr)*controller.lr*controller.lr)/(i+1);
+        avg_tdr = (i*avg_tdr+abs(tdr))/(i+1);
     }
 
 

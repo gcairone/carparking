@@ -99,9 +99,6 @@ float QLearningModel::train(int state, int action, float reward, int nextState) 
     float tdr = reward + discount_factor * maxNextQValue - q_table[state][action];
     q_table[state][action] += lr * tdr;
 
-    //er = er_min + er_ratio*(er - er_min);
-    //lr = lr_min + lr_ratio*(lr - lr_min);
-
     return tdr;
 }
 

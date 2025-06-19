@@ -13,16 +13,14 @@
 /**
  * @brief Class that implements a Q-Learning model for reinforcement learning.
  * 
- * This class manages the Q-table for storing state-action values and provides methods
- * to train the model, choose actions, and adjust learning and exploration rates over time.
  */
 class QLearningModel {
 private:
     std::vector<std::vector<float>> q_table; ///< Q-table storing the Q-values for each state-action pair.
-    int state_count;  ///< The total number of states in the environment.
-    int action_count; ///< The total number of actions available in each state.
+    int state_count;  ///< The total number of states in the environment
+    int action_count; ///< The total number of actions available in each state
 
-    std::mt19937 rng; ///< Mersenne Twister random number generator for stochastic actions.
+    std::mt19937 rng; 
 
 public:
     double lr_max;          ///< The maximum learning rate.
@@ -111,8 +109,6 @@ public:
     /**
      * @brief Stores the Q-table to a file.
      * 
-     * Saves the current Q-table to a specified file, allowing the model to be
-     * reloaded and reused later.
      * 
      * @param filename The name of the file where the Q-table will be stored.
      * @return true if the Q-table was successfully saved, false otherwise.
@@ -122,8 +118,6 @@ public:
     /**
      * @brief Loads the Q-table from a file.
      * 
-     * Loads a previously saved Q-table from a file, restoring the model to its
-     * saved state.
      * 
      * @param filename The name of the file from which to load the Q-table.
      * @return true if the Q-table was successfully loaded, false otherwise.

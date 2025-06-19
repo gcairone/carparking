@@ -10,7 +10,6 @@
 #include <iostream>
 #include <cmath>
 #include "enviroment.h"
-//#include "kohonen_net.h"
 #include "q_learning.h"
 #include <QFileDialog>
 
@@ -156,10 +155,9 @@ private:
     int hit_counter; ///< Counter for hits (collisions) during the simulation.
     int success_counter; ///< Counter for successful actions during the simulation.
 
-    int last_speed_action; ///< Last speed action taken by the speed controller.
-    int last_steering_action; ///< Last steering action taken by the steering controller.
-    QLearningModel controller; ///< Q-learning model for speed control.
-    //QLearningModel steering_controller; ///< Q-learning model for steering control.
+    int last_speed_action; ///< Last speed action .
+    int last_steering_action; ///< Last steering action .
+    QLearningModel controller; ///< Q-learning model.
 
     std::map<std::string, std::string> conf;
     int msec;
@@ -170,7 +168,6 @@ private:
     std::vector<float> steering_actions;
 
     float avg_tdr;
-    //float avg_tdr_st;
 };
 
 /**
