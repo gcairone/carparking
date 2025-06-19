@@ -1,6 +1,6 @@
 # Car Parking Project
 
-![Simulation Screenshot](res/photo.png)
+![Simulation Screenshot](photo.png)
 
 An C++ application with Qt graphical interface to train and simulate autonomous car parking using **Q-learning**.  
 Developed entirely in C++ from scratch, including physics, learning, and UI. 
@@ -13,7 +13,7 @@ This project simulates a car learning to park autonomously using a **Q-learning*
 - **Bicycle kinematic model** with oversteering simulation
 - **Collision detection** and boundary handling
 - **Map generation system** with customizable layouts
-- **Full ([Q-learning](https://en.wikipedia.org/wiki/Q-learning)) implementation** with sparse reward system 
+- **Full [Q-learning](https://en.wikipedia.org/wiki/Q-learning) implementation** with sparse reward system 
 - **Qt-based GUI** for visualization and interaction
 
 ##  Build Instructions
@@ -24,7 +24,7 @@ This project simulates a car learning to park autonomously using a **Q-learning*
 
 ### Steps
 
-1. **Clone the repository** (if not already done):
+1. **Clone the repository**:
 
     ```sh
     git clone https://github.com/your-user/carparking.git
