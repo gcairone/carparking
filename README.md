@@ -2,7 +2,7 @@
 
 ![Simulation Screenshot](interface.png)
 
-An C++ application with Qt graphical interface to train and simulate autonomous car parking using **Q-learning**.  
+An C++ project with Qt graphical interface to train and simulate autonomous car parking using **Q-learning**.  
 Developed entirely in C++ from scratch, including physics, learning, and UI. 
 This project is part of the [*Neural Networks and Deep Learning*](http://retis.sssup.it/~giorgio/courses/neural/nn.html) course by **Prof. G. C. Buttazzo**  
 
@@ -10,7 +10,7 @@ This project is part of the [*Neural Networks and Deep Learning*](http://retis.s
 
 This project simulates a car learning to park autonomously using a **Q-learning** reinforcement learning algorithm, complete with:
 
-- **Bicycle kinematic model** with oversteering simulation
+- **Bicycle kinematic model** with overhearing simulation
 - **Collision detection** and boundary handling
 - **Map generation system** with customizable layouts
 - **Full Q-Learning** with sparse reward system 
@@ -49,7 +49,7 @@ This project simulates a car learning to park autonomously using a **Q-learning*
     ./bin/carparking
     ```
 
-## ⚙️ Configuration
+## Configuration
 
 All main simulation and training parameters are stored in:
 
