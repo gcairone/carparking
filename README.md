@@ -10,7 +10,7 @@ This project is part of the [*Neural Networks and Deep Learning*](http://retis.s
 
 This project simulates a car learning to park autonomously using a **Q-learning** reinforcement learning algorithm, complete with:
 
-- **Bicycle kinematic model** with overhearing simulation
+- **Bicycle kinematic model** with overhang 
 - **Collision detection** and boundary handling
 - **Map generation system** with customizable layouts
 - **Full Q-Learning** with sparse reward system 
