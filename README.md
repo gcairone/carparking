@@ -20,14 +20,14 @@ This project simulates a car learning to park autonomously using a **Q-learning*
 
 ### Prerequisites
 
-- **Qt (version 5 or 6)** installed and in your system path
+- **Qt (version 5 or 6)** installed and in your system 
 
 ### Steps
 
 1. **Clone the repository**:
 
     ```sh
-    git clone https://github.com/your-user/carparking.git
+    git clone https://github.com/gcairone/carparking.git
     cd carparking
     ```
 
